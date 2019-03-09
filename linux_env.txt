@@ -1,0 +1,2058 @@
+文件及文件系统相关,系统,网络,应用
+
+
+unix系统的组成：
+
+	|----------------------------|
+	|	应用程序				 |	
+	|----------------------|     |
+	|	库函数			   |     |
+	|---------------|	   |     |
+	|   系统调用    |	   |     |
+	|	|-----|		|------|     |
+	|	|内核 |		|shell |     |
+	|	-------		|	   |     |
+	|--------------- ------|-----|
+
+##终端:
+
+	无终端的情况下：打开一个新终端
+	ctrl+alt+t
+	
+	在一个已经打开的终端中：
+　　打开多个终端标签\
+　　ctrl+shift+t\
+　　打开多个终端\
+　　ctrl+shift+n\
+　　切换多个终端:\
+　　alt+数字\
+　　ctrl+pageup,pagedown\
+　　历史命令：\
+　　１) 用上下键来查找；\
+　　２) 可以输入history命令，此时会显示出最近的历史命令，可选项有-n 表示显示多少最近的历史命令，显示出来后可以输入“!命令编号”来执行此命令，!!表示执行最近的命令；\
+　　３)  敲“ctrl-r”组合键，然后输入字符，此时会显示出与你输入字符最接近的最近命令，回车后就可以执行；\
+　　４) fc命令可以查阅历史命令，同时可以调用编辑器来修改此命令然后执行。-l 表示列出历史命令，列出来之后可以fc （+）命令编号编辑此命令，也可以fc - 数字表示与最后一条命令的偏差，比如-1表示最后一条，-2表示倒数第二条。\
+
+
+##ubuntu下的窗口操作：
+
+　　ctrl+alt+上下左右键：切换到不同工作区；\
+　　ctrl+shift+alt+上下左右键：将当前窗口移到不同工作区；\
+　　ctrl+win+↑：最大化当前窗口；\
+　　ctrl+win+↓：最小化当前窗口；\
+　　ctrl+win+←：当前窗口移动到当前工作区的左边，并放大到一半的宽度；\
+　　ctrl+win+→：当前窗口移动到当前工作区的右边，并放大到一半的宽度；\
+　　alt+tab：在当前工作区中切换程序窗口；\
+　　alt+`：在当前窗口切换同一类程序的多个窗口；\
+　　win：弹出命令输入窗口；\
+　　alt+f2：弹出另一个命令输入窗口；\
+
+##截屏：
+
+
+　　prtsc键-全屏\
+　　shift+prtsc 区域截取\
+　　alt+prtsc 截取当前窗口\
+　　ctrl+prtsc 全屏截取到剪切板\
+
+
+#文件管理相关
+
+##vi
+
+###介绍
+
+　　vi和vim是我们在Linux中最常用的编辑器。vi或vim是Linux最基本的文本编辑工具，vi或vim虽然没有图形界面编辑器那样点鼠标的简单 操作，但vi编辑器在系统管理、服务器管理中，永远不是图形界面的编辑器能比的。\
+　　vi中有三种模式：编辑模式，就是处于输入字符的状态光标在编辑区。进入编辑模式的方法是键入“i”或“a”表示insert或append；\
+　　命令模式，就是处于命令输入状态，光标在底下的命令窗口中，如果在编辑模式，进入命令模式的方法是按esc键然后输入“：”；\
+　　普通模式就是不属于编辑模式和命令模式的状态。\
+　　[ctrl]+[f] : 向前翻页(foreward)，和 [Page Down] 的用法一样。\
+　　[ctrl]+[b] : 向后翻页(backward)，和 [Page Up] 的用法一样。\
+
+###在普通模式中的光标移动:
+
+
+		k
+	h		l
+	　　j
+　　h向左移动，l向右移动，k向上移动，j向下移动\
+　　w  向后跳转word,光标在word的首位置.\
+　　b  向前跳转word,光标在word的首位置.\
+　　e  向后跳转word,光标在word的尾位置.\
+　　ge 向前跳转word,光标在word的尾位置.\
+　　0: 移动光标的当前行的第一个字母处.\
+　　$: 移动光标到当前行的最后一个字母处。\
+　　G: 移动光标到文档的最后一行。\
+　　gg: 移动光标到文档的第一行，和1G的功能一样。\
+　　n<enter>: n是个整数，向下移动光标n行。\
+
+
+###基本操作
+
+
+　　/word: 从光标处向下搜索下一个字符串”word”。\
+　　?word: 从光标处向上搜索前一个字符串”word”。\
+　　:n1,n2s/word1/word2/g: n1,n2是整数，用“word2”替换n1-n2行之间的字符串“word1”.\
+　　:0,$s/word1/word2/g: 用”word2″替换文档中所有的字符串”word1″.\
+　　x,X : 在一行字中，x为向后删除一个字符(相当于[Del]键)，X为向前删除一个字符(相当于[backspace]即退格键).\
+　　dd : 删除光标所在的一整行。\
+　　 ndd : n为数字。从光标位置开始，删除向下的n行。\
+　　yy : 复制光标所在的那一行。\
+　　 nyy : n为数字。复制光标所在的向下n行。\
+　　p,P : p为将已复制的数字粘贴到光标的下一行，P则为贴在光标上一行。举例来说，当前光标在第20行，且已经复制了10行数据。则按下p后，那10行数据会贴在 原来的20行之后，即由21开始贴。但如果按下P，那么原来的20行会变成30行。\
+　　u : 复原前一个操作.\
+　　[ctrl]+r : 重做上一个操作.\
+　　. : 这是小数点。意思是重复前一个动作。如果重复删除、重复粘贴，按下小数点“.”就可以。\
+　　i,I : 插入：当前光标所在处插入输入文字，已存在的文字会向后退，其中i为“从当前光标所在处插入”，I为“在当前所在行的第一非空格符处开始插入”。\
+　　a,A : a为“从当前光标所在的下一处开始插入”，A为“从光标所在行的最后一个字符处开始插入”。\
+　　o,O : 英文字母o的大小写。o为“在当前光标所在的下一行插入新的一行”；O为“在当前光标所在处的上一行插入新的一行”。\
+　　r,R : 替换：r会替换光标所在的那一个字符；R会一直替换光标所在的文字，直到按下Esc键为止。\
+　　Esc : 退出编辑模式，回到一般模式中。\
+　　:w : 将编辑的数据写入硬盘文件中。\
+　　:w! : 强行写入。\
+　　:q : 离开vi。\
+　　:q! : 若曾修改过文件，又不想存储，使用！为强制离开而不存储文件。\
+　　:wq : 存储文件后离开，:wq! 强制存储文件并离开。\
+	:e!	：重新读取文件。\
+　　以上30条是vi/vim最常用的命令，随着对vi/vim的了解，你会知道的更多。\
+	ctrl-s在windows中的存盘命令会导致在vi中卡死，这时可用ctrl-q取消。
+
+
+###块选择功能，
+
+
+　　以下为我机器的hosts文件，如果只想复制IP地址的话就能到块选择功能了。\
+　　76.13.18.78       farm3.static.flickr.com\
+　　76.13.18.79       farm5.static.flickr.com\
+　　128.242.240.29    twitter.com\
+　　128.242.240.29    www.twitter.com\
+　　209.85.225.101    docs.google.com\
+　　74.125.127.100    writely.google.com\
+　　在普通模式下的块选择按键的意义：\
+　　v：字符选择，会将光标经过的地方反白选择\
+　　V：行选择，会将光标经过的行反白选择\
+　　[ctrl]+v：块选择，可以用长方形的方式来选择数据\
+　　y：块复制\
+　　d：块删除\
+　　列插入：如果想在文档中所有行前面插入某些字符可以这样操作：\
+　　首先用ctrl-v进入块模式，然后选择想要插入字符的区域，然后使用“shift+i”，此时光标会\
+　　跳到块中的第一行，然后输入你想要插入的字符，最后按“esc”退出，此时vi就会在所选择的区域中每行加入你想要的字符。\
+　　合命令比如ggVGy，意思就是先到第一行，然后进入块模式，然后到最后一行，最后复制。可以把以上命令作为一个映射map <C-A> ggVGy 放到用户的.vimrc文件中，这样在vi中就可以使用ctrl-a组合键来复制整个文件了。\
+
+
+###历史命令窗口:
+
+
+　　1）方法1：输入q：显示历史命令窗口\
+　　    q:(注意不是在commond窗口中输入q，而是在普通模式中直接输入q：)\
+　　    会显示一个命令窗口,显示所有历史命令,用上下键移到相应命令上回车就可执行.\
+　　2）方法2：在命令窗口中输入你记得的命令开头几个字符，然后用上下键去查找想要的命令；\
+　　3）方法3：在命令窗口中输入“：”，然后用上下键或者ctrl-p（前一个命令），ctrl-n（后一个命令）；\
+
+
+###暂时退出vi:
+
+
+　　crtl+z\
+　　返回:fg\
+
+
+###阅读源文件在文件中跳转:
+
+
+　　需要查看的文件目录下输入:cscope -bR . 命令,会在当前目录下生成cscope.out文件。\
+　　在vim配置文件中添加\
+　　cs add cscope.out\
+　　set cscopetag语句\
+　　在文件中跳转的方法：\
+　　在命令窗口中输入：\
+　　cs f s abc 查找所有出现abc的地方，此时会出现一个窗口列出所有包括abc的行，输入行号就可以跳转了。\
+　　cs f g abc 查找abc定义的地方；\
+　　cs f c abc 查找调用abc的地方；\
+　　cs f t abc 查找所有包括abc的地方；\
+　　此外在普通模式下可以将光标移到某个函数上然后键入“ctrl-]”跳转到该函数定义的地方，然后键入“ctrl+t”返回。\
+
+
+###多文件操作:
+
+
+　　方法1:启动vi时打开多文件:\
+　　    命令:vi file1 file2 ... 在启动时打开多个文件\
+　　    这时打开的文件在一个窗口中,可以用:bn,:bp切换文件,或者使用:n,:prev来切换,但是使用:n有可能到最后一个文件就不能再切换,而用:bn则可以循环切换.\
+　　方法2:打开文件后在命令窗口中打开:\
+　　       命令:open file ,这里输入文件路径,这时就会新开一个文件编辑窗口,显示文件内容.但是有一个问题,就是如果不记得文件路径,用tab键无法补齐,这时可以用:file filepath来指定文件路径(这时可以用tab来补齐路径),\
+　　       然后用open来打开.但是,这样也有一个问题,就是当前编辑的文件会被这个新打开的文件代替.\
+　　       使用:new 可以开一个分割新窗口,在这个窗口里输入:q可以退出这个新窗口而不是退出vi.\
+　　       使用:spl(split)或vspl(vsplit) 可以以当前文件打开一个新分割窗口,输入:q可以退出这个新窗口而不是退出vi.\
+　　       当使用分割窗口时,使用ctrl-ww可以在多个分割窗口中切换.\
+　　       当打开多个文件时,可以用ls来显示当前打开的文件名,其中数字后有%a标号的表示当前正在编辑的文件.可以用:bno直接切换文件,no就是ls列出来的文件序号.\
+
+
+##chmod
+
+
+　　 基本操作:chmod xxx file\
+　　       文件权限解释：\
+　　           linux中所有文件（包括目录，设备）都具有权限属性。我们执行ls -l 命令可以看到如下结果：\
+　　           drwxr-xr-x 2 hanhj hanhj  4096 11月 30 09:25 Desktop\
+　　           -rw-rw-r-- 1 hanhj hanhj     4 11月  9 09:15 dic.txt\
+　　           lrwxrwxrwx 1 hanhj hanhj    56 11月 30 09:23 si -> /media/big/wine/Program Files/SourceInsight/Insight3.exe\
+　　           。。。\
+　　           第一列就是代表文件的权限\
+　　           比如对于第一个文件Desktop 它的权限是 drwxr-xr-x\
+　　           第一个字母代表文件类型 如果是‘-’代表是普通文件，‘d’代表是目录，‘c’代表是字符型设备（比如串口），‘b’代表是块设备（比如硬盘），‘l’代表符号链接。\
+　　           后面每三个为一组，表示不同分类用户的权限\
+　　           第一组表示文件所属用户的权限，rwx分别代表读、写、执行权限，如果相应位为‘-’代表没有相应的权限。\
+　　           第二组代表文件所属用户组的权限。\
+　　           第三组代表处以上外的用户所具有的权限。\
+　　           以上权限也可以用数字表示。用数字标识法，每个文件权限用四个8进制数表示，每个数由4,2,1相加而成，如果对应位省略掉，则设置为0.\
+　　           第一个数代表 suid，sgid权限 。1-代表粘滞位，2代表sgid权限，4代表suid权限。\
+					suid,sgid一般只对二进制程序有用，它的意思是当用户执行此程序时，具有该程序的用户或组身份，而不管此用户原来的身份。利用此特性，当用户执行一个用户id为root的程序时，就具有了root身份,是比较危险的。粘滞位表示当用户第一次执行此程序时，将文件内容留在内存中，这样可以提高下次访问的速度。这个是比较老的用法，现在普遍采用缓存技术，在linux中此位用来表示用户是否对文件所在目录具有权限。
+					举个例子：
+					比如某个文件a.c,该文件的所有者和组是hanhj。chmod o-r-w-x a.c去掉other的所有权限，这样其他用户就不能使用这个文件。编译一个程序xx打开a.c文件,xx的所有者和组是hanhj。如果对这个程序不加s权限chmod u+s xx ,则当其他用户比如tom执行这个程序的时候，他的身份是tom，他不能打开a.c文件，因为它属于other组，没有读写a.c文件的权限。但是如果将xx程序加上suid权限，则tom执行这个xx程序的时候就变成xx这个程序的所有者身份，则它可以打开a.c文件。
+　　           第二个数字代表用户权限 1-代表执行权限，2代表写权限，4代表读权限。\
+　　           第三个数字代表用户组权限，数字含义同上。\
+　　           第四个数字代表其他用户权限，数字含义同上。\
+　　           比如777代表所有用户均具有读写执行权限，755代表用户具有读写执行权限，而用户组和其他用户具有读和执行权限。\
+　　了解以上知识我们就可以对文件的权限进行改变。\
+　　如对上面的dict。txt文件执行下面的命令：chmod 754 dic.txt 然后ls -l 显示如下：\
+　　drwxr-xr-x 2 hanhj hanhj  4096 11月 30 09:25 Desktop\
+　　-rwxr-xr-- 1 hanhj hanhj     4 11月  9 09:15 dic.txt\
+　　可见dic。txt文件用户权限加上了执行权限，用户组权限去掉了写权限，加上了执行权限。\
+　　除了用数字改变权限外，还可以用字母改变权限\
+　　u代表用户，g代表用户组，o代表其他用户，a代表全部。\
+　　+代表加上权限，-代表去掉权限。\
+　　r代表读权限，w代表写权限，x代表执行权限，X代表当目标文件对用户来说是可执行文件或者是目录时才设置X权限，s代表设置set-uid和set-gid权限。s只有和u和g一起使用。\
+　　例如同样以上的命令可以用以下方法实现：chmod u+x g-w+x dic.txt\
+
+
+##umask
+
+
+　　该命令用于设置权限掩码。\
+　　当创建新文件时，新文件的权限就是777-掩码，比如umask=0002，则创建新文件夹的权限为777-0002=775，普通文件的权限是666-0002=664（执行权限不用umask来设置，因为此设置会影响系统安全）。\
+
+
+##在ubuntn下挂载windows的fat32分区
+
+###第一步：修改/etc/fstab;
+
+　　sudo vi /etc/fstab\
+　　相关内容如下：/dev/sda7 /media/big vfat defaults,utf8,umask=022,nosuid,nodev,uid=1000,gid=1000  0   0\
+　　/dev/sda7  需要挂载的硬盘设备名\
+　　/media/big   挂载的路径，就是文件存放的地方\
+　　vfat         文件系统名\
+　　以下是配置选项\
+　　defaults, 默认配置 属性包括rw, suid, dev, exec, auto, nouser, and async.其他好理解，suid代表允许具有set-uid和set-gid权限，具体uid，gid的用法参见后面的文件权限解释。\
+　　dev 代表解释字符和块设备。\
+　　auto 代表系统起来时是否自动挂载此文件系统。nouser 表示不允许一般用户（如非root用户）挂载此文件系统。async 代表异步操作\
+　　utf8,  代表语言编码类型\
+　　umask=022, 代表所设置的文件系统中文件权限设置（具体参见后面的文件权限解释），这里的设置代表用户权限为可读写可执行，用户所在组成员为可读，可执行，其他用户为可读，可执行。\
+　　nosuid,  代表不具有set-uid set-gid权限\
+　　nodev,  代表不解释字符和块设备\
+　　uid=1000， 用户id，代表挂载此文件系统后的文件所属的用户。如果不知道uid是多少，可以查看/etc/passwd文件\
+　　gid=1000   组用户id，代表挂载此文件系统后的文件所属的用户组。同样的，如果不知道gid是多少，可以查看/etc/passwd文件\
+　　0   0   最后两个参数是，第一个被dump命令所用，代表是否需要dump。第二个参数被fsck所用，表示系统起来时fsck的顺序。\
+
+
+###第二步：建目录
+
+
+　　修改好以上参数后，还需要在我们需要挂载文件系统的地方建个目录\
+　　   (sudo)mkdir /media/big  是否需要sudo看你建目录的地方，如果属于root用户的地方就要加sudo。如果是建在root用户的地方（我的机子就是建在/media目录下，它属于root用户），还需要用chown命令\
+　　    将其改成你想要挂载的用户和组。chown 用户组：用户名 挂载的目录 。例如sudo chown user1:user1 /media/big\
+
+
+###第三步：挂载
+
+
+　　 执行(sudo) mount -a 就可以将windows fat分区按照我们想要的路径和用户名和组挂载上了。\
+
+##mount:
+
+
+　　mount -t 文件类型 挂载设备 挂载点\
+　　例如：mount -t ntfs /dev/sda1 /media/windows\
+	文件类型：可以从/etc/filesystem或/proc/filesysem文件中看支持哪些文件系统。
+　　一般scsi设备是sdxx，ide设备是hdxx，软盘设备是fdxx\
+　　可以用命令行点方式来挂载设备，也可以用上面讲的fstab来挂载。\
+　　远程挂载：\
+　　远程挂载可以通过samba（windows）或nfs（linux）来挂载非本机的文件系统。\
+	客户端：
+　　sudo mount -t smbfs/nfs 远程ip地址/共享的目录 挂载的目录 -o 配置项
+	例如：sudo mount -t smbfs/nfs //192.168.15.23/share_doc /xx -o user=xxx dir_mod=755,file_mode=755,noserverino,uid=1001,gid=1001\
+　　user是指被挂载机的用户名\
+	在开发板上挂载时需要加上-nolock
+	mount -t nfs ip/dir mount_dir -o nolock 
+	比如 mount -t nfs 192.168.15.23 /mnt/tmp -o nolock ,intr,rsize=1024,wsize=1024 
+	服务器端：
+		界面方式：
+　　		前提是准备被挂载设备先要把共享点磁盘先共享出来，鼠标右击，点出属性配置即可，要允许陌生人挂载，如果允许读写也要将允许读写属性点上。\
+	　　	然后，在本机运行上面点命令，提示要输入密码，此时输入被共享机器的密码。注意，如果共享的目录，本身也是挂载的，就需要在挂载此文件系统使将其挂载属性为777,否则远程挂载不能修改该文件系统。\
+		无界面方式：
+			修改/etc/exports文件，该文件控制共享目录：
+			共享的目录 允许的共享者(共享的属性)
+			比如：	
+			/media/work/share_doc *(rw,sync,no_root_squash)
+			在nfs中没有验证机制，当访问者在服务端的用户列表中(/etc/passwd），则访问者具有服务器同名用户权限。
+			如果访问者id与服务器用户列表id相同，则访问者具有同名id权限。
+			如果访问者不在服务器用户列表中，则有匿名用户权限（即nobody）
+			如果访问者以root用户身份登录，则默认是将root身份改成匿名用户身份。
+			共享属性：
+				rw 
+				ro 
+				no_root_squash，不将root身份改成匿名身份
+				root_squash,将root身份改成匿名身份。
+				all_squase,所有访问者改成匿名身份
+				anonuid,设定匿名用户权限，将匿名用户的权限改成后面设置的uid或gid权限。
+				sync，同步到硬盘
+				async，铜鼓到内存
+			设置好exports文件后，用exportfs命令来更新：如果没有找到exportfs,需要apt install nfs-common,apt install nfs-kernel-server
+				exportfs -r ,更新 
+						-a ，选择所有
+						-u ，卸载 
+						-v，显示过程。
+	挂载loop设备：
+	可以将文件挂载为文件系统
+	mount 需要挂载的文件　挂载点　-o loop
+		需要挂载的文件先要格式化为某种文件系统
+	dd if=/dev/zero of=mnt.img bs=1024k count=1
+	上面的语句产生一个mnt.img文件，大小为1M
+	（dd是文件转换命令，通常可以用来产生一个系统镜像文件比如：dd if=/dev/cdrom of=root.iso)
+	mkfs -t ext2 -F mnt.img 格式化文件
+	mount mnt.img /mnt -o loop
+	挂载这个文件到ｍｎｔ目录。
+	然后，你可以对这个目录进行操作，比如添加删除文件，最后会反映到ｍｎｔ.img文件中。
+
+	产生一个内存磁盘：
+		mount -t tmpfs -o size=8M my_ramdis /meida/ramdisk
+	
+	其他的一些关于mount的命令
+
+	findmnt :列出当前已经挂载的设备
+		options:
+			-t fs_type
+	lsblk:	列出系统中的块设备信息。
+		调用格式:
+			lsblk [option] [device]
+		选项：
+			-o UUID
+
+	blkid：显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
+		调用格式
+			blkid options device
+		选项：
+			-p probe
+			-i info
+
+	
+
+##ls
+
+
+　　 :显示目录内容\
+　　 基本操作:\
+　　 -l 列出详细信息\
+　　 -R 递归调用显示子目录\
+　　 -r 逆序输出\
+　　 -t 按照创建时间排序,最新时间在前\
+　　 -u  按照访问时间排序,最新时间在前\
+　　 -a  显示所有包括隐含文件\
+　　 -A  显示除. .. 隐含文件外的文件\
+　　 -d  仅显示目录\
+　　 -F  文件后追加标识符 /表示目录,@表示符号链接,|表示管道符,=表示socket套接字,* 表示可执行文件.\
+　　 -1  单列显示\
+	 -h  和-l选项配合使用，显示为对人可以好理解的形式。\
+\
+　　 扩展:\
+　　 在deepin Linux环境中定义了以下别名\
+　　 ls  ls --color=auto\
+　　 la  ls -a\
+　　 ll  ls -l\
+　　 l   ls -CF\
+　　 | 表示管道符,管道符之前的输出是管道符之后的输入.比如ls | grep app,表示列出当前目录文件并且看其中是否有名字文app的文件.\
+　　 ls -d */ 仅显示当前目录下的目录\
+
+##basename
+
+	显示路径中最后的部分
+
+##dirname :
+
+	显示路径中最后部分前面的路径
+
+##realpath:
+
+	显示路径的实际物理路径，将链接转换成实际的物理路径
+
+##cp
+
+
+　　 :复制文件\
+　　 基本操作:\
+　　 cp [选项] [参数]\
+　　 选项:\
+　　 -a 同-dpR,保持源文件的结构和属性\
+　　 -b 当目标文件存在时,在覆盖前为其创建一个备份.\
+　　 -d 如果复制的源文件是符号链接,则仅复制符号链接本身.\
+　　 -p 保持源文件的所有者,权限,时间属性.\
+　　 -R或-r 递归复制所有子目录\
+　　 -i 如果目标文件存在,在覆盖前提示用户.默认情况下Linux环境都有别名 cp cp -i\
+　　 -l 创建源文件的硬符号链接,同ln\
+　　 -s  创建源文件的符号链接,同ln -s\
+　　 -u 仅当源文件比目标文件新或者目标文件不存在的时候才复制.\
+　　 -v 详细显示命令的执行操作.\
+　　 扩展:\
+　　 linux环境中许多命令的选项具有相同的意义,比如\
+　　    -i 表示提示用户\
+　　 -v 表示显示详细过程\
+　　 -R 表示递归\
+　　 -f 表示不提示用户\
+
+##scp 远程复制文件
+
+
+　　scp src_file dest_file\
+　　example scp hanhj@192.168.15.23:/home/hanhj/.vimrc .\
+
+##mv
+
+
+　　 :移动文件\
+　　 基本操作:\
+　　 mv [选项] [参数]\
+　　 选项:\
+　　 -i 同cp\
+　　 -f 同cp\
+　　 -u 同cp\
+　　 -b 同cp\
+　　 -v 同cp\
+
+
+##pwd
+
+
+　　 :打印当前工作目录\
+　　 -v 同cp\
+	 -P 显示绝对路径 
+
+##df 
+
+	显示当前磁盘使用情况
+	-h 按照人可阅读显示
+
+##du
+
+	显示目录占用磁盘情况
+	-b 按照byte统计
+	-k 按照k统计
+	-m 按照M统计
+	-B 按照指定大小统计
+	-c 统计总量
+##who
+
+	:-r runlevel
+
+##sudo 
+
+	-H 以用户的根目录设置环境变量
+	-i 以root身份登录并运行
+	-l 列出用户可运行命令
+	-u user 以user身份运行
+	相关文件/etc/sudoers
+		sudoers用来配置sudo用户，文件内容如下：
+		# Host alias specification
+		用来配置主机别名，方便配置主机
+
+		# User alias specification
+		用户别名，方便配置用户
+		
+		# Cmnd alias specification
+		命令别名，方便配置命令
+		
+		# User privilege specification
+		root	ALL=(ALL:ALL) ALL
+		hantmp	ALL=(ALL:ALL) ALL
+		用户配置：
+			规则是：用户 主机=(目标用户) 命令
+			比如上面的命令表示 接受来自各种主机的hantmp用户，其目标用户为所有，可以执行各种命令。
+		
+		# Members of the admin group may gain root privileges
+		%admin ALL=(ALL) ALL
+	
+
+
+##rm
+
+
+　　 :删除文件\
+　　 基本操作:\
+　　 rm [选项] [参数]\
+　　 选项:\
+　　 -f 同cp\
+　　 -i 同cp\
+　　 -R/-r 同cp\
+　　 -v 同cp\
+　　 扩展:\
+　　 rm  一般用来删除文件,如果要删除目录要加上-r选项.\
+
+
+##rmdir
+
+
+　　 :删除空目录\
+　　 基本操作:\
+　　 rmdir [选项] [参数]\
+　　 选项:\
+　　 -p 递归删除所有父目录 parent\
+　　 -v 同cp\
+　　 扩展:\
+　　 rmdir只能删除空目录,如果目录不为空则报错.\
+　　 当使用-p选项的时候,输入的参数必须是最后一级.\
+
+
+##chgrp
+
+
+　　 :改变文件所属组\
+　　 选项:\
+　　 -f 不显示报错信息\
+　　 -R 递归调用\
+　　 -v 显示过程\
+　　 扩展:\
+　　 类似的命令:\
+　　 chown\
+
+
+##chown
+
+
+　　 :改变文件所属组和用户\
+　　 选项:\
+　　 -f 同chgrp\
+　　 -R 同chgrp\
+　　 -v 同chgrp\
+　　 扩展\
+　　 如果只提供用户名,用户组不改变,如果同时提供用户名和组,之间用冒号或者点隔开.\
+
+##用户设置
+
+	adduser/useradd,前者会提示一些信息，后者直接增加用户
+		-m 会在home目录下添加用户的目录
+		-g gid 设置用户组号
+		-u uid 设置用户号
+		默认的会添加与用户名相同的用户组。
+	usermod 修改用户信息，包括密码，但是最好不要用此命令修改密码，因为会导致影子文件中的密码是明文。/etc/shadow
+	deluser 删除用户
+		--remove-home删除home目录下的用户目录
+	passwd 用来修改用户密码
+		-l 锁定用户，即禁止用户
+		-u 解锁用户
+		通过usermod -L/U可以同样达到此目的
+	groupadd 添加用户组
+		-g gid 设置用户组号
+	groupmod 修改用户组
+	groupdel 删除用户组
+
+##find
+
+
+　　 :查找文件\
+　　 基本操作:\
+　　 find 选项 目录 -name 待查内容\
+　　 选项:\
+　　 -name 指定文件名\
+　　 -gid  查找指定用户组id中的文件\
+　　 -uid  查找指定用户名id中的文件\
+　　 -group查找指定用户组中文件\
+　　 -user 查找指定用户名中的文件\
+　　 -path 指定路径\
+　　 -prune 不在path指定目录下查找。如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。\
+	 -type 查找指定类型的文件
+		b:块文件
+		d:目录
+		c:字符设备
+		p:管道文件
+		l:链接文件
+		f:普通文件
+	 -newer file or ! -newer file 比file文件新或旧的文件
+　　 -amin  +n,-n查找指定分钟前后访问过的文件\
+　　 -atime  +n,-n查找指定天数前后访问过的文件\
+　　 -cmin  +n,-n查找指定分钟前后改变文件状态的文件\
+　　 -ctime +n,-n查找指定天数前后改变文件状态的文件\
+　　 -mmin +n,-n 查找指定分钟前后修改文件内容的文件\
+　　 -mtime +n,-n 查找指定天数前后修改文件内容的文件\
+　　 -exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`\
+　　  比如：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`\
+　　  注意要加上print选项，否则不显示文件名，不好区分。\
+　　  xargs 与exec功能类似，比如上面的命令可以写成：`find . -name "app" -print |xargs cat`\
+　　 -ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示.\
+　　 扩展:\
+　　 查找除某个目录下的文件\
+　　 find . -path xx -prune -o -print\
+　　 expr1 -o expr2 是逻辑或的关系。\
+
+
+##ln
+
+
+　　 :创建链接\
+　　 基本操作\
+　　 ln 源文件 链接文件.\
+　　 默认是创建硬链接,所谓'硬链接'就是两个文件具有相同的inode,创建硬链接的文件必须与源文件在同一分区中.不能为文件夹创建硬链接.\
+　　 选项:\
+　　 -f 强制覆盖\
+　　 -i 提示\
+　　 -s 创建符号链接,符号链接仅仅是一个符号,相当于windows中的"快捷方式"\
+　　 -v 显示过程\
+
+
+##mkdir
+
+
+　　 :创建目录\
+　　 基本操作\
+　　 mkdir 目录名\
+　　 选项:\
+　　 -p  可以创建中间缺少的目录\
+　　 -m 可以设置目录属性,默认的是根据umask来设置属性.\
+　　 -v 显示过程\
+
+
+##which,whereis
+
+
+　　 :查找指令的二进制程序,man手册,源代码在磁盘中的位置\
+　　 选项:\
+　　 -b 查找二进制\
+　　 -m 查找man\
+　　 -s 查找src\
+
+#tar
+
+	压缩软件
+	tar czvf 压缩包.tar.gz 压缩文件目录 ：按照gzip格式压缩文件,默认是递归压缩文件目录下的所有文件。
+	tar xzvf 压缩包 -C 解压路径：解压缩文件，注意解压路径必须存在，如果没有-C 则在当前目录解压。
+	tar tf 压缩包 ：显示压缩包中的文件。
+	c	代表压缩
+	x	代表解压
+	v	代表显示过程
+	f	代表文件
+	z	代表gzip格式
+	j	代表gzip2格式。如果不知道文件的压缩格式，可以先用file命令来显示文件格式。
+	-C	代表改变目录。
+
+#zip
+
+	压缩软件
+	zip 压缩包.zip 压缩文件/压缩文件目录 -r：压缩文件，如果不带-r选项，则不递归压缩。默认的压缩是包括目录，即虽然不带-r不压缩目录下的内容，但是还是要包括目录的，只不过目录中没有内容。
+	uzip -l 压缩包：显示压缩包中的文件。
+	unzip 压缩包 -d 解压路径：解压缩文件，如果不带-d选项，则解压到当前目录。
+	-r	递归压缩
+	-D	不包括目录
+	-v	显示操作过程
+
+#rar
+
+	压缩软件
+	rar a 压缩包.rar 压缩文件/压缩文件目录 -r：压缩文件，如果不带-r选项，则不递归压缩。与zip不同，默认的是不带目录的。
+	rar/unrar l 压缩包：显示压缩包中的文件
+	rar/unrar x 压缩包：解压缩文件
+	rar d 压缩包 文件：从压缩包中删除文件
+	a	压缩文件
+	l	显示压缩文件
+	x	解压文件
+	d	删除文件
+	c	为压缩包添加注释。ctrl-d退出
+
+
+
+##updatedb
+
+　　更新搜索文件数据库，相关配置文件为/etc/updatedb.conf
+
+##locate
+
+　　搜索文件，与updatedb关联，默认是从 var/lib/mlocate/mlocate.db中查找文件。
+　　-b 文件名
+　　
+##dirname
+
+　　获取路径名
+
+##basename
+
+　　获取除去路径的文件名
+
+##rename
+
+　　批量修改文件名,可以使用正则表达式\
+　　rename srcfilename destfilename filelist\
+　　批量修改文件名：\
+　　abc.txt abc1.txt abcf.txt,如果想把a替换替换成m，可以输入：rename 's/a/m/' * \
+
+
+##file
+
+
+　　 :检测文件类型\
+　　 选项:\
+　　 -f  用输入的文件来检查\
+
+
+##touch
+
+
+　　 :改变文件时间\
+　　 基本操作:\
+　　 touch 文件,默认使用当前时间作为文件最后访问时间和修改时间\
+　　 选项:\
+　　 -t [CCYY]MMDDHHmm[.ss],指定时间\
+　　 -a  <时间> 仅修改最后访问时间\
+　　 -m  <时间> 仅修改修改时间\
+　　 扩展:\
+　　 使用touch命令可以创建新文件\
+　　 touch newfile\
+
+##time
+
+	:统计程序运行时间
+	time program
+	-p 按照可移植格式显示
+	例如：time -p grep hello . -r  --include "*.h" >/dev/null
+	结果：
+	real xx 程序实际执行时间，与当前系统执行任务有关
+	user xx  用户指令执行时间
+	sys  xx  系统指令执行时间（调用内核）
+
+##apt-key
+
+
+　　 :获取公鈅\
+　　 sudo apt-key --keyserver keyserver.ubuntu.com --recv-keys 需要的公鈅id\
+　　 或者gpg --keyserver subkeys.pgp.net --recv 需要的公鈅id\
+
+
+
+##grep
+
+
+　　grep [options] 查询内容 路径\
+		查询内容可以是正则表达式
+	-i 忽略大小写
+	-w 匹配整个单词
+	-x 匹配一行
+	-r 在路径中递归查找
+	-R 在路径中递归查找，包括链接
+	-n 显示行号
+	-v 反向匹配
+	--include pattern 包括展开的文件名
+	--exclude pattern 不包括展开的文件名
+	--exclude-dir=dir 不包括路径
+	-A num ,显示匹配行前面的ｎｕｍ行
+	-B num ,显示匹配行之后的num行
+	-C num,显示匹配行前后的num行 
+	-o pattern 仅显示匹配的字符
+
+##| 管道
+
+
+　　 set | grep ...\
+　　 grep可以使用正则表达式。如果想获得逻辑与的结果，比如查看某个文件中包括“字串1”和“字串2”的内容的行：\
+　　 cat search.txt|grep "xxxx1"|grep "xxxx2" \
+
+
+##ps
+
+
+　　显示当前进程,-e显示全部进程,-all显示详细内容\
+
+
+##set
+
+
+　　查看本地定义的环境变量\
+
+
+##unset
+
+
+　　取消环境变量\
+
+
+##env
+
+
+　　显示所有环境变量\
+
+
+##export 增加一个环境变量
+
+　　export增加的环境变量是临时的,关机后就没有了.\
+　　在/etc/profile下面定义永久的环境变量.其他可以设置永久环境变量的地方：/etc/profile.d,/etc/bash.bashrc，~/.bashrc,~/.profile\
+
+##source
+	
+	在当前bash中执行脚本。默认执行脚本时，系统会新建一个bash，所以如果设置环境变量，直接执行脚本会发现当前环境中的环境变量并没有改变。
+
+##正则表达式
+
+　　正则表达式可以灵活处理字符串,最初用于sed和grep，称为regex，后来pythom，java等开发语言也支持了正则表达式。
+最简单的正则表达式是用’*’来匹配0个或任意字符的字符串,用’?’来匹配一个字符.‘.’匹配至少一个任意字符串.比如：ls *.txt
+- 匹配字串：\
+　　 `^`表示行开始,比如`^[0-9]`表示必须以数字开始\
+　　 `$`表示行结束,比如`[0-9]$`表示必须以数字结束\
+　　 `{}`:表示需要匹配前面匹配项的个数,比如[0-9]\{3\}表示匹配3个数字,`[0-9]\{3,8\}`表示匹配3到8个数字.\
+   `\<\>`表示精确匹配	
+		比如:
+		`^abc`表示以abc开头的一串字符，
+		`abc$`表示以abc为结尾的一串字符。
+		`abc\{3\}`,表示abc要重复出现3次。数字可以是“m”，“m，”或者“m，n”三种形式。第一种，第二种表示至少重复m次，第三种表示至少m次，不大于n次。
+　　 范围匹配:\
+　　 `[]`:用来匹配一个范围,如[a-z],如果后面加+,则表示至少匹配一个这样的字符\
+		为了简化范围匹配，posix扩展了一些标记：
+		[[:digit:]]表示匹配数字
+		[[:upper:]] =[A-Z]
+		[[:lower:]] =[a-z]
+		[[:alnum:]] = [0-9a-zA-Z]
+		[[:alpha:]] =[a-zA-Z]
+		[[:space:]] =TAB or space
+		\w等同于[[:alnum:]]
+　　此外还有：\
+　　 `&`表示被匹配的部分。\
+　　 `\1,\2...`表示匹配的第一次，第二次结果。为了使用匹配结果需要在匹配字串中使用：`\(匹配单词\)`来定义匹配变量。比如说：`\(abc\)`\
+　　 `a|b`:表示条件或,比如[p|p]ython,表示匹配python或python.注意在grep中需要加上-E或者调用egrep才能有效\
+
+
+##sed  行编辑器
+
+　　sed用于对输入的文本逐行处理。sed不会改变源内容，除非特地指定。\
+　　	sed是在正则表达式的基础上，加上定位和动作对一行文本进行处理。
+　　格式：sed [选项] '脚本命令' 输入\
+　　选项：-e 执行后面的脚本命令，如果有多个脚本命令，可以用-e 隔开。\
+　　-f 脚本文件\
+　　-i 修改源文件\
+　　-n quiet 仅显示匹配字串的行\
+　　脚本命令格式：[定位]/正则表达式/动作,/表示分隔符，第一个分隔符之后表示要匹配的字串，第二个分隔符之后表示要替换的字串或内部命令，第三个分隔符之后表示内部命令。比如/Hi/p,表示匹配Hi字串，然后打印。
+- 定位符：\
+	x,y/
+　　可以是数字比如1：表示第一行；1,3表示1到3行，`$`表示结尾。定位也可以用匹配的方式:/pattern/,y;x,/pattern/
+
+- 动作：\
+　　  常用的内部命令：\
+　　    a\：当前行后添加一行；\
+　　    i\：当前行前添加一行；\
+　　    c\：改变当前行；\
+　　    d：删除当前行；\
+　　    w：将选中内容写入文件\
+　　    r：对于选中内容读入文件；\
+　　    s：替换匹配内容；\
+　　    y：将匹配行字符逐个替换；\
+　　    =：打印当前行号；\
+　　    ！：表示后面的命令对没有被选中的行发生作用。\
+　　假设有如下文本：\
+　　 line 1 aaa line\
+　　 line 2 bbb\
+　　 welcome\
+　　 line 4 ccc\
+　　 hello　　    
+　　p 表示打印\
+　　 `sed '/line/p' demo.txt`\
+　　  line 1 aaa line\
+　　  line 1 aaa line\
+　　  line 2 bbb\
+　　  line 2 bbb\
+　　  welcome\
+　　  line 4 ccc\
+　　  line 4 ccc\
+　　  hello\
+　　 `sed -n '/line/p' demo.txt`\
+　　  line 1 aaa line\
+　　  line 2 bbb\
+　　  line 4 ccc\
+　　 `sed '/line/!p' 1.txt`\
+　　  line 1 aaa line\
+　　  line 2 bbb\
+　　  welcome\
+　　  welcome\
+　　  line 4 ccc\
+　　  hello\
+　　  hello\
+　　` sed '/line/!=' 1.txt`\
+　　  line 1 aaa line\
+　　  line 2 bbb\
+　　  3\
+　　  welcome\
+　　  line 4 ccc\
+　　  5\
+　　  hello\
+　　d 表示删除,命令前需要输入范围，范围可以用数字表示，也可用`$`表示行尾，或者是匹配行\
+　　 `sed '1,3d' demo.txt`\
+　　  line 4 ccc\
+　　  hello\
+　　 `sed '/line/d' demo.txt`\
+　　  welcome\
+　　  hello \
+　　s 表示替换。s/匹配字串/替换字串/命令\
+　　 `sed 's/line/Line/g' demo.txt`\
+　　  Line 1 aaa Line\
+　　  Line 2 bbb\
+　　  welcome\
+　　  Line 4 ccc\
+　　  hello\
+　　 如果不带g，则第一行的后面一个line不会替代，g的意思是所有匹配的内容都将替代，否则如果某一行中有多个匹配内容，则只匹配第一个。\
+　　 `^`表示单词开头，`$`表示单词结尾。\
+　　 `sed 's/^line/Line/' demo.txt`\
+　　  Line 1 aaa line\
+　　  Line 2 bbb\
+　　  welcome\
+　　  Line 4 ccc\
+　　  hello\
+　　 `sed -e 's/line$/Line/' demo.txt`\
+　　  line 1 aaa Line\
+　　  line 2 bbb\
+　　  welcome\
+　　  line 4 ccc\
+　　  hello\
+　　 如果想替换匹配行的所有内容\
+　　 `sed 's/line.* /Line/' demo.txt`\
+　　  Line\
+　　  Line\
+　　  welcome\
+　　  Line\
+　　  hello\
+　　r 命令 读取文件，将匹配行替换成所读取的文件\
+　　 `cat demo.txt|sed '/line/r a.txt'`\
+　　  line 1 aaa line\
+　　  this is line\
+　　  repleace\
+　　  line 2 bbb\
+　　  this is line\
+　　  repleace\
+　　  welcome\
+　　  line 4 ccc\
+　　  this is line\
+　　  repleace\
+　　  hello\
+　　w 命令 将匹配行写入文件\
+　　 `sed '/line/w 1.txt' demo.txt`  \
+　　  line 1 aaa line\
+　　  line 2 bbb\
+　　  welcome\
+　　  line 4 ccc\
+　　  hello\
+　　  hanhj@hanhj-Ideapad-Z460:~/biji$ cat 1.txt\
+　　  line 1 aaa line\
+　　  line 2 bbb\
+　　  line 4 ccc\
+　　a\ 命令 添加内容到当前行的下面一行\
+　　 `sed '/line/a\ sss' demo.txt`\
+　　  line 1 aaa line\
+　　   sss\
+　　  line 2 bbb\
+　　   sss\
+　　  welcome\
+　　  line 4 ccc\
+　　   sss\
+　　  hello\
+　　i\命令 添加内容到当前行的上面一行\
+　　 `sed '/line/i\ sss' demo.txt`\
+　　   sss\
+　　  line 1 aaa line\
+　　   sss\
+　　  line 2 bbb\
+　　  welcome\
+　　   sss\
+　　  line 4 ccc\
+　　  hello\
+　　c\命令 将匹配行修改，c和s同样可以达到修改的目的，但是c是修改整行，s可以替换其中的字符\
+　　 `sed '/line/c\sss' demo.txt`\
+　　  sss\
+　　  sss\
+　　  welcome\
+　　  sss\
+　　  hello\
+　　y 命令 将匹配行字符逐个替换\
+　　 `sed 'y/linewo/LINEWO/' demo.txt`\
+　　  LINE 1 aaa LINE\
+　　  LINE 2 bbb\
+　　  WELcOmE\
+　　  LINE 4 ccc\
+　　  hELLO
+	  多个sed命令可以用-e，{}，和;分号来分割。
+
+
+- 例子：\
+　　 删除空行：`sed '/^$/d' demo.txt` \
+　　 行尾添加内容：`sed 's/$/append/' demo.txt`\
+　　 行尾删除刚才添加的内容：`sed 's/append$//' demo.txt`\
+　　 大小写转换 `sed 's/[a-z]/\u&/g' demo.txt`,`sed 's/[A-Z]/\l&/g' demo.txt`\
+　　 注意：\d,\u,\l,不能用在正则表达式的匹配中，只能用在转换中，如果在匹配中只能是字母本身。
+
+##awk
+
+	awk是另一个类似于sed的行文本处理程序，awk的原理是逐行读入文本，按照定义好的分割符将文本切割成多列，然后通过类似于c的脚本进行处理。awk认为输入的文本是结构的，可以分割成多列。sed只能提供内定的一些处理命令，而awk可以通过编程来实现比较复杂的处理。
+	基本命令：awk [option] '[BEGIN{}]{}[END{}]' 输入文本。
+	在awk中命令需要用'{}'来包括。begin中的命令是读入之前的操作，end中的命令是读入完成之后的操作。
+	如果{}中的操作含有更多的操作，可以再次嵌套。
+	动作之间用;分隔。
+	调用awk有三种方法，1直接调用。2.通过-f选项调用脚本。3.将脚本加上执行权限，直接运行脚本。
+	options
+		-f 输入的awk脚本文件
+		-F 定义分隔符，例如-F"\t"
+			默认的分割符是空格，每行的分割结果用$1,$2...来表示。
+			比如下面的文本：1 2 3 4 aaa bbb 
+			用awk来分割：awk '{for(i=0;i<NF;i++)print $(i+1)}',结果为：
+				1
+				2
+				3
+				4
+				aaa
+				bbb
+				分隔符也可以在BEGIN中来定义。比如{BEGIN{FS="/"}}
+		-v val=value 设置变量  
+	parameter:
+		可以给awk输入参数，在awk中可以直接引用输入参数，比如
+			1)awk -v OFS="." 'BEGIN{print OFS}' test.txt
+			或：2)awk -v OFS="." -f test.awk test.txt
+			或：3)./test.awk OFS="." test.txt 
+			需要指出的是如果采用方法3,在begin的时候，变量是没有被赋值的，此时变量被当作是输入文件，所以是无效的，只有当执行读入文本操作的的时候才有效。
+
+	awk中语句：
+		NF 表示每行的单元数
+		NR 表示文件的行数
+		FS 表示列分隔符，默认是空格
+		OFS 表示输出列分隔符，默认是空格
+		RS 表示记录分隔符，默认是换行符
+		ORS 表示输出记录分隔符，默认是换行符
+		注意：如果修改了输入分隔符，则相应的输出分隔符也要修改，否则分隔符就是默认的。
+		BEGIN 表示在处理文件前的准备工作，可以用来初始化变量，比如：awk 'BEGIN{i=0;}逐行处理命令'
+		END   表示文件处理结束后的工作，可以在这里输出结果。
+		比如：
+		awk 'BEGIN{j=0;}\
+		for(i=0;i<NF;i++)a[j][i]=$(i+1);j++;\
+		END{for(j=0;j<NR;j++){for(i=0;i<NF;i++)printf("%s:",a[j][i]);printf("\n");}}',\
+		结果是将输入文本中分割单元之间的空格转换成分号“:”
+		或者 awk '{for(i=1;i<=NF;i++)printf("%s:");print "\r"}'
+		awk中的语句和c十分相似，同样的语法结构，条件判断等，需要注意的地方：
+			1.不需要定义变量,包括数组。
+			2.使用正则表达式，比如在读入命令前可以加上正则表达式匹配：
+				awk 'BEGIN{}/pattern/{}' inputfile
+			3.打印语句可以是print,printf.print语句直接打印字串或变量，printf可以格式化字串。注意不是echo
+			4.条件判断语句可以是精确比较==，也可以是模糊比较~,或者与正则表达式比较。比如：
+				awk 'BEGIN{a=1}{if (a~10)print "a~10"}'
+				awk 'BEGIN{a=Abc}{if(a~[Aa]bc)print "a~abc"}'
+			5.执行语句之间用;分开。
+	awk中的函数：
+		split(r,s,t):将r字串按照t分割符分成s字串
+			awk 'BEGIN{r="a/b/c";split(r,s,'/');OFS="-";print s[1],s[2],s[3];}'
+			结果是：a-b-c
+		sub(r,s,t):将t中第一次出现的r用s替换
+			awk 'BEGIN{t="abc";sub("a","s",t);print t}'
+		gsub(r,s):将全局范围内的r用s替换;
+		gsub(r,s,t):在t中将r用s替换，相当于sub
+		inedx(t,s):返回t中s所处的位置
+		length(s):返回s的长度
+		substr(t,pos):返回t中从pos之后的字串
+		substr(t,pos,len):返回t中从pos之后长度为len的字串。
+			pos,len是数字,与index正好相反。	
+
+##sort
+	
+	对文本中的内容进行排序。sort认为文本中的数据是结构化的，同awk类似，通过分隔符，将每行文本分成多个域，然后针对某个域进行排序。比较时如果两个记录的第一列的内容相同则根据第二列进行排序，以此类推。
+	-t 设置分隔符，默认分隔符是空格，通过分隔符将记录分成多列，可以设置多个分隔符。
+	-kn 设置比较的列，n是想要比较的列，从1开始。默认是第一列。
+	-n 指定按照数字比较，默认是按照字串比较，比如如果内容为100,默认是按照字串100进行比较。
+	-c 测试文件是否已经排序。
+	-m 合并两个已经排序的文件。
+	-r 逆序 
+	-o 输出文件 
+	-u 排除重复项
+
+##uniq
+
+	统计文件重复行
+	-c 显示重复行数次数及重复行内容
+	-u 显示非重复行
+	-d 显示重复行
+	uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而sort中的重复行可以不连续。
+	例子：统计文本中单词的出现频率，显示出现次数和单词，次数多的在前面。
+	cat record.txt|sed -e 's/\.//g' -e 's/://g' -e 's/ /\n'|sort|uniq -c|sort -nr;
+	前面2个sed用于将不想统计的单词去掉，后面一个sed将用空格分开单词形成一个单列的文件，接着用sort将此文件排序，此文件中有重复行就是重复出现的单词，然后用uniq统计重复单词的数量，最后逆序输出该统计结果。
+
+##join
+	
+	用于将两个类似数据库的文件连接起来，如果两个文件有共有列，则列出包括共有列的记录的两个文件的所有列。比如两个文件为：file1：
+		1 a b c
+		2 a1 b1 c1
+		3 a2 b2 c2
+		file2:
+		1 a d e
+		2 a2 d2 e2
+		则join file1 file2为
+		1 a b c d e
+		2 a1 b1 c1 a2 d2 e2
+		默认的是以第一列作为比较的关键字
+		-a1	除了共有部分记录，还列出文件1中不包括共有部分的记录
+		-a2 除了共有部分记录，还列出文件2中不包括共有部分的记录
+		-v1 仅列出文件1中不包括共有部分的记录
+		-v2 仅列出文件2中不包括共有部分的记录
+		-1  文件1中用于比较的关键字所在列，默认是第一列
+		-2  文件2中用于比较的关键字所在列，默认是第一列
+		-o  输出的列
+		-t  列分隔符
+
+##split 分割文件
+
+		-n 分割成几个文件
+		-b size 按照字节数来分
+		-C size 按照字节数来分，尽可能保持行完整
+
+##cut   按列取出文件
+		-c n 从第几个字节取出
+			-c 1,-c 1-2，-c1,3
+		-f 从第几域取出
+		-d 定义域分割字符
+
+##paste 将两个文件按行合并
+		paste [options] file1 file2
+		-s 将连接的文件写在一行中
+		-d 定义连接符
+		比如 file1
+		a b c
+		a1 b1 c1
+		file2：
+		d e
+		d1 e1
+		paste -d@ file1 file2
+		结果为：
+		a b c @d e
+		a1 b1 c1@d1 e1
+
+##显示二进制文件
+
+
+　　xxd或者hexedit \
+	-gn n为按照几个字节显示记录
+
+
+##chkconfig 配置服务
+
+
+　　先在/etc/init.d/目录下编辑此文件,文件名就是服务名,例如server\
+　　case "$1" in\
+　　    start)\
+　　    cd /home/hanhj/tmp/language/py\
+　　    /home/hanhj/tmp/language/py/server2.py &\
+　　     ;;\
+　　   stop)\
+　　    killall server2.py\
+　　       ;;\
+　　   status)\
+　　   status server2.py\
+　　   ;;\
+　　   restart)\
+　　   $0 stop\
+　　   $0 start\
+　　   ;;\
+　　 *)\
+　　   echo "Usage:$0 {start|stop|status|restart}"\
+　　   exit 1\
+　　esac\
+　　 exit 0\
+　　意:\
+　　要将此文件加上可执行属性:sudo chmod +x server\
+　　然后,运行chkconfig -a server;将此命令加入到服务中.(如果没有安装chkconfig命令,可以执行:sudo apt-get install chkconfig)\
+　　此时用chkconfig -l ,可以看见server服务在列表中,但是全是off状态,\
+　　可以用chkconfig server on,将服务打开\
+　　 server               0:off  1:off  2:on   3:on   4:on   5:on   6:off\
+　　 0,1,...表示启动时的级别;\
+　　此时,重启系统后,server服务将自动启动,\
+　　如果想手动启停服务,可以\
+　　service server start|stop\
+　　或者:\
+　　/etc/init.d/server start|stop\
+
+
+##uname:
+
+
+　　显示系统版本-r显示核心版本,-a显示全部;\
+
+
+##history:
+
+
+　　显示输入过的命令\
+　　在~/.bashrc文件中可以有以下配置项\
+　　HISTCONTROL=ignoredups,忽略连续的重复输入\
+　　HISTCONTROL=erasedups,忽略所有命令中重复的输入\
+　　HISTTIMEFORMAT='%F %T|',配置命令前的时间\
+　　命令:\
+　　history 数字,显示最近n条的输入命令\
+　　!n,执行数字指示的命令,注意是直接在控制台中输入\
+　　!char,执行最近的与char匹配的命令,比如最近执行了dir命令,则!dir就执行dir命令\
+　　history -c,清除历史记录\
+
+
+
+##okular
+
+
+　　：阅读和注释pdf\
+　　划线 f6\
+
+
+##作图软件：
+
+
+　　pencil2d\
+　　pinta\
+
+
+##crontab
+
+
+　　用来设置计划任务\
+　　crontab -e 编辑计划任务\
+　　crontab -l 显示计划任务\
+　　-u 表示用户
+	编辑计划任务时，会显示该任务执行的分，时，日，月，周，命令\
+	/n 表示每隔
+	n1-n2 表示从n1到n2 
+	n1,n2 表示可选的数值
+	比如：*/1 * * * * echo "ddd" 表示每隔1分钟打印ddd
+	用户的crontab放置在/var/spool/cron/crontabs/user文件下
+	系统的cron放置在/etc/cron/crontab,/etc/cron.d/ 下
+
+
+##开机服务程序
+
+
+　　1）添加开机服务程序最简单的方法是在/etc/rc.local中添加脚本程序。rc.local是开机时最后执行的命令。脚本程序可以是很简单的一句话比如：\
+　　 在rc.local中添加a.sh,a.sh的内容为：echo 'hello'。注意需要将a.sh的属性改成可执行：chmod +x a.sh .a.sh可以放在环境变量path中\
+　　 的任何地方；\
+　　2）开机服务程序可以通过脚本来实现，开机程序的脚本放在/etc/init.d/目录下，可以看见这里有许多脚本比如ssh，apache2等。最简单的脚本如下：\
+　　 /etc/init.d/myfun :\
+　　 start(){\
+　　  echo "my fun start'\
+　　  a.sh\
+　　 }\
+　　 stop(){\
+　　  echo "my fun stop"\
+　　 }\
+　　 编辑好脚本后，用sysv-rc-conf命令将此服务置于某种启动模式之下，启动模式是指计算机启动的不同环境，在linux中有6种启动模式，分别为：\
+　　 0-关机\
+　　 1-单用户\
+　　 2-不带网络的多用户\
+　　 3-带网络的多用户\
+　　 4-不可用\
+　　 5-带图形界面的多用户\
+　　 6-重启\
+　　 我们常用的是3,5\
+　　 在etc目录下有rc.0，rc.1 ... 等目录，里面放的是不同启动模式下需要执行的活动比如s01apache2，s表示启动如果是，k表示关闭，后面是一个数字\
+　　 最后是服务名，该活动实际上是一个链接，链接到init.d中的脚本，这样在不同模式下需要启动或关闭服务就可以通过修改链接（修改链接名的第一个字母）\
+　　 或添加删除链接来完成。\
+　　 手动的修改这些链接比较麻烦，linux中提供了chkconfig工具（在ubuntu中废弃了这个工具，取而代之的是sysv-rc-conf）.\
+　　 chkconfig --add 服务名 用来添加服务;\
+　　 chkconfig -level 启动级别 服务名 on/off 可以设置相关服务的启动级别和开关该服务;\
+　　 chkconfig --list 可以列出当前的服务。\
+　　 sysv-rc-conf提供类似的图形化的界面，使用起来更加方便。\
+　　 如果服务做了改动，比如删除了/init.d/xxx服务，可以用sysv-rc-conf -P 来清除缓冲区，使其不在图形界面上显示。\
+	
+	配置服务的另外方法：systemd.
+	linux启动的过程：post->boot sequence->boot loader->Kernel+initrams->rootfs->/sbin/init,
+	不同版本linux的init不同，在centos5中是systemV，在centos6中是upstart，在centos7中是systemd（可以看到/sbin/init实际上是链接到/lib/systemd/systemd）.
+	相关文件是：
+		/lib/systemd/system/ 这里面有后缀名为service,target,path等文件。service就是服务名，相当于/etc/init.d/中的文件，target是运行等级文件。
+		/etc/systemd/system/ 这里面是管理员的配置文件，是指向/lib/systemd/system中的链接文件。
+	相关命令是：systemctl
+		启动/停止服务：systemctl start/stop xx.service
+			替代命令：service xx start/stop or /etc/init.d/xx start/stop
+		禁止/恢复服务：systemctl disable/enable xx.service 
+			类似命令：checkconfig xx on/off ,sysv-rc-conf。如果该服务不是属于systemd，则可能转交给systemd-sysv-install,比如apache2服务。所以有可能出现明明在/etc/init.d/中禁止的服务，但是依然不能禁止。
+		禁止/恢复服务：systemcrl mask/unmask xx.servie,实际上是在/etc/systemd/system/目录下创建一个该服务名的链接，该链接指向/dev/null 
+		杀死服务：systemctl kill xx.service
+		查看服务：
+			systemctl -t help 列出服务类别：
+				可以是service，socket，busname，target，snapshot，mount，device，automount，swap，timer，path，slice，scope。
+			systemctl list-units -t x or systemctl -t x
+				x可以是service，或其他上面的类型。该命令是列出指明类型的服务，列出其状态。
+			systemctl status xx.service
+			is-active:是否激活
+			is-enabled：是否禁止
+			list-dependencies ：列出依赖关系
+
+			who -r ，runlevel，systemctl get-default,显示当前运行等级
+##apt
+
+
+　　软件管理\
+	 update :refresh source list
+	 upgrade software\
+	 install software 安装软件\
+　　 purge software完全卸载软件\
+　　 remove software 保留修改部分\
+	 autoremove remove necessary 
+	 list regex software,like dpkg-query -l software\
+	 show software,show info of software\
+	 source software ,get source of software
+　　 apt-cache search 搜索本地文件\
+
+#dpkg
+
+	软件管理
+	-i 软件包名 :安装软件
+	-r 软件包名 :卸载软件
+	-s 软件包名 :显示软件状态
+	-l 软件包名 :显示软件包安装信息
+	-L --listfiles：显示软件包内文件
+
+	dpkg-deb actions  :for archive 
+		-b dir archive
+			build a deb package
+		-x archive dir 
+			extract archive
+		-I archive
+			info archive
+	dpkg-query actions :for installed package 
+		-l package-mach-name
+			list packages mached name 
+		-s package-name 
+			status of package
+		-S filename search pattern
+			serarch filename frome install package 
+		-p package-name
+			display details of package 
+		-L package name
+			list files installed on your system of package
+
+##wget 
+	从远程网站下载文件
+	-r 递归 
+	-c 断点续传
+	-p 下载图片
+	-e 执行命令，如果远方网站有robots.txt里面有disallow的字眼，表示不能自动下载，这时可以用-e robots=off 来关掉此限制。
+
+##nc 网络调试工具
+	server:nc -l [ip] port ;ip不写默认是本地任选ip地址
+	client:nc ip port 
+	-s ：设定socket中发送地址source ip，不能与-l同时使用
+	-S ：enable rfc 2385 tcp md5 signature option
+	-z ：scan listening daemons
+	-u ：udp
+	-p ：source port 
+	-l ：listening
+	-O ：specifies output size
+	-I ：specifiles input size
+	-4 ：use ipv4
+	-6 ：use ipv6
+	下面的命令可以在客户端发送命令到服务端，并执行
+	server:
+	rm -f /tmp/f 
+	mkfifo /tmp/f
+	cat f|sh -i 2>&1|nc -l port >f
+	client:
+	nc ip port 
+	这时，客户端提示符为$
+	可以输入比如ls，cd等命令
+	ctrl-d退出。
+
+##tcpdump 网络抓包工具
+
+	tcpdump [-i interface] [protocol] [port] 
+	tcpdump tcp port 7998 ;抓取本机默认网卡的上tcp协议中所有端口号为7998的数据包。
+	-i 网卡
+	protocol 协议：ip,tcp,udp,icmp,arp,rarp，eth等
+	net 网络名，比如 tcpdump net xxx
+	port 与协议有关，
+	src 源
+	dst 目的地，比如tcp src port 7998，ip src 192.168.1.2
+	host 主机名，比如tcpdump host 192.168.1.2
+	逻辑 and，or,!,>,<,==,! 
+		比如不想抓某个ip的包：tcpdump tcp port 7998 and host ! 218.106.89.76
+	可以用协议[字节]来获取相应协议的字节，从而达到对内容进行过滤的目的。比如：tcpdump ip[2:2]获取ip包的长度
+	-w 将原始包写入一个文件以供分析
+	-W 写入的文件c格式输出
+	-r 读入一个文件进行分析
+	-l 一边抓包，一边显示 tcpdump -l |tee dat; tcpdump -l >dat & tail -f dat 
+	-# 显示包号
+	-p 取消杂散模式
+	-t tt ttt tttt ttttt 显示时间格式
+	-v vv vvv 分析包
+	-U 一旦有包来了，立即更新写入的文件
+	-x，-xx，-X，-XX 分析文件
+	-Z 以某个用户身份使用。
+	例如：
+	在本机抓取tcp协议的端口号为7998（src and dst），排除218.106.89.76地址，实时写入文件dat。
+	tcpdump tcp port 7998 and host not 218.106.89.76 -w dat -U 
+	分析文件：
+	tcpdump -r dat -X 
+	
+        0                            15                              31
+       -----------------------------------------------------------------
+       |          source port          |       destination port        |
+       -----------------------------------------------------------------
+       |                        sequence number                        |
+       -----------------------------------------------------------------
+       |                     acknowledgment number                     |
+       -----------------------------------------------------------------
+       |  HL   | rsvd  |C|E|U|A|P|R|S|F|        window size            |
+       -----------------------------------------------------------------
+       |         TCP checksum          |       urgent pointer          |
+       -----------------------------------------------------------------
+
+
+##apache
+
+
+　　web服务器\
+　　安装\
+　　 从服务器安装：\
+　　  sudo apt-get install apache2\
+　　 从源代码安装\
+　　 。。。\
+　　配置apache\
+　　 配置文件位于/etc/apache2下，其中有:\
+　　 mods-available:存放可以用于加载的模块，这里的模块不是真正的程序，而是配置文件比如php.conf,php.load.load文件中指出装载模块的实际地址，conf文件用于配置该模块。\
+　　 比如php.conf\
+　　 <filesmatch ".php">\
+　　  sethandler application/x-httpd-php\
+　　 </filesmatch>\
+　　 指出扩展名是php的处理方法\
+　　 php.load\
+　　 loadmodule php5_module /usr/lib/apache2/modules/libphp5.0.so\
+　　 mods-enable:存放来自mods-available的链接，这样就可以方便的选择是否装入这些模块了。\
+　　 sites-available:存放可以访问的本机文件目录，包括根目录，虚拟目录。\
+　　 在sites-available中的文件，其内容包括目录路径和目录描述，比如\
+　　 alias study /home/hanhj/study 这里描述一个虚拟目录和实际路径的对应关系\
+　　 <directory /home/hanhj/study>\
+　　  options indexes followsymlinks\
+　　  allowoverride none\
+　　  require all granted\
+　　 </directory>\
+　　 这里是对该目录属性的描述\
+　　 sites-enable：存放sites-available的链接，通用用于方便的设置可供访问的目录\
+　　 ports.conf\
+　　 用于配置端口号\
+　　 此外，还有配置文件apache2.conf 可以用来配置除了以上分开的配置文件未配置的内容；\
+
+
+##wiki
+
+
+　　wiki is a php program with database,so it use apache,php and mysql(or other database)\
+　　 1)sudo apt-get install apache2 mysql-server php7.0 php7.0-mysql libapache2-mod-php7.0 php7.0-xml\
+　　php is as a module of apache2. php version must suitible for apache,unless it will not work well,and up\
+　　command is useful for install wiki envioument;\
+　　and then,you should download wiki programe from wiki web site,if you download diffrent version it will\
+　　not work well possibly,in my envioument i use mediawiki-1.26.3(the new version 1.27.1 report error when\
+　　run index.php);\
+　　 2)tar zxvf mediawiki-1.26.3.tar.gz\
+　　and then,you should config apache sites-enable for wiki:\
+　　 3)vi /etc/apache2/sites-enable/httpd.conf\
+　　and then,you should config my sql ,create a database for wiki\
+　　 4)\
+　　  shell:mysql -u root -p\
+　　  mysql>create database my_wiki;\
+　　  mysql>grant all on my_wiki to wiki@localhost identified by '123456'\
+　　  mysql>exit\
+　　  Bye\
+　　  this is  not computer user account passwd ,but the database user passwd\
+　　and then ,you should add a computer user for wiki,like this:\
+　　 5)\
+　　  sudo adduser wiki\
+　　  passwd wiki (not necessary)\
+　　 6)\
+　　  in browse :localhost/wiki\
+　　  config your wiki\
+　　  and put LocalSettins.php in your wiki dictory\
+
+
+##mysql:
+
+
+　　login:mysql -u username -p\
+　　mysql>show databases\
+　　--创建数据库\
+　　mysql> create database 数据库名称\
+　　--创建表\
+　　mysql> create table 表名 (列的名字（id）类型（int（4））primary key(定义主键) auto_increment（描述 自增），……，）；\
+　　--插入数据\
+　　mysql> insert into 表名(field1,field2...) values(value1,value2...);\
+　　--查看所有数据库\
+　　mysql> show databases ;\
+　　--使用某个数据库\
+　　mysql> use 数据库名称；\
+　　--查看所使用数据库下所有的表\
+　　mysql> show tables;\
+　　--显示表的属性结构\
+　　mysql> desc 表名；\
+　　--创建数据库\
+　　mysql> create database 数据库名称\
+　　--删除数据库\
+　　mysql> drop database databasename;\
+　　--创建表\
+　　mysql> create table 表名 (列的名字（id）类型（int（4））primary key(定义主键) auto_increment（描述 自增），……，）；\
+		   create table newtable like oldtable;根据oldtable复制newtable的表结构;
+　　--删除表\
+　　mysql> drop table tablename;\
+	--更改表\
+	mysql> alter table 表名 add/drop field [type]\
+	mysql> alter table 表名 modify field type\
+		通用的sql语句是alter table 表名 alter column field Type
+	--插入数据\
+　　mysql> insert into 表名(field1,field2...) values(value1,value2...);\
+		   insert into table1 select * from table2,从table2中复制所有数据到table1中;
+　　--删除表中的数据\
+　　mysql> delete from table where id=？[or name=? (and name=?)];\
+			delete from table ;删除所有数据
+	--更新数据\
+	mysql> update 表名 set field1 = value,field2=value where...\ 
+　　--选择表中数据的显示\
+　　--* 代表选择所有列 ，\
+　　mysql> select * from 表名 where id=?[and name=？] [or name=?];\
+　　mysql> select id,name from 表名 order by 某一列的名称 desc(降序，\
+	--联合
+	mysql> select table1.field1 table2.field2 from table1,table2 where table1.field = table2.field\
+		select table1.field1 table2.field2 from table1 inner join table2 on table1.field=table2.field\
+		select a.name ,b.name, b.age from student a inner join person b on a.name=b.name;
+sql中的数据类型：
+integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(size,d),char(size),varchar(size),date(yyyymmdd);
+
+##设置动态库搜寻路径：
+
+
+　　方法１）修改/etc/ld.so.conf.d/在此路径下添加一个文件指明路径\
+　　方法２）修改~/.bashrc文件，添加一行：export LD_LIBRARY_PATH=想要的路径:$LD_LIBRARY_PATH\
+　　静态和动态连接：\
+　　如果是静态连接需要加上　--static选项，比如g++ -I /usr/local/include/　a.cpp -L /usr/local/lib/ -lboost-serialization --static -o a\
+　　如果是动态连接,可以不加上static ,但是需要用上面的方法指明库搜寻路径。\
+　　一般第三方的库，会在配置文件时指出--prefix=xxx的选项，用于指明安装目录，我们一般放在/usr 或者/usr/local目录下，这样一般是在linux默认的搜寻路径中。\
+
+
+##gdb:
+
+
+调试程序，需要在编译和连接时加上-g选项。\
+启动：\
+　　gdb exe_file\
+　　gdb PID exe_id  运行时调试\
+　　启动时参数：\
+　　　--symbols=SYMFILE\
+　　从指定文件中读取符号表。\
+　　--se=FILE \
+　　从指定文件中读取符号表信息，并把他用在可执行文件中。 \
+　　--core=COREFILE \
+　　调试时core dump的core文件。 \
+　　--directory=DIR\
+　　加入一个源文件的搜索路径。默认搜索路径是环境变量中PATH所定义的路径  			\
+
+调试时命令：\
+　　设置输入参数：set args\
+　　显示输入参数：show args\
+　　装入调试程序：file xx\
+　　源程序：\
+　　　　list\
+　　　　list line\
+　　　　list -向前显示\
+　　　　list +向后显示\
+　　　　set listsize count设置一次显示的行\
+　　　　list first，last\
+　　　　edit，编辑代码，需要设置EDITOR环境变量，如果没有设置默认是/usr/bin/ed\
+　　　　make,编译代码\
+　　　　cd 改变路径\
+　　　　pwd 显示路径\
+　　　　shell 执行shell，需要设置SHELL环境变量，如果没有设置默认是/usr/bin/sh\
+　　显示信息：info ，简写i。比如i b表示显示断点\
+　　　　info locals 显示当前局部变量\
+　　　　info args 显示输入参数\
+　　　　info f 显示调用栈\
+　　显示信息: show\
+　	　　show ada -- Generic command for showing Ada-specific settings\
+　　显示数据：print，简写p\
+　　　　变量：p/f f表示显示格式，可以是\
+　　　　　　x 按十六进制格式显示变量。 \
+　　　　　　d 按十进制格式显示变量。 \
+　　　　　　u 按十六进制格式显示无符号整型。 \
+　　　　　　o 按八进制格式显示变量。 \
+　　　　　　t 按二进制格式显示变量。 \
+　　　　　　a 按十六进制格式显示变量。 \
+　　　　　　c 按字符格式显示变量。 \
+　　　　　　f 按浮点数格式显示变量。　　 \
+　　　　　　print base@length:显示数组，base是数组的起始地址名称，length是显示的长度\
+　　　　内存：x \
+　　　　　　x addr\
+　　　　　　x/nfh addr \
+　　　　　　n 	is numbers will show\
+　　　　　　f 	数据显示形式，比如x表示16进制，o表示8进制，d表示十进制，c表示字符，f表示浮点，s表示字符串\
+　　　　　　h	表示每个数字的宽度，b表示1个byte，h表示半个字2个byte，w表示一个字4个byte，g表示8个byte\
+　　自动显示变量：display expr每当到达断点时自动显示变量\
+　　　　`display /i $pc` 会在断点时显示机器代码和源代码。\
+　　　　`undisplay dnums`\
+　　　　`delete display dnums`\
+　　显示数组或变量类型：whatis 变量，or ptype 变量,ptype比whatis显示更多信息。\
+　　特殊变量：`$pc`：程序计数器，`$fp`当前堆栈指针,`$sp`栈指针,`$ps`当前处理器状态\
+　　设置变量：set 变量=value\
+　　执行：run 全速运行，简写r；next 不进入的单步执行，简写n；step 进入的单步执行，简写s。continue 继续执行，简写c。\
+　　函数调用：call function-name\
+　　    eg：call fun（1,3）\
+　　程序暂停：程序暂停的方法有断点，观察点和catch。\
+　　　　断点：break 简写b\
+　　　　 　  b linesnumber:设置行断点;\
+　　　　 　  b function-name：设置函数断点\
+　　　　 　  b line or function if contion：设置条件断点\
+　　　　 　   eg：b 20 if count==100\
+　　　　 　  b filename：linenumber or filename：function-name：设置多文件的断点。\
+　　　　 　  commands： 用来设置程序暂停后的动作，由commands 。。。 end组成\
+　　　　 　  比如 b foo if count==100\
+　　　　 　  commands\
+　　　　 　  	printf “count==100”\
+　　　　 　  	continue\
+　　　　 　  end\
+　　　　 　  使用commands可以方便自动化测试。\
+　　　　 　  设置好条件断点后可以用condition命令来修改条件\
+　　　　 　  	condition bnum expr\
+　　　　 　  	condition bnum 清除条件\
+　　　　 　  ignore bnum count，表示忽略断点count次\
+　　　　设置观察点：watch 变量，设置观察点后，当观察点数据发生变化，可以自动停下来。	 　  \
+　　　　捕捉信号：handle handle-name control\
+　　　　	handle-name：SIGPIPE，SIGINT。。。\
+　　　　	control:\
+　　　　	 nostop：不停止程序，也不发送给程序\
+　　　　	 stop:停止程序\
+　　　　	 print：显示一条信息\
+　　　　	 noprint：\
+　　　　	 pass：将信号发送给程序\
+　　　　	 nopass：停止程序，但不发送信号给程序\
+　　　　	 \
+　　　　	 catch event，event可以是：\
+　　　　	 	throw\
+　　　　	 	catch\
+　　　　	 	exec\
+　　　　	 	fork\
+　　　　	 	vfork\
+　　　　	 	load/unload\
+　　　　	 	\
+　　　　维护暂停点：delete，enable，disable，clear\
+　　　　 　 删除断点：delete breakpoint-number，如果不带number则删除所有断点。简写d，比如d 2\
+　　　　 　 禁止断点：disable breakpoint-number\
+　　　　 　 允许断点：enable breakpoint-number\	\
+　　　　 继续运行：\
+　　　　 	step [ignore count]	 \
+　　　　 	coutinue [count]\
+　　　　 	next [count]\
+　　栈：\
+　　　　bt：显示当前调用栈\
+　　　　f，frame 显示当前代码\
+　　　　info f 显示栈信息		\
+　　[gdb help](gdb_help.html)
+
+	gdb的移植：
+	为了在目标板上运行gdb，可以做以下移植工作：
+	1.下载代码，从gnu网站上下载gdb，和ncurses代码
+		www.gnu.org/software/software.html
+	2.编译ncurses
+		ncurses是一个文本的gui界面库
+		./configure --host=your cross compile --prefix=where you want install --without-ada --enable-termcap --with-shared
+		比如我的：./configure --host=arm-none-linux --prefix=/home/bin --without-ada --enable-termcap --with-shared
+		需要注意的是：cross compile 就是你的交叉编译器的前缀，在编译之间要设置环境变量path路径，使得能够找到该交叉编译器。
+		make 
+		make install
+	3.编译gdb
+		./configure --host=your cross compile --prefix=where you want to install --without-x --disable-gdbtk --disable-tui --without-included-regex --without-included-gettext CPPFLAGS=your ncurese include  LDFLAGS=your ncurese lib dir
+		比如：
+		./configure --host=arm-none-linux --prefix=/home/bin --without-x --disable-gdbtk --disable-tui --without-included-regex --without-included-gettext CPPFLAGS=-I/home/bin/include  LDFLAGS=/home/bin/lib
+		编译好后，gdb就在gdb目录下，可以拷贝到目标板运行，同时也要拷贝ncurses的库。gdb调试的时候，需要源文件，如果是简单的程序，可以直接拷贝到目标板，如果程序较大，可以将计算机挂载到目标板上进行调试。
+		mount -t smbfs your ip/dir mount dir -o dir_mod=xxx,file_mode=xxx,noserverino,uid=xxx,gid=xxx
+		比如：mount -t smbfs //192.168.15.23/share_doc /mnt/tmp/ -o dir_mod=0777,file_mode=0777 ,noserverino,uid=1001,gid=1001
+		这样就可以直接在目标板上调试保存在计算机上的程序了，而不用拷贝。
+
+		ddd是一个基于gdb的图形界面环境，
+		gdbtui是一个基于gdb的文本界面环境。
+
+##内存检查工具valgrind
+
+
+　　valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  ./a.out\
+　　valgrind使用memcheck工具来检查，如果是守护进程，可以用killall memcheck来退出进程。实际上有一个默认选项--tool=memcheck\
+　　检查代码覆盖：\
+　　valgrind --tool=callgrind ./a.out\
+　　killall callgrind\
+　　检查当前目录下有一个callgrind.out.xxx文件，xxxx表示当前程序的ｐｉｄ。\
+　　callgrind_annotate --auto=yes callgrind.out.xxx>log\
+　　然后可以用vi来查看这个文件。\
+　　valgrind需要下载和安装。下载来自www.valgrind.org,程序为valgrind-x.x.x.tar.bz2.\
+　　下载后tar vxf valgrind-x.x.x.tar.bz2\
+　　./configure --prefix=/usr/local\
+　　make install\
+　　\
+　　另外一个检查内存泄露的工具是mtrace\
+　　不需要下载，在ubuntu中已经自动安装了，需要做的是：\
+　　1）在文件中加入下列语句\
+　　...\
+　　#include <mcheck.h>
+　　...\
+　　main(){\
+　　...\
+　　 set("MALLOC_TRACK","output",1);\
+　　 mtrack();\
+　　....\
+　　}\
+　　运行后在当前目录下，会产生一个output 文件，可以用mtrace output来查看。\
+　　但是mtrace的记录都是机器级的，不如valgrind来的直接，是代码级的。\
+　　\
+　　Valgrind的最新版是3.2.0，它一般包含下列工具： \
+　　1.Memcheck \
+　　最常用的工具，用来检测程序中出现的内存问题，所有对内存的读写都会被检测到，一切对malloc()/free()/new/delete的调用都会被捕获。所以，它能检测以下问题： \
+　　1.对未初始化内存的使用； \
+　　2.读/写释放后的内存块； \
+　　3.读/写超出malloc分配的内存块； \
+　　4.读/写不适当的栈中内存块； \
+　　5.内存泄漏，指向一块内存的指针永远丢失； \
+　　6.不正确的malloc/free或new/delete匹配； \
+　　7,memcpy()相关函数中的dst和src指针重叠。 \
+　　这些问题往往是C/C++程序员最头疼的问题，Memcheck在这里帮上了大忙。 \
+　　用法：valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  your program\
+　　然后会在当前目录看到一个ｌｏｇｆｉｌｅ文件，然后就可以查看这个文件检查问题了。\
+　　2.Callgrind \
+　　和gprof类似的分析工具，但它对程序的运行观察更是入微，能给我们提供更多的信息。和gprof不同，它不需要在编译源代码时附加特殊选项，但加上调试选项是推荐的。Callgrind收集程序运行时的一些数据，建立函数调用关系图，还可以有选择地进行cache模拟。在运行结束时，它会把分析数据写入一个文件。callgrind_annotate可以把这个文件的内容转化成可读的形式。 \
+　　用法：valgrind --tool=callgrind  your program,然后可以发现在当前目录中有一个callgrind.out.xxxx的文件，可以直接查看这个文件看调用关系，但是很复杂，可以用kcachegrind callgrind.out.xxxx来查看，这是个图形化程序。左边窗口是所有调用的函数及其调用次数，运行时间所占比例等，右边窗口上半部是左边窗口所选择函数的调用者信息，下半部是该函数调用的函数信息。\
+　　3.Cachegrind \
+　　Cache分析器，它模拟CPU中的一级缓存I1，Dl和二级缓存，能够精确地指出程序中cache的丢失和命中。如果需要，它还能够为我们提供cache丢失次数，内存引用次数，以及每行代码，每个函数，每个模块，整个程序产生的指令数。这对优化程序有很大的帮助。 \
+　　用法：valgrind --tool=cachegrind  your program,然后可以发现在当前目录中有一个cachegrind.out.xxxx的文件，可以直接查看这个文件.也可以用kcachegrind程序来查看。\
+　　4.Helgrind \
+　　它主要用来检查多线程程序中出现的竞争问题。Helgrind寻找内存中被多个线程访问，而又没有一贯加锁的区域，这些区域往往是线程之间失去同步的地方，而且会导致难以发掘的错误。Helgrind实现了名为“Eraser”的竞争检测算法，并做了进一步改进，减少了报告错误的次数。不过，Helgrind仍然处于实验阶段。 \
+　　用法：valgrind --tool=helgrind --log-file=log your program,然后查看ｌｏｇ文件\
+　　5. Massif \
+　　堆栈分析器，它能测量程序在堆栈中使用了多少内存，告诉我们堆块，堆管理块和栈的大小。Massif能帮助我们减少内存的使用，在带有虚拟内存的现代系统中，它还能够加速我们程序的运行，减少程序停留在交换区中的几率。 \
+　　用法：valgrind --tool=massif your program,然后可以在当前目录中看到有一个massif.out.xxxx文件，可以查看该文件检查堆的使用情况。\
+　　此外，lackey和nulgrind也会提供。Lackey是小型工具，很少用到；Nulgrind只是为开发者展示如何创建一个工具。我们就不做介绍了。  \
+　　\
+
+
+##单元测试中的代码覆盖率检查：
+
+
+　　1）在cppflags或cflags中加上 -fprofile-arcs -ftest-coverage\
+　　2) 在ldflags中加上 -fprofile-arcs -ftest-coverage\
+　　3) 编译文件，可以看到在当前目录中有后缀名为gcno文件\
+　　4）运行程序，可以看到在当前目录中有后缀名为gcda文件，此时文件中已经包括了代码覆盖信息。但是还不能直观的显示出来。\
+　　5）下载lcov工具，http://ltp.SourceInsight.net/coverage/lcov.php\
+　　 lcov-x.x.tar.gz,\
+　　 tar -zxvf lcov-x.x.tar.gz,mak install\
+　　6) lcov -d .  -o coverage.info -b . -c -t your programe\
+　　7) genhtml  coverage.info　-o 想要输出的目录\
+　　8) 可以看到在当前目录下有一个你刚才建立的输出目录，里面是html文件，用浏览器查看index.html文件。\
+　　\
+
+
+##doxygen:用于生成项目帮助文档
+
+
+　　1.下载工具：sudo apt-get install doxygen\
+　　2. 在项目所在目录 doxygen -g 会生成一个Doxygenfile 配置文件。\
+　　 这里面的大多数内容可以不修改，主要要修改的地方\
+　　 PROJECT_NAME           = "项目名称"\
+　　 OUTPUT_DIRECTORY       =doxygen_file//设置输出目录\
+　　 OUTPUT_LANGUAGE        =Chinese //语言选择\
+　　 EXTRACT_PRIVATE        = YES//是否要检查private中的变量或函数\
+　　 GENERATE_RTF           = YES//是否产生rtf文件，默认是在rtf目录下的refman。rtf\
+　　 EXTRACT_LOCAL_CLASSES YES 是否解析源文件（cpp文件）中定义的类\
+　　 SOURCE_BROWSER NO 如果为YES，源代码文件会被包含在文档中\
+　　 INLINE_SOURCES NO 如果为YES，函数和类的实现代码被包含在文档中\
+　　3. 注释代码\
+　　 @exception {exception description} 对一个异常对象进行注释。\
+　　 @warning {warning message } 一些需要注意的事情\
+　　 @todo { things to be done } 对将要做的事情进行注释\
+　　 @see {comment with reference to other items } 一段包含其他部分引用的注释，中间包含对其他代码项的名称，自动产生对其的引用链接。\
+　　 @relates 通常用做把非成员函数的注释文档包含在类的说明文档中。\
+　　 @since {text} 通常用来说明从什么版本、时间写此部分代码。\
+　　 @deprecated\
+　　 @pre { description of the precondition } 用来说明代码项的前提条件。\
+　　 @post { description of the postcondition } 用来说明代码项之后的使用条件。\
+　　 @code 在注释中开始说明一段代码，直到@endcode命令。\
+　　 @endcode 注释中代码段的结束。\
+　　 ///产生一条消息给control类，用于转发主站直接对电能表的批量抄读，1,2,3,4等级数据的返回\
+　　 /**\
+　　 ***********************************************************************\
+　　 *  @brief  清除电表事件等级参数列表\
+　　 *  @author  hhj\
+　　 *  @param[in] AmmeterEventGrade &grade 电表事件分级表\
+　　 *  @return  grade.data_id_set清除\
+　　 *  @note 无。\
+　　 *  @see  NULL\
+　　 ***********************************************************************\
+　　 */\
+　　 以上都是有效的注释\
+　　4. 运行 doxygen，会自动在doxygen_file目录下产生html和latex目录\
+
+##网络配置：
+
+基本工具：
+	ifconfig,用来启停网络设备，配置ip地址（临时的），子网掩码，等
+	ifconfig [interface] [options] [address]
+		没有任何参数，显示当前所有接口网络状态
+		interface 当前网络接口，可以用ls /sys/class/net 来显示当前的网络接口，其实是一个链接。一般以太设备命名为enxxx,无线设备命名为wlxxx.
+			cat /sys/class/net/enxxx/address 来显示mac地址。
+		netmask 用来配置子网掩码
+		metric 用来配置数据包转发次数。
+		-arp 允许或禁止arp
+		-allmuti 允许或禁止无区别模式
+		-promisc 关闭或启动混杂模式
+		media 网络媒介10base2,10baseT，100bseT
+		mem_start 驱动内存开始地址
+		mtu 每个包的最大长度
+		add <地址>配置ipv6地址
+		del <地址>删除ipv6地址 
+		-s 显示当前网络通讯发送接受字节信息
+		up 启动网络设备
+		down 关闭网络设备
+	例子：
+		ifconfig eth0 192.1688.1.103 netmask 255.255.255.0 up/down
+	其他：
+		改变接口名称：
+			一般以前的网络接口名都是ethx，如果觉得现在的命名不爽，可以用下面的方法来改变：
+			vi /etc/udev/rules.d/10-network.rules 这个文件中是配置网络接口底层信息的地方，可以配置mac地址和名称：
+			SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="88:ae:1d:d2:d0:4d",NAME="net0"
+			NAME最好不要配置成ethx，免得冲突。地址可以用上面的命令获得。
+			修改好后，如果想立即生效，可以先删除系统中该接口的驱动，然后重新插入。
+			查找该接口的驱动可以用lspci -v来显示
+			07:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8101/2/6E PCI Express Fast/Gigabit Ethernet controller (rev 02)
+			Subsystem: Lenovo RTL8101/2/6E PCI Express Fast/Gigabit Ethernet controller
+			Flags: bus master, fast devsel, latency 0, IRQ 26
+			I/O ports at 2000 [size=256]
+			Memory at 95110000 (64-bit, prefetchable) [size=4K]
+			Memory at 95100000 (64-bit, prefetchable) [size=64K]
+			Expansion ROM at 98100000 [disabled] [size=128K]
+			Capabilities: <access denied>
+			Kernel driver in use: r8169
+			Kernel modules: r8169
+　　从上面的最后一句话可以看出该接口使用的模块是r8169，该模块位于/lib/modules/当前内核/kernel/drivers/net/ethernet/realtek/r8169.ko.如果不知道位于何处，可以用locate 模块名 来搜索。然后，rmmod r8169 ,insmod /lib/modules/.../r8169.ko来重新加载模块，这时用ifconfig来查看，可以看到接口名已经改变了。
+
+	cat proc/net/dev:显示当前网络通讯发送接受字节信息，同ifoconfig -s ,netstat -i 
+		
+	为一个网卡配置多个ip地址：
+		ifconfig eth0:1 xxx 为eth0添加一个配置（第一个是eth0:0）,ifconfig eth0:2 xxx为eth0添加第二个网卡配置 
+	
+	以上配置都是一次性的，如果关机了，配置就掉了，你可以在/etc/rc.local添加以上配置。对于ubuntu你也可以在/etc/network/interfaces中配置，下面再描述。
+
+route:配置路由：
+	route [add] target [gw] [netmask] [interface]
+	route [del] target [netmask] [interface]
+	路由就是与远方建立连接的通道表，通过目标地址和子网掩码来确定，比如通过dns确定目标地址为19.1.2.3，假如路由表中有这样配置：19.1.0.0,netmask:255.255.0.0
+	route add default gw 192.168.1.1
+配置dns
+	sudo vi /etc/resolv.conf 
+	nameserver 8.8.8.8 --google dns
+
+自动配置网络：
+	刚才讲了通过ifconfig方式来配置网络，但是此方法是一次性的，为了能够开机就能自动配置，可以使用下面的方法：
+	linux下配置网络有两种方法，无界面方式和有界面方式。前者在ubuntu下通过/etc/network/interface或者rehat下通过/etc/sysconfig/network-scripts
+
+	无界面方式：
+    	ubuntu:
+    	编辑/etc/network/interfaces文件，该文件用于配置网络接口，并被ifup，ifdown来使用。
+    	vi /etc/network/interfaces
+    		auto eth0
+    		iface eth0 inet manual|static|dhcp 
+    	如果是static，可以配置ip地址，netmask，gateway等
+    	比如：
+    		address 192.168.0.10
+    		netmask 255.255.255.0
+    		gateway 192.168.0.1
+    		dns-nameserver 192.168.0.1
+    		dns-nameserver 8.8.8.8
+    	然后调用ifup|ifdown interface 来启动和停止网络，或者/etc/init.d/network restart
+    	如果配置成manual，可能需要等一会才能ping通外面的网络，
+    	如果配置成dhcp，会调用dhcpcd守护进程配置网络，可能需要等一会才能ping通外部的网络。
+    	
+    	dhcpcd的配置文件是/etc/dhcpcd.conf
+    		# A sample configuration for dhcpcd.
+    		# See dhcpcd.conf(5) for details.
+    		
+    		# Allow users of this group to interact with dhcpcd via the control socket.
+    		#controlgroup wheel
+    		
+    		# Inform the DHCP server of our hostname for DDNS.
+    			hostname
+    		
+    		# Use the hardware address of the interface for the Client ID.
+    		#clientid
+    		# or
+    		# Use the same DUID + IAID as set in DHCPv6 for DHCPv4 ClientID as per RFC4361.
+    		# Some non-RFC compliant DHCP servers do not reply with this set.
+    		# In this case, comment out duid and enable clientid above.
+    			duid
+    		
+    		# Persist interface configuration when dhcpcd exits.
+    			persistent
+    		
+    		# Rapid commit support.
+    		# Safe to enable by default because it requires the equivalent option set
+    		# on the server to actually work.
+    			option rapid_commit
+    		
+    		# A list of options to request from the DHCP server.
+    			option domain_name_servers, domain_name, domain_search, host_name
+    			option classless_static_routes
+    		# Most distributions have NTP support.
+    			option ntp_servers
+    		# Respect the network MTU. This is applied to DHCP routes.
+    			option interface_mtu
+    		
+    		# A ServerID is required by RFC2131.
+    			require dhcp_server_identifier
+    		
+    		# Generate Stable Private IPv6 Addresses instead of hardware based ones
+    			slaac private
+    		可能要改动的地方是clinetid
+    		也可以直接运行dhcpcd net0 以获得dns，或者dhclient来获得dns。
+    		dns的配置文件是/etc/resolv.conf,该文件一般不直接修改，而是通过ifup，dhcpcd，network-manager等程序来修改。		
+
+	有界面方式：
+    	通过/etc/NetworkManager/NetworkManager.conf配置文件来实现
+    	需要允许其中的managed
+    		[ifupdown]
+    		managed=true
+    	然后通过桌面右上角的网络配置添加网络配置，然后执行/etc/init.d/network-manager start 
+    	如果上面managed配置成false，右上角的网络会显示未托管。
+    
+　　有界面和无界面方式二者只能选一，如果改动了interfaces文件，有界面方式会关闭自己，显示未托管，除非特地指定managed为true。如果managed设置为true，则interfaces文件无效。
+
+通过systemctl来操纵network :
+	/etc/init.d/network-manager替代，network-manager用/usr/sbin/NetworkManager来处理。
+　　相关文件：
+		/etc/conf.d/network@<interface>
+			address ...
+			netmask ...
+			gateway ...
+		/lib/systemd/system/network@.service
+			[Unit]
+			Description=Network connectivity (%i)
+			Wants=network.target
+			Before=network.target
+			BindsTo=sys-subsystem-net-devices-%i.device
+			After=sys-subsystem-net-devices-%i.device
+			
+			[Service]
+			Type=oneshot
+			RemainAfterExit=yes
+			EnvironmentFile=/etc/conf.d/network@%i
+			
+			ExecStart=/usr/bin/ip link set dev %i up
+			ExecStart=/usr/bin/ip addr add ${address}/${netmask} broadcast ${broadcast} dev %i
+			ExecStart=/usr/bin/ip route add default via ${gateway}
+			
+			ExecStop=/usr/bin/ip addr flush dev %i
+			ExecStop=/usr/bin/ip link set dev %i down
+			
+			[Install]
+			WantedBy=multi-user.target
+	ln -s /lib/systemd/system/network@.servie /etc/systemd/system 
+	systemctl enable network@enp7s0 
+	systemctl start network@enp7s0
+
+		
+
+自动插入模块：
+	vi /etc/moudles中写入想要插入的模块比如r8169，该文件被指向为 /etc/modules-load.d/modules.conf .
+
+adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
+	在ubuntu中的配置工具是采用ponconf。在redhat中采用adsl
+	ubuntu：
+	sudo pppoeconf 用来配置pppoe ，会弹出文本界面自动扫描当前网卡，提示输入你的adsl用户名和密码，询问是否开机自动启动连接。设置最后提示是否现在使用，同意后就能使用网络了。
+	手动建立adsl连接命令是sudo pon dsl-provider，断开连接命令是sudo poff dsl-provider。
+	为了建立dns，可以下载dhcpcd:sudo apt install dhcpcd .
+	redhat：
+	配置命令是adsl-setup,启动命令是adsl -start，停止命令是adsl -stop，可以在启动命令中加入adsl用于自动建立连接。
+修改主机名：
+	hotnamectl set-hostname=xxx
+	注意同时要修改/etc/hosts文件，将其中的主机名修改，否则配置网络时会报“无法解析主机”的错误。
+
+##rinetd:一个端口映射工具
+	需要配置/etc/rinetd.conf
+	文件内容为：
+	绑定地址 绑定端口 发送地址 发送端口
+	比如：
+	0.0.0.0 1234 192.168.1.23 1234 
+
+##sysctl:用来控制一些系统参数
+	-a 显示所有系统参数
+
+##ros 机器人操作系统
+
+	https://wenku.baidu.com/view/1d15d1fd284ac850ac02422a.html
+
+##Makefile编写：
+
+	Makefile用来管理包括多个文件的项目的编译，因为一般来说用手工编写，因此适用于比较小规模的项目，如果项目文件较多建议使用自动化程度较高的cmake或automake等工具。
+	Makefile类似与bash脚本文件，最基本的包括定义，依赖关系两个部分，此外makefile中也有控制语句，函数等，我们只要使用常用的部分基本就可以了，没有必要弄得太复杂。
+	定义就是定义一些需要用到的变量，常用的变量包括编译器，工程路径，源代码，目标文件，以及一些预定义的变量。变量的定义与bash中的定义方法是一致的，比如：CC=gcc，就是指定编译器为gcc，make工具有默认定义的规则和变量，可以用make -p 来查看。假设，目前的项目所有文件都在同一目录下，有两个文件main.cpp,lib.cpp
+	第一个Makefile
+	proj=.
+	target=test
+	all:$(target)
+	CC=gcc
+	$(target):main.o lib.o
+	以上用到的是make的默认规则，如果不用默认规则，可以这样写：
+	proj=.
+	target=test
+	all:$(target)
+	srcs=main.cpp lib.cpp  或者 srcs=$(wildcard %.cpp)
+	objs=$(srcs:%cpp=%.o)	或则 objs=$(patsubst %.cpp,%.o,$(srcs))
+	%.o:%.cpp
+		$(CC) -c -g $< -o $@
+	$(target):$(objs)
+		$(CC) $(objs) -o $@
+	.PHONY clean
+	clean:
+		@rm $(objs) $(target)
+	
+	如果项目由多个目录组成，可以考虑在根目录建一个管理的Makefile，将通用的部分包括进来，在各个子目录中进行实际的编译，比如有如下目录
+	--root
+		--app
+		--lib
+		--tools
+		
+	app目录放置应用程序，lib放置一些库，tools放置一些工具程序
+	在根目录可以这样写：
+	Makefile:
+	proj_root_dir=$(PWD)
+	export proj_root_dir
+	subdir=app lib tools 或者：subdir=$(shell ls -d */)
+	for i in $(sbudir);do
+		make -C $i||exit 1;
+	done
+	
+	Makefile.rule:
+	%.o:%.cpp
+		$(CC) -c -g $< -o $@
+
+	app/Makefile
+	
+	include $(proj_root_dir)/Makefile.rule
+	target=test
+	srcs=$(wildcard *.cpp)
+	objs=$(srcs:%.cpp=%.o)
+	objs+=$(proj_root_dir)/tools/*.o
+	$(target):$(objs)
+		$(CC) -L$(proj_root_dir)/lib -labc $(objs) -o $@	
+	...
+	
+编写so库：
+	gcc -fPIC -c -g -Wall a.c
+	gcc -shared -o a.so a.o
+	使用的时候：
+	修改LD_LIBRARY_PATH环境变量，指向so所在目录
+	或者在 /etc/ld.so.conf.d/中添加你想要的路径
+	静态库：ar rcs a.a a.o
+		
+#iconv:用于转换文字编码
+	iconv -f infilecode -t tofilecode inputfile -o outputfile
+	iconv -l :list all support code
+	icov -f CN-GB -t utf-8 a.txt -o a.txt.utf8
+#file 显示文件编码信息
+	-i 按照mime形式显示
+
+#pdftk：合并切割pdf

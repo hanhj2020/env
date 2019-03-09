@@ -1,0 +1,116 @@
+git 下载：sudo apt-get install git
+配置：
+	git config [范围] [操作]
+	范围：--global/system/local
+		global 表示全局变量，针对当前用户而言，配置文件为~/.gitconfig
+		system 表示系统变量，针对当前系统而言,配置文件为/etc/gitconfig
+		local 表示当前数据库变量，针对当前数据库而言，配置文件为当前数据库下.git/config
+		这三个地方的配置文件，如果有相同变量，以本地配置文件优先，其次是全局配置，最次是系统配置。
+		如果不带范围，默认是在当前目录下找git数据库。
+		配置文件形式一般为：
+		[组名]
+			成员名=value
+			。。。
+		常用的组和成员为：
+		user组：
+			成员：name，email
+		alias组：用于设置简化的命令，方便操作
+			成员：可以自定义比如：
+				co=checkout
+				ci=commit -a -m
+				br=branch
+				st=status
+				...
+	操作：
+		--add name value 增加一个变量，可以不带前面的--add
+		--get name 获得一个变量，可以不带前面的--get 
+		--unset name 删除一个变量
+		--remove-section name 删除一个组
+		--rename-section name newname 重命名一个组
+		-l 列出当前所有变量
+		-e 编辑当前变量
+
+
+初始化仓库：
+	在工作目录下执行：git init 可以在当前工作目录下创建一个仓库用来管理当前目录下的改动。
+	git init --bare 用来创建一个空仓库。
+	执行init 命令后，会在当前目录下创建一个.git的目录，用来存放仓库文件，在此目录下有
+	一个config文件，用来存放当前项目的配置文件。
+
+本地库操作：
+	git add 文件： 添加跟踪文件，可以添加目录
+	git rm 文件：删除对某个文件的跟踪，--cache 用于保留物理文件，避免rm的时候删除物理文件
+	git commit -m "提交的说明" ：提交改动
+	git status ：显示提交状态，显示没有提交的改动
+	git log ：显示提交记录
+	git reflog：显示提交纪录号。 HEAD 表示当前提交，HEAD^表示上次提交，HEAD@{0}表示当前提交，HEAD@{1}表示上次提交，数字越大表示越久远。
+	git reset 提交纪录号：回到某个版本的提交。提交纪录号可以是绝对数字或者用HEAD来表示。但是注意HEAD是变动的，所以需要先用reflog查看一下head当前的状态。如果当前你有改动，而且没有提交，reset是不会替换你所做的改动（好像跟reset的含义不一样，这里的reset仅仅是对版本回退到某个地方，然后基于此版本开始工作）。如果想放弃当前所做的还未保存的改动，可以用--hard 选项用于强制回退。如果不想放弃，则可以先提交，注意选择基于的版本，在reset之后就是基于你reset的版本。
+	git diff a b ：将a和b两个版本比较，a，b可以是提交号或者是HEAD所指示的版本。
+	git show a:显示第几号记录变更的内容，a可以是提交记录号，HEAD所指示的版本，或标签。
+	git checkout 记录号/分支号/文件：切换到某个记录号/分支/文件。
+		-b 创建一个分支，并切换到该分支，相当于git br newbr && git co newbr 
+	git branch 分支：创建一个分支。如果不带分支，则显示当前分支情况。
+	 -d选项用于删除一个分支,
+	 -D强行删除分支
+	git merge 分支：合并当前分支与指定分支.
+	git stash：保存工作现场。当需要临时改动，又不想破坏当前状态，比如你现在正在工作，别人让你临时对某个文件改动，这时你可以用git stash命令保存你现有的工作状态，此时，文件就会回到你当前改动之前的状态（如果没有改动，则不会产生stash），然后你可以做改动，此项工作完成后，你可以使用git stash pop命令恢复之前的工作状态，此时你所做的临时改动就丢掉了。当然，如果临时改动的部分对你也很重要的时候，你可以创建一个分支，用来永久保存。
+	git stash list 来查看当前有多少个stash，与HEAD类似，多个stash的表示为：
+	  stash@{数字}数字越大，表示越久远。如果不带stash记录号默认就弹出最近的那个记录。
+	git stash pop [stash 记录号]：恢复保存的工作现场，此命令主要用于临时的改动。
+标签：
+	git tag -a 标签名 -m "标签注释"  提交纪录号：用于对某个提交记录打上标签。
+	git tag -d 标签名：删除标签
+	git tag -l ：列出标签，如果git tag不带参数，也是显示标签列表
+
+	git ls-files:显示在git库中的文件
+	git log --graph 图形显示log记录
+
+远程仓库操作：
+	git remote add 远程库名 远程库地址：建立与远程git库的连接
+		远程库名是远程用来跟踪所有版本仓库的名字，一般为origin，例如：
+	git remote add origin git@192.168.15.23:simple.git,这条命令实际上是修改本地仓库的配置文件：
+	[remote "origin"]
+		url=git@192.168.15.23:simple.git
+		fetch=+refs/heads/*:refs/remotes/origin/*
+	git branch --set-upstream-to=远程库名/远程分支：建立本地分支与远程库的联系。
+		创建远程库连接时会默认建立origin与master分支的联系，如果想建立远程库与其他分支的联系，可以通过上面的命令，比如：git branch --set-upstream-to=origin/other_br
+	它实际上是修改本地库的配置文件
+	[branch "other_br"]
+		remote=origin
+		merge=refs/heads/other_br
+
+	git clone git@url：从远程git库中下载整个项目
+
+	git push [-u 远程库名 本地分支:远程分支]:将本地库的改动提交到远程git库中，
+		在推送前先要在本地提交改动。如果不带参数，默认的是将本地的当前分支推送到origin仓库中,如果该分支远程没有，则在远程自动创建一个。比如：git push origin master:master。这里有一个技巧就是通过将本地分支置空来删除远程分支，比如：我们想删除远程的dup分支，git push origin 空格 :dup
+
+	git fetch [远程仓库名] [分支名]：从远程库获得最新内容，
+		如果不带参数，默认的是从origin获得当前分支的最新内容。
+	
+	git rebase [--onto newbase ] [远程分支/或者是所基于的分支] [待合并的分支]：	本地分支与远程合并。
+		如果待合并的分支没有指明，默认是当前分支;如果远程分支没有指明，默认是在branch.name.merge或branch.name.remote中所配置的分支名。所以如果git rebase没有参数，默认是基于远程库将本地改动合并。
+		最简单的情况：假如库修改状态如下：
+		A---B  远程库
+		\
+		 C 本地库 
+		 假如甲和乙都是基于A做的开发，甲修改后提交改动到远程库，此时远程库状态为B，乙也做了修改，但没有提交，假如甲和乙做的改动都是有效的需要将二者合并起来，执行下面命令：git fetch,git rebase (这里假设都是基于同一个分支)，（如果有冲突，解决冲突，然后git add 修改后的文件），合并结果如下：
+		 A---B--C 远程库。
+		 内部的机理是:首先在临时文件夹.git/rebase_apply/中执行git reset  B --hard,然后再执行B与C的合并（此时C记录中内容没变）。
+		 解决冲突过程中，可以用git rebase --continue看是否都已经解决了冲突。
+		 如果合并失败，或者想放弃合并，可以执行git --skip|--abort。
+		 git rebase --onto newbase br1 br2 :表示基于newbase的br1和br2,但是希望br2分支从br1开始基于newbase进行合并，比如：
+		 A--B---C---D 远程库 newbase
+		    \
+			 D---E---F br1
+					 \
+					  G--H br2
+		git rebase --onto newbase br1 br2 
+			合并结果：
+		A--B--C--D newbase 
+			\ 	  \	
+			 \    G--H br2
+		      D--E--F br1
+	
+	git pull ：抓取远程库内容，并与本地库合并；
+	git checkout -b 本地分支 origin/远程分支：生成一个本地分支与远程分支同步；	
+
