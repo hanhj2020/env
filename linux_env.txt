@@ -47,6 +47,12 @@ unix系统的组成：
 　　win：弹出命令输入窗口；\
 　　alt+f2：弹出另一个命令输入窗口；\
 
+	xx & :	将程序放到后台运行：
+	jobs :查看当前后台运行的程序
+	fg [job号]：将后台运行程序调到前台。不带参数就是最后一个进入后台运行的程序。fg 1,fg 2 就是前面jobs查看的第一个任务数字
+	bg [job号]：让后台暂停的程序继续运行。比如我们用xx &将某个gui界面的程序后台运行，不小心用fg调到前台，这时只有关掉这个程序，才能继续在当前终端中输入。此时可以用ctrl-z将当前程序暂停，这时就可以回到终端界面。然后bg，让这个程序继续在后台运行。
+	ctrl-z:	将前台运行的程序放到后台并挂起
+
 ##截屏：
 
 
@@ -92,6 +98,7 @@ unix系统的组成：
 
 　　/word: 从光标处向下搜索下一个字符串”word”。\
 　　?word: 从光标处向上搜索前一个字符串”word”。\
+	找到后，用n跳转到下一个单词，shift-n跳转到上一个单词
 　　:n1,n2s/word1/word2/g: n1,n2是整数，用“word2”替换n1-n2行之间的字符串“word1”.\
 　　:0,$s/word1/word2/g: 用”word2″替换文档中所有的字符串”word1″.\
 　　x,X : 在一行字中，x为向后删除一个字符(相当于[Del]键)，X为向前删除一个字符(相当于[backspace]即退格键).\
@@ -156,6 +163,21 @@ unix系统的组成：
 　　crtl+z\
 　　返回:fg\
 
+###vi中的参数设置
+	:set xxx 设置xx参数
+	:set noxxx 取消xx参数设置
+	
+	键盘映射
+	调用格式
+	[x]map lhs rhs
+
+	map		在普通和可视，运算符模式下的映射
+	nm		在普通模式下映射
+	vm		在可视模式下映射
+	imap	在插入状态下的映射
+	inoremap在插入状态下非循环映射方式下的映射。no recuision
+	取消映射
+	unmap xx 
 
 ###阅读源文件在文件中跳转:
 
@@ -180,12 +202,14 @@ unix系统的组成：
 　　    命令:vi file1 file2 ... 在启动时打开多个文件\
 　　    这时打开的文件在一个窗口中,可以用:bn,:bp切换文件,或者使用:n,:prev来切换,但是使用:n有可能到最后一个文件就不能再切换,而用:bn则可以循环切换.\
 　　方法2:打开文件后在命令窗口中打开:\
-　　       命令:open file ,这里输入文件路径,这时就会新开一个文件编辑窗口,显示文件内容.但是有一个问题,就是如果不记得文件路径,用tab键无法补齐,这时可以用:file filepath来指定文件路径(这时可以用tab来补齐路径),\
-　　       然后用open来打开.但是,这样也有一个问题,就是当前编辑的文件会被这个新打开的文件代替.\
+　　       命令:edit  file ,这里输入文件路径,这时就会新开一个文件编辑窗口.\
 　　       使用:new 可以开一个分割新窗口,在这个窗口里输入:q可以退出这个新窗口而不是退出vi.\
 　　       使用:spl(split)或vspl(vsplit) 可以以当前文件打开一个新分割窗口,输入:q可以退出这个新窗口而不是退出vi.\
 　　       当使用分割窗口时,使用ctrl-ww可以在多个分割窗口中切换.\
 　　       当打开多个文件时,可以用ls来显示当前打开的文件名,其中数字后有%a标号的表示当前正在编辑的文件.可以用:bno直接切换文件,no就是ls列出来的文件序号.\
+	用wimmanger插件打开
+			用ctrl-w在各个窗口中跳转。
+
 
 
 ##chmod
@@ -225,6 +249,17 @@ unix系统的组成：
 　　r代表读权限，w代表写权限，x代表执行权限，X代表当目标文件对用户来说是可执行文件或者是目录时才设置X权限，s代表设置set-uid和set-gid权限。s只有和u和g一起使用。\
 　　例如同样以上的命令可以用以下方法实现：chmod u+x g-w+x dic.txt\
 
+	权限限制：
+	当某个进程访问某个文件时，系统会将启动进程的用户与文件的权限属性相比较。如果用户是文件主，则按照文件主的权限访问。如果用户是文件的组用户，则按照文件组的权限访问，最后如果用户是其他用户，则按照文件的其他用户权限访问。
+	目录属性：
+		目录也是一个文件，其中的内容是一个目录项列表。每个目录项包括文件名和一个inode编号。
+		目录的属性：r表示可以打开该目录，w表示可以对该目录添加，删除文件，修改目录名，x表示可以进入该目录
+	sticky属性
+		对于普通文件sticky属性没有用，仅对目录有用。
+		应用场景是对于一个公共目录，该目录的other组应当有rwx权限。但是如果other都有w权限，每个用户就都可以该目录下创建自己的文件，则a用户就可以删除b用户的文件，即使该文件对其他用户是只读属性。为了避免这个问题，该目录的创建者可以加上sticky属性，chmod o+t xx ,这样a用户创建的文件就不能被b用户所删除。反之也一样。但是对于该目录的创建者，仍然可以删除这些文件。
+	suid属性：
+		应用场景是对于一个公共文件，如果其中的部分内容仅对a用户开放（可读或可写），另外一部分内容仅对b用户开放（可读或可写），这时可以将文件other组的r权限去掉，即所有其他用户均不能访问该文件。这时只能由特定程序去去访问该文件的时候，由该程序决定哪些用户访问可以访问的内容。这种方法在Linux中称为策略与机制分开策略。
+		如果给某个程序文件加上suid权限，则当用户启动该程序时，将继承所要访问文件的主权限属性（或者加上sgid，继承组属性），这时该进程就相当于是文件的主人，可以按照文件的主（或组）权限属性访问文件。Linux提供了这种机制，让其他用户可以有机会访问不是它的文件（即该文件的other组没有rw权限）。
 
 ##umask
 
@@ -276,6 +311,8 @@ unix系统的组成：
 	文件类型：可以从/etc/filesystem或/proc/filesysem文件中看支持哪些文件系统。
 　　一般scsi设备是sdxx，ide设备是hdxx，软盘设备是fdxx\
 　　可以用命令行点方式来挂载设备，也可以用上面讲的fstab来挂载。\
+	挂载映像文件：mount -o loop ,ro xx.iso 挂载点 
+
 　　远程挂载：\
 　　远程挂载可以通过samba（windows）或nfs（linux）来挂载非本机的文件系统。\
 	客户端：
@@ -346,7 +383,19 @@ unix系统的组成：
 			-i info
 
 	
-
+##tftp
+		服务器：sudo /etc/init.d/tftpd-hpa start
+			config_file:/etc/default/tftpd-hpa 
+		客户端：
+			busy box :
+			get file:tftp ip -g -r file
+				tftp 192.168.15.62 -g -r xxd 
+			put file :tftp ip -p -l file
+			linux：
+				tftp Host
+				put file
+				get file
+			
 ##ls
 
 
@@ -559,39 +608,60 @@ unix系统的组成：
 
 　　 :查找文件\
 　　 基本操作:\
-　　 find 选项 目录 -name 待查内容\
-　　 选项:\
-　　 -name 指定文件名\
-　　 -gid  查找指定用户组id中的文件\
-　　 -uid  查找指定用户名id中的文件\
-　　 -group查找指定用户组中文件\
-　　 -user 查找指定用户名中的文件\
-　　 -path 指定路径\
-　　 -prune 不在path指定目录下查找。如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。\
-	 -type 查找指定类型的文件
-		b:块文件
-		d:目录
-		c:字符设备
-		p:管道文件
-		l:链接文件
-		f:普通文件
-	 -newer file or ! -newer file 比file文件新或旧的文件
-　　 -amin  +n,-n查找指定分钟前后访问过的文件\
-　　 -atime  +n,-n查找指定天数前后访问过的文件\
-　　 -cmin  +n,-n查找指定分钟前后改变文件状态的文件\
-　　 -ctime +n,-n查找指定天数前后改变文件状态的文件\
-　　 -mmin +n,-n 查找指定分钟前后修改文件内容的文件\
-　　 -mtime +n,-n 查找指定天数前后修改文件内容的文件\
-　　 -exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`\
-　　  比如：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`\
-　　  注意要加上print选项，否则不显示文件名，不好区分。\
-　　  xargs 与exec功能类似，比如上面的命令可以写成：`find . -name "app" -print |xargs cat`\
-　　 -ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示.\
+	
+	find options test_expression  action
+	options:
+		-xdev	排除非本文件系统文件
+		-mount	同-xdev
+	expression:\
+		+n	greater n
+		-n  less n
+		n	equal n
+
+		-name 指定文件名\
+		-gid  查找指定用户组id中的文件\
+		-uid  查找指定用户名id中的文件\
+		-group查找指定用户组中文件\
+		-user 查找指定用户名中的文件\
+		-path 指定路径\
+		-prune 如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。\
+		-amin 查找指定分钟前访问过的文件\
+		-atime 查找指定天数前访问过的文件\
+		-cmin 查找指定分钟前改变文件状态的文件\
+		-ctime 查找指定天数前改变文件状态的文件\
+		-mmin 查找指定分钟前修改文件内容的文件\
+		-mtime 查找指定天数前修改文件内容的文件\
+		-a/c/mnewer file 时间与file比较
+		-maxdepth 查找深度
+	action:
+		-print	默认动作，打印查找出来的文件。
+		-exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`.在;前面加上转义符\的意思是由于;在bash中解释成命令的结尾，如果不加转义符，该find命令就将结束。而在find命令中可以有多个执行语句，所以要避免解释成find命令结尾。\
+	　　  比如：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`\
+	　　	  注意要加上print选项，否则不显示文件名，不好区分。\
+			多个执行语句：	find / -ctime +30 -a \( -name '.vimrc' -o -name 'vimrc' \) -exec grep -n 'mmap' {} \; -exec echo {} \;
+				在根目录下查找30天前修改.vimrc或vimrc文件，然后查找其中包括nmap的行，同时打印该文件名。
+	　　-ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示.\
+	logic of expression:
+		expr1 -o expr2	:or logic
+		expr1 -or expr2	:or logic
+		expr1 expr2		:and logic 
+		expr1 -a expr2	:and logic
+		! expr			:not logic
+		-nor expr		:not logic 
+
+
 　　 扩展:\
 　　 查找除某个目录下的文件\
 　　 find . -path xx -prune -o -print\
-　　 expr1 -o expr2 是逻辑或的关系。\
+　　 排除多个目录，查找某个文件
+　　 find . \( -path ./tmp -o -path ./dsp/bak \) -prune -o  -name "*.c" -o -name "*.cpp" -o -name "*.h" 
+　　 prune：修剪的意思
 
+　　 xargs 用于在程序后面添加参数。默认的xagrs用标准输入作为输入。
+		例如：find / -name  'vimrc' -print | xagrs grep -n 'local'; 将find的输出文件名作为grep的输入，这样grep命令可以只执行一次。
+		同样的功能可以用find / -name 'vimrc' -exec grep -n 'local' {} \;来做，但是这样每次找到一个文件就要调用grep，效率较低。
+		xargs自动填充输入参数缓冲区可以达到128k，如果多于128k就将参数分割调用程序。这样可以防止直接调用参数缓冲区过小导致程序不能执行的问题。比如：
+			ls *.dat|cat ,如果dat文件过多，可能导致cat命令的缓冲区溢出，这时可用ls *.dat|xargs cat
 
 ##ln
 
@@ -665,7 +735,16 @@ unix系统的组成：
 	d	删除文件
 	c	为压缩包添加注释。ctrl-d退出
 
-
+#另 压缩总结
+	.tar			tar -xvf
+	.gz				gzip -d  /gunzip解压
+	.tar.gz/.tgz	tar -xzf
+	.bz2			bzip2 -d /bunzip2
+	.tar.bz2		tar -xjf
+	.Z				uncompress
+	.tar.Z			tar -xzf
+	.rar			unrar e
+	.zip			unzip
 
 ##updatedb
 
@@ -840,9 +919,9 @@ unix系统的组成：
 
 - 动作：\
 　　  常用的内部命令：\
-　　    a\：当前行后添加一行；\
-　　    i\：当前行前添加一行；\
-　　    c\：改变当前行；\
+　　    a：当前行后添加一行；\
+　　    i：当前行前添加一行；\
+　　    c：改变当前行；\
 　　    d：删除当前行；\
 　　    w：将选中内容写入文件\
 　　    r：对于选中内容读入文件；\
@@ -1977,15 +2056,26 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 	比如：
 	0.0.0.0 1234 192.168.1.23 1234 
 
+#pdftk 将多个pdf文件连接成一个文件
+	pdf file1 file2 ... cat output all.pdf 
+	安装pdftk sudo apt install pdftk
 ##sysctl:用来控制一些系统参数
 	-a 显示所有系统参数
 
+##convert 将图像文件转换成pdf文件
+
 ##ros 机器人操作系统
-
 	https://wenku.baidu.com/view/1d15d1fd284ac850ac02422a.html
-
+#连接库
+	编译程序时，往往涉及到库的路径问题，可以采用：
+	1.修改LD_LIBRARY_PATH变量方式，修改环境变量的方法参见export说明。
+	2.修改  /etc/ld.so.conf.d/下面文件，将需要的路径添加进来。
+#bash脚本执行
+	1。bash xx 启动一个bash执行脚本。执行xx不会影响当前环境
+	2. chmod u+x xx 给脚本加上执行属性，然后 ./xx 。此方法也是启动一个bash去执行。
+	3. source xx 。在当前bash中执行脚本。执行xx会影响当前环境。
+	4. .空格xx 。也是在当前bash中执行脚本。
 ##Makefile编写：
-
 	Makefile用来管理包括多个文件的项目的编译，因为一般来说用手工编写，因此适用于比较小规模的项目，如果项目文件较多建议使用自动化程度较高的cmake或automake等工具。
 	Makefile类似与bash脚本文件，最基本的包括定义，依赖关系两个部分，此外makefile中也有控制语句，函数等，我们只要使用常用的部分基本就可以了，没有必要弄得太复杂。
 	定义就是定义一些需要用到的变量，常用的变量包括编译器，工程路径，源代码，目标文件，以及一些预定义的变量。变量的定义与bash中的定义方法是一致的，比如：CC=gcc，就是指定编译器为gcc，make工具有默认定义的规则和变量，可以用make -p 来查看。假设，目前的项目所有文件都在同一目录下，有两个文件main.cpp,lib.cpp
