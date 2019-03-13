@@ -1408,25 +1408,19 @@ unix系统的组成：
 		edit-sources	:编辑软件源文件source.list 
 		list pkg		:显示安装软件的状态。类似dpkg-query --list 
 		source pkg		:安装软件源程序包
+		----以下是apt-get中的命令，可以用apt来调用
 		build-dep pkg 	:为编译软件安装依赖包
 		autoclean		:清除下载的软件包
 		autoremove		:删除下载的一些不需要的依赖包。
 		download		：下载软件安装包deb文件到本目录。
 
 		pkg可以带版本号
+		apt可以认为等同与apt-get
+		安装软件时，如果不太记得名字，可以先用search 来找一下是否有类似名字的软件，找到后再用install来安装。
+		如果需要软件包，可以用download来下载。
+		如果下载源程序包，可以用build-dep解决依赖性问题。
 		
-	install xx :
-		remove xx
-	 update :refresh source list
-	 upgrade software\
-	 install software 安装软件\
-　　 purge sourceftware完全卸载软件\
-　　 remove software 保留修改部分\
-	 autoremove remove necessary 
-	 list regex software,like dpkg-query -l software\
-	 show software,show info of software\
-	 source software ,get source of software
-　　 apt-cache  \
+#apt-cache  \
 		apt-cache pkgnames	:print all installed package
 		apt-cache dumpavail	:print all available package
 		apt-cache showpkg pkgs	:print infomation of pkgs
