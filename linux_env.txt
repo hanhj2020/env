@@ -1392,14 +1392,35 @@ unix系统的组成：
 			list-dependencies ：列出依赖关系
 
 			who -r ，runlevel，systemctl get-default,显示当前运行等级
-##apt
+			
+##apt 软件包管理
+	
+	调用格式：
+		apt [opions] <action> [pkg]
+	action:
+		install pkg		:安装软件
+		remove pkg		：移除软件，但不包括配置文件
+		update	[pkg]	:根据/etc/source.list,更新软件信息
+		upgrade [pkg]	:升级软件
+		dist-upgrade	:更新操作系统
+		search regex	：用regex来查找软件
+		show pkg		:显示软件包信息
+		edit-sources	:编辑软件源文件source.list 
+		list pkg		:显示安装软件的状态。类似dpkg-query --list 
+		source pkg		:安装软件源程序包
+		build-dep pkg 	:为编译软件安装依赖包
+		autoclean		:清除下载的软件包
+		autoremove		:删除下载的一些不需要的依赖包。
+		download		：下载软件安装包deb文件到本目录。
 
-
-　　软件管理\
+		pkg可以带版本号
+		
+	install xx :
+		remove xx
 	 update :refresh source list
 	 upgrade software\
 	 install software 安装软件\
-　　 purge software完全卸载软件\
+　　 purge sourceftware完全卸载软件\
 　　 remove software 保留修改部分\
 	 autoremove remove necessary 
 	 list regex software,like dpkg-query -l software\
@@ -1409,8 +1430,6 @@ unix系统的组成：
 		apt-cache pkgnames	:print all installed package
 		apt-cache dumpavail	:print all available package
 		apt-cache showpkg pkgs	:print infomation of pkgs
-
-
 
 #dpkg
 
