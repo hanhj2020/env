@@ -699,41 +699,70 @@ unix系统的组成：
 　　 -s 查找src\
 
 #tar
-
-	压缩软件
-	tar czvf 压缩包.tar.gz 压缩文件目录 ：按照gzip格式压缩文件,默认是递归压缩文件目录下的所有文件。
-	tar xzvf 压缩包 -C 解压路径：解压缩文件，注意解压路径必须存在，如果没有-C 则在当前目录解压。
-	tar tf 压缩包 ：显示压缩包中的文件。
-	c	代表压缩
-	x	代表解压
-	v	代表显示过程
-	f	代表文件
-	z	代表gzip格式
-	j	代表gzip2格式。如果不知道文件的压缩格式，可以先用file命令来显示文件格式。
-	-C	代表改变目录。
-
+	调用格式：
+		tar [options] [zipfiles] [files]
+	选项：
+		-c	代表压缩
+		-x	代表解压
+		-v	代表显示过程
+		-t  显示压缩文件中的内容
+		-f	代表文件
+		-z	代表gzip格式
+		-j	代表gzip2格式。如果不知道文件的压缩格式，可以先用file命令来显示文件格式。
+		-J	代表xz格式
+		-C	代表改变解压目录。
+	例子：
+		压缩文件：
+			tar -czvf xx.tar.gz /tmp 
+			tar -cjvf xx.tar.gz2 /tmp
+		解压文件：
+			tar -xzvf xx.tar.gz -C /tmp
+			tar -xjvf xx.tar.gz2 -C /tmp
 #zip
-
-	压缩软件
-	zip 压缩包.zip 压缩文件/压缩文件目录 -r：压缩文件，如果不带-r选项，则不递归压缩。默认的压缩是包括目录，即虽然不带-r不压缩目录下的内容，但是还是要包括目录的，只不过目录中没有内容。
-	uzip -l 压缩包：显示压缩包中的文件。
-	unzip 压缩包 -d 解压路径：解压缩文件，如果不带-d选项，则解压到当前目录。
-	-r	递归压缩
-	-D	不包括目录
-	-v	显示操作过程
-
+	调用格式：
+		zip [options] zipfile files
+	选项：
+		-r	recurse
+		-d	删除文件
+		-v	显示操作过程
+	
+	调用格式：
+		unzip [options] zipfile 
+		-l	list files 
+		-d  改变输出目录
+		-v	显示操作过程
+#gzip
+	调用格式：
+		gzip [options] file 
+		gunzip [options] file.gz 
+		zcat file.gz 
+	选项：
+		-d 解压 
+		-l 列出压缩比等压缩文件信息
+		-c 改变输出为标准输出.
+			gzip默认在file压缩后，将在原文件后面加上后缀.gz以替换原文件。为了保留原文件可以gzip -c file > file.gz.注意后面要加上>file.gz,否则gzip将压缩结果输出到屏幕上，会出现乱码。如果想压缩多个文件可以gzip -c a.txt b.txt >file.gz 
+		zcat可以显示压缩后的文件内容，相当于gunzip -c file.gz 
 #rar
+	调用格式：
+		rar <action> [options] rarfile [files] [path_to_extract]
+	action：
+		a	压缩文件
+		l	显示压缩文件
+		x	解压文件
+		d	删除文件
+		c	为压缩包添加注释。ctrl-d退出
+		v   显示过程
+	选项：
+		-r recurse
 
-	压缩软件
-	rar a 压缩包.rar 压缩文件/压缩文件目录 -r：压缩文件，如果不带-r选项，则不递归压缩。与zip不同，默认的是不带目录的。
-	rar/unrar l 压缩包：显示压缩包中的文件
-	rar/unrar x 压缩包：解压缩文件
-	rar d 压缩包 文件：从压缩包中删除文件
-	a	压缩文件
-	l	显示压缩文件
-	x	解压文件
-	d	删除文件
-	c	为压缩包添加注释。ctrl-d退出
+	unrar
+	调用格式：
+		unrar <action> [options] rarfile [path_to_extract]
+	action:
+		e	解压到当前目录
+		x	解压全目录
+		l   列出压缩文件内容
+	注意如果path_to_extract不存在，则不会解压。这点与zip，tar不同
 
 #另 压缩总结
 	.tar			tar -xvf
@@ -1376,7 +1405,12 @@ unix系统的组成：
 	 list regex software,like dpkg-query -l software\
 	 show software,show info of software\
 	 source software ,get source of software
-　　 apt-cache search 搜索本地文件\
+　　 apt-cache  \
+		apt-cache pkgnames	:print all installed package
+		apt-cache dumpavail	:print all available package
+		apt-cache showpkg pkgs	:print infomation of pkgs
+
+
 
 #dpkg
 

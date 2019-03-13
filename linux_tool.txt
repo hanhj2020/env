@@ -1,0 +1,35 @@
+系统管理：
+	用户手册：man
+	用户管理
+		adduser,deluser,usradd,userdel,passwd,id
+		who,whoami,
+		如何配置启动程序
+	磁盘管理
+		ls,pwd,mv,cp,find
+		chmod,chown
+		mount,findmnt,lsblk,blkid,df
+		mkfs
+	系统资源
+		uptime,top,free,vmstat,time
+	网络管理
+		tupdump,nc,net,
+		tty,stty
+	安全管理
+		apt-key,gpg
+	软件包管理
+		apt,aptitude,dpkg,rpm,yum
+
+工具软件	
+	压缩软件
+		tar,zip,rar
+	版本管理：
+		git，svn
+
+文本处理
+	vi编辑器
+	正则表达式	sed，grep，awk
+	cat,more,less,head,tail,od,xxd,uniq
+	tee,sort,tr,wc
+	cmp,diff
+	iconv,md5sum,file
+脚本处理
