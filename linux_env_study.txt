@@ -601,6 +601,17 @@ rsync	增量拷贝
 				[ "$c" = q -o "$c" = "Q" ] && break
 			done
 
+			for var in [seq];do 
+				...
+			done 
+
+			seq 这个条件可有也可无，如果无var变量从命令行中取$1,$2...
+			也可是一个命令的输出比如：
+				for i in `find .`
+				或者是一个数字序列：
+				for i in `seq 1 10`
+
+
 
 
 			

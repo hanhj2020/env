@@ -1399,11 +1399,11 @@ unix系统的组成：
 		apt [opions] <action> [pkg]
 	action:
 		install pkg		:安装软件
-		remove pkg		：移除软件，但不包括配置文件
-		update	[pkg]	:根据/etc/source.list,更新软件信息
-		upgrade [pkg]	:升级软件
+		remove pkg		:移除软件，但不包括配置文件
+		update			:根据/etc/source.list,更新软件信息
+		upgrade			:升级软件
 		dist-upgrade	:更新操作系统
-		search regex	：用regex来查找软件
+		search regex	:用regex来查找软件
 		show pkg		:显示软件包信息
 		edit-sources	:编辑软件源文件source.list 
 		list pkg		:显示安装软件的状态。类似dpkg-query --list 
@@ -1412,7 +1412,7 @@ unix系统的组成：
 		build-dep pkg 	:为编译软件安装依赖包
 		autoclean		:清除下载的软件包
 		autoremove		:删除下载的一些不需要的依赖包。
-		download		：下载软件安装包deb文件到本目录。
+		download		:下载软件安装包deb文件到本目录。
 
 		pkg可以带版本号
 		apt可以认为等同与apt-get
@@ -1426,32 +1426,45 @@ unix系统的组成：
 		apt-cache showpkg pkgs	:print infomation of pkgs
 
 #dpkg
-
-	软件管理
-	-i 软件包名 :安装软件
-	-r 软件包名 :卸载软件
-	-s 软件包名 :显示软件状态
-	-l 软件包名 :显示软件包安装信息
-	-L --listfiles：显示软件包内文件
-
-	dpkg-deb actions  :for archive 
-		-b dir archive
-			build a deb package
-		-x archive dir 
-			extract archive
-		-I archive
-			info archive
-	dpkg-query actions :for installed package 
-		-l package-mach-name
-			list packages mached name 
-		-s package-name 
-			status of package
+	调用格式：
+		dpkg <action> [pkg]
+	action:
+		-i :安装软件
+		-r :卸载软件
+		-s :state显示软件状态
+		-l :显示软件安装信息
+		-L --listfiles：显示软件包内文件
+	----以下是dpkg-deb的命令
+	dpkg-deb  
+		-b :产生一个deb文件
+			下面详细描述产生过程
+		-x :解压一个deb文件 
+		-I :显示一个deb文件信息
+	dpkg-query  
+		-l :显示软件安装信息
+		-s :state显示安装软件状态 
 		-S filename search pattern
-			serarch filename frome install package 
+			:serarch filename frome install package 
 		-p package-name
-			display details of package 
+			:display details of package 
 		-L package name
-			list files installed on your system of package
+			:list files installed on your system of package
+	制作一个安装包：
+		比如安装一个my-app软件
+		首先创建以这个软件为名的目录
+		然后将所需要安装的软件相关文件拷贝到这个目录中，这个目录是所安装系统的根目录。
+		在这个目录下创建DEBIAN目录，在这个目录中创建control文件，作为dpkg创建deb文件的信息，内容如下：
+				Package:my-deb
+				version: 1.4.0
+				architecture:i386
+				installed-size:4096
+				maintainer:gatieme
+				provides:bioinfoserv-arb
+				description: this is my deb
+				section:bioinfoserv-arbserv
+				depends:
+				suggests:
+		然后执行：dpkg -b my-deb 
 
 ##wget 
 	从远程网站下载文件
