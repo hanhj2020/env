@@ -1431,8 +1431,8 @@ unix系统的组成：
 	action:
 		-i :安装软件
 		-r :卸载软件
-		-s :显示软件状态
-		-l :显示软件包安装信息
+		-s :state显示软件状态
+		-l :显示软件安装信息
 		-L --listfiles：显示软件包内文件
 	----以下是dpkg-deb的命令
 	dpkg-deb  
@@ -1441,8 +1441,8 @@ unix系统的组成：
 		-x :解压一个deb文件 
 		-I :显示一个deb文件信息
 	dpkg-query  
-		-l :显示安装软件信息
-		-s :显示安装软件状态 
+		-l :显示软件安装信息
+		-s :state显示安装软件状态 
 		-S filename search pattern
 			:serarch filename frome install package 
 		-p package-name
