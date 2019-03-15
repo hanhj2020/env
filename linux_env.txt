@@ -1454,17 +1454,17 @@ unix系统的组成：
 		首先创建以这个软件为名的目录
 		然后将所需要安装的软件相关文件拷贝到这个目录中，这个目录是所安装系统的根目录。
 		在这个目录下创建DEBIAN目录，在这个目录中创建control文件，作为dpkg创建deb文件的信息，内容如下：
-				Package:my-deb
+				Package:my-app
 				version: 1.4.0
 				architecture:i386
 				installed-size:4096
 				maintainer:gatieme
 				provides:bioinfoserv-arb
-				description: this is my deb
+				description: this is my-app 
 				section:bioinfoserv-arbserv
 				depends:
 				suggests:
-		然后执行：dpkg -b my-deb 
+		然后执行：dpkg -b my-app 
 
 ##wget 
 	从远程网站下载文件
