@@ -397,30 +397,58 @@ unix系统的组成：
 				get file
 			
 ##ls
+	用途：显示目录内容
+	调用格式：
+		ls [options] [file]
+	选项：
+		输出格式选项：
+			-l	:长格式，显示详细信息
+			-1	：单列，输出每个文件后即换行。普通方式下多个文件在一行中。
+			-R	:递归 
+		　　-a  :显示所有包括隐含文件
+		　	-A  :显示除. .. 隐含文件外的文件,同ls 
+		　　-d  :仅显示目录
+		　　-F  :文件后追加标识符 /表示目录,@表示符号链接,|表示管道符,=表示socket套接字,* 表示可执行文件.
+			关于文件大小的输出
+				-s	：输出文件占磁盘大小（块数）。默认的-l选项输出文件本身大小信息。
+				-h	：文件大小的单位可以自动调整成k，m，g等。human
+					文件大小单位：默认按照1k=1024.
+				-si	：按照1k=1000 
+			关于时间的输出：
+				--time=word，与-l选项连用
+					word=
+					atime：	accesstime;
+					ctime：	changtime
+					默认的是modifytime
+				-u	：显示accesstime，并且按照最新时间排序
+				-c	：显示changetime，并且按照最新时间排序
+		排序选项：
+			-t	:按照修改时间输出并排序，最新时间在前。
+				如果与-u选项连用，按照accesstime输出并排序。
+				如果与-c选项连用，按照changetime输出并排序。
+			-S	：按照文件大小排序，大的在前。
+			--sort=word，按照word来排序
+				word=
+					size,	等同-S
+					time，	等同-t
+					verion，	等同-v
+					extension	等同-X 
+			-r	：反序
+	关于文件时间的说明：
+		首先要定义三个名词：访问（access），修改(modify)，改动(change)
+		访问：读取文件
+		修改：对文件内容进行修改。
+		改动：包括对文件内容进行修改，以及对文件权限，所有者等文件信息进行修改。
+		linux中对于文件有三个时间：
+		access time:	访问时间，确切的说是对文件进行修改或改动后，对文件内容首次访问的时间。需要解释一下：比如对文件a内容修改并保存后，三个时间都会改动。如果修改或改动后该文件一直未被访问，则该时间不会被改动，直到有一次访问该文件，该时间将被改动，之后只要文件不被修改或改动，无论访问多少次都不会该时间。
+		modify time:	对文件内容进行修改的时间。
+		change time:	对文件内容进行修改或对文件权限，所有者信息进行改动即上述的进行“改动”动作时间。
+		通过touch可以改变以上时间：
+		touch -a:	改变访问时间和改动时间
+		touch -m:	改变修改时间和改动时间
+		touch	:	改变上述三个时间
 
-
-　　 :显示目录内容\
-　　 基本操作:\
-　　 -l 列出详细信息\
-　　 -R 递归调用显示子目录\
-　　 -r 逆序输出\
-　　 -t 按照创建时间排序,最新时间在前\
-　　 -u  按照访问时间排序,最新时间在前\
-　　 -a  显示所有包括隐含文件\
-　　 -A  显示除. .. 隐含文件外的文件\
-　　 -d  仅显示目录\
-　　 -F  文件后追加标识符 /表示目录,@表示符号链接,|表示管道符,=表示socket套接字,* 表示可执行文件.\
-　　 -1  单列显示\
-	 -h  和-l选项配合使用，显示为对人可以好理解的形式。\
-\
-　　 扩展:\
-　　 在deepin Linux环境中定义了以下别名\
-　　 ls  ls --color=auto\
-　　 la  ls -a\
-　　 ll  ls -l\
-　　 l   ls -CF\
-　　 | 表示管道符,管道符之前的输出是管道符之后的输入.比如ls | grep app,表示列出当前目录文件并且看其中是否有名字文app的文件.\
-　　 ls -d */ 仅显示当前目录下的目录\
+		ls -d */ 仅显示当前目录下的目录\
 
 ##basename
 
@@ -625,7 +653,8 @@ unix系统的组成：
 		-user 查找指定用户名中的文件\
 		-path 指定路径\
 		-prune 如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。\
-		-amin 查找指定分钟前访问过的文件\
+		-amin 查找指定分钟前访问过的文件。
+			注意：这里所说的指定分钟前是指第n分钟前，是指查找n分钟到n+1分钟之间所修改的文件，如果访问时间在n+1分钟之前就不会找到。如果想找n分钟之前访问的文件应当在n前面加+。下面关于时间的查找情况一样。\
 		-atime 查找指定天数前访问过的文件\
 		-cmin 查找指定分钟前改变文件状态的文件\
 		-ctime 查找指定天数前改变文件状态的文件\
@@ -1406,7 +1435,7 @@ unix系统的组成：
 		search regex	:用regex来查找软件
 		show pkg		:显示软件包信息
 		edit-sources	:编辑软件源文件source.list 
-		list pkg		:显示安装软件的状态。类似dpkg-query --list 
+		list pkg		:显示软件包的安装状态。类似dpkg-query --list 
 		source pkg		:安装软件源程序包
 		----以下是apt-get中的命令，可以用apt来调用
 		build-dep pkg 	:为编译软件安装依赖包
@@ -1424,10 +1453,11 @@ unix系统的组成：
 		apt-cache pkgnames	:print all installed package
 		apt-cache dumpavail	:print all available package
 		apt-cache showpkg pkgs	:print infomation of pkgs
+		apt-cache search regex:查找软件包.apt search 可能找到一些不是精确匹配的软件。
 
 #dpkg
 	调用格式：
-		dpkg <action> [pkg]
+		dpkg <action> [pkg]	:pkg 要求精确匹配
 	action:
 		-i :安装软件
 		-r :卸载软件
@@ -2206,3 +2236,49 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 	-i 按照mime形式显示
 
 #pdftk：合并切割pdf
+
+#svn
+	版本库
+	svnserve 服务端
+	调用格式：
+		svnserve [options] reposdir
+	选项：
+		-d	daemon 
+		-r	root dir 
+	svn	客户端
+	调用格式
+		svn <command> [args]
+	command:
+		add			:add file into repos 
+		commit(ci)	:提交
+		checkout(co):检出。
+		list(ls) 	:列出文件，只有一级目录,
+		info		:显示版本库信息
+		diff		：显示修改
+	
+		
+	服务端：
+		如果没有svn工具，首先要下载subversion
+		创建一个新仓库：
+			例如在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2
+			1.	建立仓库根目录：cd ~ && mkdir svn 
+			2.	创建两个仓库：svnadmin create svn/test1 && svnadmin create  svn/test2。
+			3.	启动svn服务器：svnserve -d -i /home/hanhj/svn 
+			这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
+		挂载原仓库：
+			svnserve -d -r 原仓库的位置
+
+	客户端：
+		如果没有svn工具，首先要下载subversion
+		检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
+		修改后，可以用
+			svn add:添加文件
+			svn ci -m ""：提交修改
+			svn diff :比较修改等操作
+
+		
+
+
+
+
+
