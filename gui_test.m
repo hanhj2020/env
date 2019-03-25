@@ -70,31 +70,29 @@ end
 
 function ret=reset_cfg(handles)
 handles.r1=[2  2  2];
-handles.Angle1=[0 -120 120];
+handles.Angle1=[0 -120 120 0 0 ];
 handles.Name1=char('Ua','Ub','Uc','U0');
 handles.step1=10;
 handles.r2=[0.5 0.5 0.5];
 handles.Angle2=[0 -120 120];
-handles.Name2=char('Ia','Ib','Ic','I0');
+handles.Name2=char('Ia','Ib ','Ic','I0');
 handles.step2=10;
 handles.v1=1+j;
 handles.v2=1+j;
-for i=1:3	%
+for i=1:3	
 	the=handles.Angle1(i);
 	r=handles.r1(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v1(i)=v;
 end
-for i=1:3	%
+for i=1:3	
 	the=handles.Angle2(i);
 	r=handles.r2(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v2(i)=v;
 end
-%¡§
 v1=handles.v1(1)+handles.v1(2)+handles.v1(3);
 v2=handles.v2(1)+handles.v2(2)+handles.v2(3);
-%
 handles.Angle1(4)=angle(v1)/pi*180;
 handles.r1(4)=abs(v1);
 handles.Angle2(4)=angle(v2)/pi*180;
@@ -137,26 +135,31 @@ step=str2num(get(findobj('tag','edit2'),'String'));
 handles.step2=step;
 handles.v1=1+j;
 handles.v2=1+j;
-for i=1:3	%
+for i=1:3
 	the=handles.Angle1(i);
 	r=handles.r1(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v1(i)=v;
 end
-for i=1:3	%
+for i=1:3
 	the=handles.Angle2(i);
 	r=handles.r2(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v2(i)=v;
 end
-%¡§
+
 v1=handles.v1(1)+handles.v1(2)+handles.v1(3);
 v2=handles.v2(1)+handles.v2(2)+handles.v2(3);
-%
+
+ag1=angle(handles.v1(1)-handles.v1(2));%angle of uab
+ag2=angle(handles.v2(1));%angle of ia
+ag=ag1-ag2-pi/6;%angle of uab-ia
+
 handles.Angle1(4)=angle(v1)/pi*180;
 handles.r1(4)=abs(v1);
 handles.Angle2(4)=angle(v2)/pi*180;
 handles.r2(4)=abs(v2);
+handles.Angle1(5)=ag/pi*180;
 handles.d1=max(handles.r1);
 handles.d2=max(handles.r2);
 if(handles.d1>handles.d2)
@@ -395,6 +398,9 @@ set(findobj('tag','ang_Ua_Ia'),'String',[num2str(mod(handles.Angle1(1)-handles.A
 set(findobj('tag','ang_Ub_Ib'),'String',[num2str(mod(handles.Angle1(2)-handles.Angle2(2),360)) '¡ã']);
 set(findobj('tag','ang_Uc_Ic'),'String',[num2str(mod(handles.Angle1(3)-handles.Angle2(3),360)) '¡ã']);
 set(findobj('tag','ang_U0_I0'),'String',[num2str(mod(handles.Angle1(4)-handles.Angle2(4),360)) '¡ã']);
+if length(handles.Angle1)>=5
+    set(findobj('tag','ang_Uab_Ia'),'String',[num2str(mod(handles.Angle1(5),360)) '¡ã']);
+end
 ret=handles;
 function edit2_Callback(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)

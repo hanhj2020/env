@@ -24,7 +24,7 @@ function varargout = gui_test(varargin)
 
 % Edit the above text to modify the response to help gui_test
 
-% Last Modified by GUIDE v2.5 25-Mar-2019 16:53:35
+% Last Modified by GUIDE v2.5 25-Mar-2019 18:13:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -75,26 +75,24 @@ handles.Name1=char('Ua','Ub','Uc','U0');
 handles.step1=10;
 handles.r2=[0.5 0.5 0.5];
 handles.Angle2=[0 -120 120];
-handles.Name2=char('Ia','Ib','Ic','I0');
+handles.Name2=char('Ia','Ib ','Ic','I0');
 handles.step2=10;
 handles.v1=1+j;
 handles.v2=1+j;
-for i=1:3	%б└
+for i=1:3	
 	the=handles.Angle1(i);
 	r=handles.r1(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v1(i)=v;
 end
-for i=1:3	%б└
+for i=1:3	
 	the=handles.Angle2(i);
 	r=handles.r2(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v2(i)=v;
 end
-%ио
 v1=handles.v1(1)+handles.v1(2)+handles.v1(3);
 v2=handles.v2(1)+handles.v2(2)+handles.v2(3);
-%б└
 handles.Angle1(4)=angle(v1)/pi*180;
 handles.r1(4)=abs(v1);
 handles.Angle2(4)=angle(v2)/pi*180;
@@ -137,26 +135,29 @@ step=str2num(get(findobj('tag','edit2'),'String'));
 handles.step2=step;
 handles.v1=1+j;
 handles.v2=1+j;
-for i=1:3	%б└
+for i=1:3
 	the=handles.Angle1(i);
 	r=handles.r1(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v1(i)=v;
 end
-for i=1:3	%б└
+for i=1:3
 	the=handles.Angle2(i);
 	r=handles.r2(i);
 	v=complex(r*cos(the/180*pi),r*sin(the/180*pi));
 	handles.v2(i)=v;
 end
-%ио
+
 v1=handles.v1(1)+handles.v1(2)+handles.v1(3);
 v2=handles.v2(1)+handles.v2(2)+handles.v2(3);
-%б└
+v3=handles.v1(1)-handles.v1(2);
+v4=handles.v2(1);
+
 handles.Angle1(4)=angle(v1)/pi*180;
 handles.r1(4)=abs(v1);
 handles.Angle2(4)=angle(v2)/pi*180;
 handles.r2(4)=abs(v2);
+handles.Angle1(5)=angle(v4)/pi*180;
 handles.d1=max(handles.r1);
 handles.d2=max(handles.r2);
 if(handles.d1>handles.d2)
@@ -279,8 +280,8 @@ function edit1_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit1 as text
 %        str2double(get(hObject,'String')) returns contents of edit1 as a double
-
-
+handles.step1=str2num(get(handles.edit1,'String'));
+guidata(hObject,handles);
 % --- Executes during object creation, after setting all properties.
 function edit1_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
@@ -387,10 +388,17 @@ set(findobj('tag','ang_Ia'),'String',[num2str(handles.Angle2(1)) ]);
 set(findobj('tag','ang_Ib'),'String',[num2str(handles.Angle2(2)) ]);
 set(findobj('tag','ang_Ic'),'String',[num2str(handles.Angle2(3)) ]);
 set(findobj('tag','ang_I0'),'String',[num2str(handles.Angle2(4)) ]);
-set(findobj('tag','ang_Ua_Ia'),'String',[num2str(mod((handles.Angle2(1))-handles.Angle1(1),360)) '']);
-set(findobj('tag','ang_Ub_Ib'),'String',[num2str(mod((handles.Angle2(2))-handles.Angle1(2),360)) '']);
-set(findobj('tag','ang_Uc_Ic'),'String',[num2str(mod((handles.Angle2(3))-handles.Angle1(3),360)) '']);
-set(findobj('tag','ang_U0_I0'),'String',[num2str(mod((handles.Angle2(4))-handles.Angle1(4),360)) '']);
+set(findobj('tag','ang_Ia_Ua'),'String',[num2str(mod(handles.Angle2(1)-handles.Angle1(1),360)) 'бу']);
+set(findobj('tag','ang_Ib_Ub'),'String',[num2str(mod(handles.Angle2(2)-handles.Angle1(2),360)) 'бу']);
+set(findobj('tag','ang_Ic_Uc'),'String',[num2str(mod(handles.Angle2(3)-handles.Angle1(3),360)) 'бу']);
+set(findobj('tag','ang_I0_U0'),'String',[num2str(mod(handles.Angle2(4)-handles.Angle1(4),360)) 'бу']);
+set(findobj('tag','ang_Ua_Ia'),'String',[num2str(mod(handles.Angle1(1)-handles.Angle2(1),360)) 'бу']);
+set(findobj('tag','ang_Ub_Ib'),'String',[num2str(mod(handles.Angle1(2)-handles.Angle2(2),360)) 'бу']);
+set(findobj('tag','ang_Uc_Ic'),'String',[num2str(mod(handles.Angle1(3)-handles.Angle2(3),360)) 'бу']);
+set(findobj('tag','ang_U0_I0'),'String',[num2str(mod(handles.Angle1(4)-handles.Angle2(4),360)) 'бу']);
+if length(handles.Angle1)>=5
+    set(findobj('tag','ang_Uab_Ia'),'String',[num2str(mod(handles.Angle1(5),360)) 'бу']);
+end
 ret=handles;
 function edit2_Callback(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
@@ -399,8 +407,8 @@ function edit2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit2 as text
 %        str2double(get(hObject,'String')) returns contents of edit2 as a double
-
-
+handles.step2=str2num(get(handles.edit2,'String'));
+guidata(hObject,handles);
 % --- Executes during object creation, after setting all properties.
 function edit2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
@@ -426,7 +434,8 @@ function rUa_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of rUa as text
 %        str2double(get(hObject,'String')) returns contents of rUa as a double
-handles.r1(1)=str2num(handles.rUa,'String');
+handles.r1(1)=str2num(get(handles.rUa,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function rUa_CreateFcn(hObject, eventdata, handles)
@@ -451,8 +460,8 @@ function rUc_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of rUc as text
 %        str2double(get(hObject,'String')) returns contents of rUc as a double
-handles.r1(3)=str2num(handles.rUc,'String');
-
+handles.r1(3)=str2num(get(handles.rUc,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function rUc_CreateFcn(hObject, eventdata, handles)
@@ -477,6 +486,8 @@ function rUb_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of rUb as text
 %        str2double(get(hObject,'String')) returns contents of rUb as a double
+handles.r1(2)=str2num(get(handles.rUb,'String'));
+guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -502,6 +513,8 @@ function rIa_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of rIa as text
 %        str2double(get(hObject,'String')) returns contents of rIa as a double
+handles.r2(1)=str2num(get(handles.rIa,'String'));
+guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -527,7 +540,8 @@ function rIb_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of rIb as text
 %        str2double(get(hObject,'String')) returns contents of rIb as a double
-
+handles.r2(2)=str2num(get(handles.rIb,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function rIb_CreateFcn(hObject, eventdata, handles)
@@ -552,7 +566,8 @@ function rIc_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of rIc as text
 %        str2double(get(hObject,'String')) returns contents of rIc as a double
-
+handles.r2(3)=str2num(get(handles.rIc,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function rIc_CreateFcn(hObject, eventdata, handles)
@@ -576,7 +591,8 @@ function ang_Ua_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of ang_Ua as text
 %        str2double(get(hObject,'String')) returns contents of ang_Ua as a double
-
+handles.Angle1(1)=str2num(get(handles.ang_Ua,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function ang_Ua_CreateFcn(hObject, eventdata, handles)
@@ -601,7 +617,8 @@ function ang_Uc_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of ang_Uc as text
 %        str2double(get(hObject,'String')) returns contents of ang_Uc as a double
-
+handles.Angle1(3)=str2num(get(handles.ang_Uc,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function ang_Uc_CreateFcn(hObject, eventdata, handles)
@@ -626,7 +643,8 @@ function ang_Ub_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of ang_Ub as text
 %        str2double(get(hObject,'String')) returns contents of ang_Ub as a double
-
+handles.Angle1(2)=str2num(get(handles.ang_Ub,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function ang_Ub_CreateFcn(hObject, eventdata, handles)
@@ -651,7 +669,8 @@ function ang_Ia_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of ang_Ia as text
 %        str2double(get(hObject,'String')) returns contents of ang_Ia as a double
-
+handles.Angle2(1)=str2num(get(handles.ang_Ia,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function ang_Ia_CreateFcn(hObject, eventdata, handles)
@@ -676,7 +695,8 @@ function ang_Ib_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of ang_Ib as text
 %        str2double(get(hObject,'String')) returns contents of ang_Ib as a double
-
+handles.Angle2(2)=str2num(get(handles.ang_Ib,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function ang_Ib_CreateFcn(hObject, eventdata, handles)
@@ -701,7 +721,8 @@ function ang_Ic_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of ang_Ic as text
 %        str2double(get(hObject,'String')) returns contents of ang_Ic as a double
-
+handles.Angle2(3)=str2num(get(handles.ang_Ic,'String'));
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function ang_Ic_CreateFcn(hObject, eventdata, handles)
@@ -766,4 +787,13 @@ if ispc
 else
     set(hObject,'BackgroundColor',get(0,'defaultUicontrolBackgroundColor'));
 end
+
+
+
+% --- Executes on key press over rUa with no controls selected.
+function rUa_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to rUa (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 
