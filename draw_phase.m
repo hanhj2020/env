@@ -28,7 +28,7 @@ v(2).angle=angle(2);
 v(2).r=r(2);
 v(3).angle=angle(3);
 v(3).r=r(3);
-if(l1==4&&l2==4&&l3==4)
+if(l1>=4&&l2>=4&&l3>=4)
 	v(4).angle=angle(4);
 	v(4).r=r(4);
 else

@@ -398,9 +398,7 @@ set(findobj('tag','ang_Ua_Ia'),'String',[num2str(mod(handles.Angle1(1)-handles.A
 set(findobj('tag','ang_Ub_Ib'),'String',[num2str(mod(handles.Angle1(2)-handles.Angle2(2),360)) 'бу']);
 set(findobj('tag','ang_Uc_Ic'),'String',[num2str(mod(handles.Angle1(3)-handles.Angle2(3),360)) 'бу']);
 set(findobj('tag','ang_U0_I0'),'String',[num2str(mod(handles.Angle1(4)-handles.Angle2(4),360)) 'бу']);
-if length(handles.Angle1)>=5
-    set(findobj('tag','ang_Uab_Ia'),'String',[num2str(mod(handles.Angle1(5),360)) 'бу']);
-end
+set(findobj('tag','ang_Uab_Ia'),'String',[num2str(mod(handles.Angle1(5),360)) 'бу']);
 ret=handles;
 function edit2_Callback(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
