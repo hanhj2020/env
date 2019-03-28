@@ -111,6 +111,6 @@ git 下载：sudo apt-get install git
 			 \    G--H br2
 		      D--E--F br1
 	
-	git pull ：抓取远程库内容，并与本地库合并；
+	git pull ：抓取远程库内容，并与本地库合并；相当于git fetch + rebase 
 	git checkout -b 本地分支 origin/远程分支：生成一个本地分支与远程分支同步；	
 

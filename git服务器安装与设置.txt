@@ -1,0 +1,235 @@
+==1安装 openssh服务器==
+ sudo apt-get install openssh-server openssh-client
+==2创建个人公钥和私钥==
+ 在默认用户的主目录路径下，运行以下命令，按照提示创建公钥和私钥 
+ ssh-keygen -t rsa
+ ssh-keygen -t rsa -C “YourEmail”  这样产生的key包括email地址
+
+ 默认生成2048位，如果需要提高安全级别，也可以通过下面的命令创建公钥和私钥 
+ ssh-keygen -t rsa -b 4096
+ 默认情况下，公钥和私钥会保存在~/.ssh目录下，如下所示： 
+ id_rsa  id_rsa.pub  known_hosts
+==3安装 git服务器 ==
+ sudo apt-get install git-core
+==4配置 git服务器 ==
+ 创建git服务器管理用户 
+ sudo useradd -m git
+ sudo passwd git
+
+ useradd 仅仅是创建一个普通用户，不要求输入密码
+ -m 表示创建home目录
+ passwd 用来输入密码
+ userdel 删除用户
+ 
+ adduser 可以同时创建用户和组，同时输入密码
+ deluser 删除用户和组
+ deluser --remove-home 删除用户的同时，删除用户目录。
+  moduser 可以修改用户
+ 
+ 创建git仓库存储目录 
+ sudo mkdir /home/git/repositories
+ 这一步不需要，因为后面gitosis-init 也要创建这个目录
+ 设置git仓库权限 
+ sudo chown git:git /home/git/repositories
+ sudo chmod 755 /home/git/repositories
+ 这个也不需要，一般umask=022,gitosis-init时创建的目录也是归属git用户的。
+ 
+ 初始化全局设置 
+ git config --global user.name "myname"
+ git config --global user.email "myname@server"
+ 这个与设置gitosis无关，一般都要设置，其设置的内容在用户目录下的.gitconfig文件中，在这个文件中可以设置alias别名，用来方便使用git。
+ [alias]
+ co=checkout
+ ci=commit
+ br=branch
+ …
+ 
+ 
+==5安装python的setup tool ==
+ sudo apt-get install python-setuptools
+ 这个需要，否则在gitosis目录下执行python setup.py install 出错。
+
+==6安装gitosis ==
+ cd /tmp
+ git clone https://github.com/res0nat0r/gitosis.git
+ cd gitosis
+ sudo python setup.py install
+==7配置gitosis ==
+ cp ~/.ssh/id_rsa.pub /tmp
+ sudo -H -u git gitosis-init < /tmp/id_rsa.pub
+ sudo chmod 755 /home/git/repositories/gitosis-admin.git/hooks/post-update
+ sudo -H 表示在用户的目录，-u 表示用户 
+ chmod 755 不必要，除非umask不是022.
+
+==8管理gitosis配置==
+ cd ~
+ git clone git@hostname:用户名/gitosis-admin.git
+ cd gitosis-admin/
+ 报错了
+ hanhj@deepin:~/tmp$ git clone git@localhost:respositories/gitosis-admin.git
+ Cloning into 'gitosis-admin'...
+ ERROR:gitosis.serve.main:Repository read access denied
+ fatal: The remote end hung up unexpectedly
+ 
+ 原因是在这里git clone 使用ssh协议，git@localhost:respositories/gitosis-asmin.git 
+ git@是用户名，localhost是远程服务器地址，：respositories/gitosis-admin.git是仓库所在的目录名。我们一般在服务器上创建一个git用户，服务器的仓库都在其主目录下（仓库的目录一般后缀都是.git，当然，你也可以不加这个后缀），这样，当别人访问这些仓库时，就是访问git用户的主目录下的目录。这些仓库目录必须先初始化，比如/home/git/test.git想把它作为一个仓库，执行
+ su git,cd ~,git init –bare test.git. 这样就创建了一个名为test的仓库。如果没有做这一步，别人访问这个仓库时，就会报test不是一个仓库的错误。
+ 在git主目录下有个.ssh目录，里面放id_rsa,id_rsa.pub,authorized_keys文件。前面两个文件是git用户的私钥和公钥，第三个文件是允许接入的用户公钥，每个用户一行，就是将用户的公钥复制进来。如果没有放进来或者有错误，就会报上面的错误。
+ 各个用户按照前面提到的办法生成各自的ssh公钥文件后，服务器管理员把所有人的 ssh公钥文件都拿来，拷贝到keydir目录下。 
+ 修改gitosis.conf文件，如下所示 
+ [gitosis]
+ [group gitosis-admin]
+ writable = gitosis-admin
+ members = a@server1
+ [group developers]
+ writable = helloworld
+ members = a@server1 b@server2
+ [group test] 
+ readonly = helloworld
+ members = c@server3
+ 这个配置文件表达了如下含义：gitosis-admin组成员有a，该组对gitosis-admin仓库有读写权限； developers组有a，b两个成员，该组对helloworld仓库有读写权限； test组有c一个成员，对helloworld仓库有只读权限。 当然目前这些配置文件的修改只是在你的本地，你必须推送到gitserver上才能真正生效。 加入新文件、提交并push到git服务器： 
+ git add .
+ git commit -am "add helloworld project and users"
+ git remote add origin ssh://git@hostname/helloworld.git
+ git push origin master
+==9配置 gitweb ==
+ 安装gitweb 
+ sudo apt-get install gitweb
+ 默认是安装到/usr/share/gitweb目录下
+ 
+ 默认没有 css 加载，把 gitweb 要用的静态文件连接到 DocumentRoot 下： 
+ cd /var/www/
+ sudo ln -s /usr/share/gitweb/* .
+ 如果按照下面我的做法，这步可以不做
+ 修改配置： 
+ sudo vi /etc/gitweb.conf
+ 将 $projectroot 改为git仓库存储目录(例如：/home/git/repositories)，保存后刷新浏览器。 
+ 
+ 如果没有找到项目，你需要将$projectroot/*.git 的属性改为755，让apache用户有可读权限。可以只改你需要让别人通过web访问的那个git。 http://localhost/cgi-bin/gitweb.cgi 
+ 
+ 修改/etc/gitweb.conf 内容： 
+ # path to git projects (<project>.git)
+ #$projectroot = "/var/cache/git";
+ $projectroot = "/home/git/repositories";
+ 一般只需要改这个就可以了
+ # directory to use for temp files
+ $git_temp = "/tmp";
+ # target of the home link on top of all pages
+ $home_link = $my_uri || "/";
+ # html text to include at home page
+ $home_text = "indextext.html";
+ # file with project list; by default, simply scan the projectroot dir.
+ $projects_list = $projectroot;
+ # stylesheet to use
+ @stylesheets = ("/gitweb/static/gitweb.css");
+ # javascript code for gitweb
+ $javascript = "gitweb/static/gitweb.js";
+ # logo to use
+ $logo = "/gitweb/static/git-logo.png";
+ # the 'favicon'
+ $favicon = "/gitweb/static/git-favicon.png";
+ # git-diff-tree(1) options to use for generated patches
+ #@diff_opts = ("-M");
+ @diff_opts = ();
+==10安装apache2==
+ sudo apt-get install apache2
+==11配置apache2 ==
+ ubuntu中默认的web目录是/var/www，默认的cgi目录是 /usr/lib/cgi-bin/,安装完成gitweb后，gitweb的gitweb.cgi会自动放置到该目录下。 （实际上是安装了个链接）
+ 如果你的cgi路径不是默认的/usr/lib/cgi-bin/，需要将gitweb安装在/usr/lib/cgi-bin中的 gitweb.cgi复制到原来配置的cgi-bin路径，并在apache的配置文件/etc/apache2/apache.conf末尾加上以下内容： 
+ SetEnv  GITWEB_CONFIG   /etc/gitweb.conf 
+ <Directory "/srv/www/cgi-bin/gitweb">           
+      Options FollowSymlinks ExecCGI          
+      Allow from all                          
+      AllowOverride all                       
+      Order allow,deny                        
+      <Files gitweb.cgi> 
+           SetHandler cgi-script 
+      </Files>                    
+      RewriteEngine on 
+      RewriteCond %{REQUEST_FILENAME} !-f 
+      RewriteCond %{REQUEST_FILENAME} !-d 
+      RewriteRule ^.* /gitweb.cgi/$0 [L,PT] 
+ </Directory>
+ 重新启动apache：sudo /etc/init.d/apache2 restart，访问http://localhost/cgi-bin/gitweb.cgi
+ 
+ 可以不这样做。在/etc/apache2/conf.d中有gitweb文件
+ Alias /gitweb /usr/share/gitweb        ---指出别名
+ <Directory /usr/share/gitweb>            ---指出别名所在的目录
+   Options FollowSymLinks +ExecCGI
+   AddHandler cgi-script .cgi
+ </Directory>
+ 这样就可以通过http://locolhost/gitweb/来访问git仓库了
+ usr/share/gitweb下所放的文件如下：
+ /usr/share/gitweb 
+ ├── gitweb.cgi 
+ ├── index.cgi -> gitweb.cgi 
+ └── static 
+     ├── git-favicon.png 
+     ├── git-logo.png 
+     ├── gitweb.css 
+     └── gitweb.js 
+ 经过验证gitosis没有太多用处，无法象网上某些文章说的可以远程创建仓库。
+ 一般git用法就是将用户的公钥加入git的ssh目录下的authorized_keys中就可以了。
+ 仓库还是在服务器上先建好。
+ 
+==12安装Cgit==
+ Cgit是另外一个类似gitweb的git仓库页面显示软件。
+ 获取cgit
+ 方法一：clone
+ 克隆地址：
+ git://git.zx2c4.com/cgit或
+ http://git.zx2c4.com/cgit 或
+ ssh://git@git.zx2c4.com/cgit
+ 随便找个目录，比如～目录
+ cd ～
+ git clone git://git.zx2c4.com/cgit
+ cd cgit
+ 
+ 方法二：下载代码
+ wget http://git.zx2c4.com/cgit/snapshot/cgit-0.9.2.zip
+ 访问http://git.zx2c4.com/cgit/ 下载最新代码
+ 编译cgit
+ make get-git
+ make 
+ make install
+ 
+ Makefile中默认的cgit安装目录是/var/www/htdocs/cgit
+ 这里可以修改CGIT_SCRIPT_PATH=你想要的路径，比如/usr/share/cgit
+ make的时候可能会报找不到openssl头文件的错误，是因为没有安装openssl的开发包，可以执行以下命令：
+ sudo apt-get install libcurl4-openssl-dev
+ 
+==13配置cgit==
+ 添加apache2的配置文件
+ 在/etc/apache2/conf.d目录下添加一个cgit文件。注意这个文件不是自动生成的，需要手工敲入。
+ 文件内容如下
+ Alias /cgit /usr/share/cgit 
+  <Directory /usr/share/cgit> 
+     AllowOverride None
+     Options +ExecCGI
+     Order allow,deny
+     DirectoryIndex /cgit/cgit.cgi
+     Allow from all
+      AddHandler cgi-script .cgi 
+ </Directory>
+ 添加链接
+ sudo mkdir /var/www/cgit
+ sudo ln -s /usr/share/cgit/* /var/www/cgit/.
+ 添加cgit的配置文件
+ 在/etc目录下添加cgitrc文件。注意这个文件不是自动生成的，需要手工敲入。
+ css=/cgit/cgit.css 
+ logo=/cgit/cgit.png 
+ robots=noindex,nofollow 
+ scan-path=/home/git 
+ #repo.url=test.git 
+ #repo.path=/home/git/test.git 
+ #repo.desc=ggg 
+ #repo.owner=hanhj
+ 
+ scan-path 表示自动搜索git仓库所在目录
+ 如果要手工配置仓库则添加被注释掉的repo配置
+ 
+ 重新启动apache：sudo etc/init.d/apache2 restart
+ 在浏览器中输入地址 http://localhost/cgit 就可以看到如下界面了
+
+ 可能要将www-data的用户加到git组中,否则www-data用户无法访问git仓库.
+ git仓库一般默认建在/home/git用户目录下.
