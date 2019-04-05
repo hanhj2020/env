@@ -270,7 +270,7 @@ unix系统的组成：
 
 ##在ubuntn下挂载windows的fat32分区
 
-###第一步：修改/etc/fstab;
+第一步：修改/etc/fstab;
 
 　　sudo vi /etc/fstab\
 　　相关内容如下：/dev/sda7 /media/big vfat defaults,utf8,umask=022,nosuid,nodev,uid=1000,gid=1000  0   0\
@@ -290,98 +290,156 @@ unix系统的组成：
 　　0   0   最后两个参数是，第一个被dump命令所用，代表是否需要dump。第二个参数被fsck所用，表示系统起来时fsck的顺序。\
 
 
-###第二步：建目录
-
+第二步：建目录
 
 　　修改好以上参数后，还需要在我们需要挂载文件系统的地方建个目录\
 　　   (sudo)mkdir /media/big  是否需要sudo看你建目录的地方，如果属于root用户的地方就要加sudo。如果是建在root用户的地方（我的机子就是建在/media目录下，它属于root用户），还需要用chown命令\
 　　    将其改成你想要挂载的用户和组。chown 用户组：用户名 挂载的目录 。例如sudo chown user1:user1 /media/big\
 
 
-###第三步：挂载
+第三步：挂载
 
 
 　　 执行(sudo) mount -a 就可以将windows fat分区按照我们想要的路径和用户名和组挂载上了。\
 
 ##mount:
 
-
 　　mount -t 文件类型 挂载设备 挂载点\
-　　例如：mount -t ntfs /dev/sda1 /media/windows\
-	文件类型：可以从/etc/filesystem或/proc/filesysem文件中看支持哪些文件系统。
-　　一般scsi设备是sdxx，ide设备是hdxx，软盘设备是fdxx\
-　　可以用命令行点方式来挂载设备，也可以用上面讲的fstab来挂载。\
-	挂载映像文件：mount -o loop ,ro xx.iso 挂载点 
-
-　　远程挂载：\
-　　远程挂载可以通过samba（windows）或nfs（linux）来挂载非本机的文件系统。\
-	客户端：
-　　sudo mount -t smbfs/nfs 远程ip地址/共享的目录 挂载的目录 -o 配置项
-	例如：sudo mount -t smbfs/nfs //192.168.15.23/share_doc /xx -o user=xxx dir_mod=755,file_mode=755,noserverino,uid=1001,gid=1001\
-　　user是指被挂载机的用户名\
-	在开发板上挂载时需要加上-nolock
-	mount -t nfs ip/dir mount_dir -o nolock 
-	比如 mount -t nfs 192.168.15.23 /mnt/tmp -o nolock ,intr,rsize=1024,wsize=1024 
-	服务器端：
-		界面方式：
-　　		前提是准备被挂载设备先要把共享点磁盘先共享出来，鼠标右击，点出属性配置即可，要允许陌生人挂载，如果允许读写也要将允许读写属性点上。\
-	　　	然后，在本机运行上面点命令，提示要输入密码，此时输入被共享机器的密码。注意，如果共享的目录，本身也是挂载的，就需要在挂载此文件系统使将其挂载属性为777,否则远程挂载不能修改该文件系统。\
-		无界面方式：
-			修改/etc/exports文件，该文件控制共享目录：
-			共享的目录 允许的共享者(共享的属性)
-			比如：	
-			/media/work/share_doc *(rw,sync,no_root_squash)
-			在nfs中没有验证机制，当访问者在服务端的用户列表中(/etc/passwd），则访问者具有服务器同名用户权限。
-			如果访问者id与服务器用户列表id相同，则访问者具有同名id权限。
-			如果访问者不在服务器用户列表中，则有匿名用户权限（即nobody）
-			如果访问者以root用户身份登录，则默认是将root身份改成匿名用户身份。
-			共享属性：
-				rw 
-				ro 
-				no_root_squash，不将root身份改成匿名身份
-				root_squash,将root身份改成匿名身份。
-				all_squase,所有访问者改成匿名身份
-				anonuid,设定匿名用户权限，将匿名用户的权限改成后面设置的uid或gid权限。
-				sync，同步到硬盘
-				async，铜鼓到内存
-			设置好exports文件后，用exportfs命令来更新：如果没有找到exportfs,需要apt install nfs-common,apt install nfs-kernel-server
-				exportfs -r ,更新 
-						-a ，选择所有
-						-u ，卸载 
-						-v，显示过程。
-	挂载loop设备：
-	可以将文件挂载为文件系统
-	mount 需要挂载的文件　挂载点　-o loop
+	　　例如：mount -t ntfs /dev/sda1 /media/windows\
+		文件类型：可以从/etc/filesystem或/proc/filesysem文件中看支持哪些文件系统。
+	　　一般scsi设备是sdxx，ide设备是hdxx，软盘设备是fdxx\
+	　　可以用命令行点方式来挂载设备，也可以用上面讲的fstab来挂载。\
+	
+	将文件挂载为文件系统
+		挂载映像文件：mount -o loop ,ro xx.iso 挂载点 
 		需要挂载的文件先要格式化为某种文件系统
-	dd if=/dev/zero of=mnt.img bs=1024k count=1
-	上面的语句产生一个mnt.img文件，大小为1M
-	（dd是文件转换命令，通常可以用来产生一个系统镜像文件比如：dd if=/dev/cdrom of=root.iso)
-	mkfs -t ext2 -F mnt.img 格式化文件
-	mount mnt.img /mnt -o loop
-	挂载这个文件到ｍｎｔ目录。
-	然后，你可以对这个目录进行操作，比如添加删除文件，最后会反映到ｍｎｔ.img文件中。
+		dd if=/dev/zero of=mnt.img bs=1024k count=1
+		上面的语句产生一个mnt.img文件，大小为1M
+		（dd是文件转换命令，通常可以用来产生一个系统镜像文件比如：dd if=/dev/cdrom of=root.iso)
+		mkfs -t ext2 -F mnt.img 格式化文件
+		mount mnt.img /mnt -o loop
+		挂载这个文件到ｍｎｔ目录。
+		然后，你可以对这个目录进行操作，比如添加删除文件，最后会反映到ｍｎｔ.img文件中。
 
 	产生一个内存磁盘：
 		mount -t tmpfs -o size=8M my_ramdis /meida/ramdisk
 	
 	其他的一些关于mount的命令
+		findmnt :列出当前已经挂载的设备
+			options:
+				-t fs_type
+		lsblk:	列出系统中的块设备信息。
+			调用格式:
+				lsblk [option] [device]
+			选项：
+				-o UUID
 
-	findmnt :列出当前已经挂载的设备
-		options:
-			-t fs_type
-	lsblk:	列出系统中的块设备信息。
-		调用格式:
-			lsblk [option] [device]
-		选项：
-			-o UUID
+		blkid：显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
+			调用格式
+				blkid options device
+			选项：
+				-p probe
+				-i info
 
-	blkid：显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
-		调用格式
-			blkid options device
-		选项：
-			-p probe
-			-i info
+##网络共享：\
+　　
+	用samba来共享:
+		samba是一种基于smb/cifs协议的提供网络文件共享服务.其客户端被windows,linux所支持.
+		配置方法:
+			linux服务端:
+				1.查看是否安装samba服务端软件:
+					service smbd status ;smbd 是smb daemon 的意思,是samba服务端软件.
+					如果没有安装执行:sudo apt install samba
+				2.配置配置文件
+					配置文件位于:/etc/samba/smb.conf 
+					主要是配置共享的文件夹,例如:
+					[share_doc]		网络上共享名
+					comment = xxx	注释 
+					path=xxx		共享的本地文件
+					guest ok = yes/no 是否允许任何人访问,如果不允许,则客户端访问时需要提供用户名和密码.(这一点测试的时候反复弹出用户名密码对话框,不知何故)
+					read only = yes/no	是否可写
 
+					其他一些选项好像不是必要的
+					public=yes/no 
+					writeable=yes/no 
+					browseable=yes/no 
+					create mask=
+					directory mask = 
+					需要注意的是,由于是共享,所以如果要可写,需要原文件夹对other用户具有写权限,否则即使这里配置了可写,也不能写入.
+				3.启动服务端:
+					sudo /etc/init.d/smbd start
+					或
+					service smbd start 
+					或
+					用sysvc-rc-conf来配置自动启动
+			windows端服务器:
+				配置用右键点取需要共享的文件夹,然后选择共享,是否允许修改即可.
+			客户端:
+				在windows的文件夹浏览器中输入\\server_ip就可以看到共享的文件内容.比如\\192.168.0.103\
+				在liunx的文件夹浏览器中输入smb://server_ip,比如:smb://192.168.0.103/
+				如果想在linux中某个目录挂载该文件系统,可以用mount命令,命令如下:
+					mount -t smbfs/cifs //server_ip/share_name mount_point -o user=xxx,pass=xxx,[uid=xxx,gid=xxx,file_mode=xxx,dir_mod=xxx,noserverino,vers=1.0]
+					带[]中的内容是可选项,vers选项主要是因为有些老的windows系统不支持smb2.0以上版本.
+					比如:mount -t cifs //192.168.0.102/share_doc share_doc -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
+	
+	用nfs来共享
+		nfs是sun公司在1984年发明的一种网络共享协议(internet filesystem).目前有nfs2,3,4版本.
+		配置方法:
+			服务器端：
+				1.查看是否安装服务端软件
+						dpkg -l nfs-server-kernel
+						dpkg -l nfs-common
+						dpkg -l rpcbind
+					or
+						service rpcbind status
+						service nfs-server-kernel status
+					如果没有安装,执行:
+					apt install nfs-kernel-server
+					apt install nfs-common
+					apt install rpcbind
+				2.配置文件:/etc/exports文件：
+					文件格式:共享的目录 允许的共享者(共享的属性).比如：	
+					/media/work/share_doc *(rw,sync,no_root_squash)
+					共享属性：
+						rw 
+						ro 
+						no_root_squash，不将root身份改成匿名身份
+						root_squash,将root身份改成匿名身份。
+						all_squash,所有访问者改成匿名身份
+						anonuid,设定匿名用户权限，将匿名用户的权限改成后面设置的uid或gid权限。
+						sync，同步到硬盘
+						async，同步到内存
+						在nfs中没有验证机制，当访问者在服务端的用户列表中(/etc/passwd），则访问者具有服务器同名用户权限。
+						如果访问者id与服务器用户列表id相同，则访问者具有同名id权限。
+						如果访问者不在服务器用户列表中，则有匿名用户权限（即nobody）
+						如果访问者以root用户身份登录，则默认是将root身份改成匿名用户身份。
+					设置好exports文件后，用exportfs命令来更新
+						exportfs 
+							-r :更新 
+							-a :所有
+							-u :卸载 
+							-v :显示过程。
+				3.启动nfs服务 
+					sudo /etc/init.d/nfs-kernel-server start
+					or
+					service nfs-kernel-server start 
+			客户端:
+				通过mount命令来挂载:
+					mount -t nfs server_ip:/share_name mount_point [action] [-o options]
+					例如:mount -t nfs 192.168.0.103:/meida/work/share_doc share_doc -o nolock 
+					action:
+						-r
+						-w
+					options:
+						nolock		:文件锁,挂开发板的时候有用,具体还不明白.
+						proto=xx	:tcp/udp 
+						rsize=xx	:
+						wsize=xx	:
+
+				shomount 命令可以查看服务端或客户端的共享情况
+				在开发板上挂载时需要加上-nolock
+				mount -t nfs ip/dir mount_dir -o nolock 
+				比如 mount -t nfs 192.168.15.23 /mnt/tmp -o nolock ,intr,rsize=1024,wsize=1024 
 	
 ##tftp
 		服务器：sudo /etc/init.d/tftpd-hpa start
@@ -1461,8 +1519,8 @@ unix系统的组成：
 	action:
 		-i :安装软件
 		-r :卸载软件
-		-s :state显示软件状态
-		-l :显示软件安装信息
+		-s :state显示软件安装包信息
+		-l :显示软件安装状态
 		-L --listfiles：显示软件包内文件
 	----以下是dpkg-deb的命令
 	dpkg-deb  
@@ -1471,10 +1529,10 @@ unix系统的组成：
 		-x :解压一个deb文件 
 		-I :显示一个deb文件信息
 	dpkg-query  
-		-l :显示软件安装信息
-		-s :state显示安装软件状态 
+		-l :显示软件安装状态
+		-s :state显示软件安装包信息 
 		-S filename search pattern
-			:serarch filename frome install package 
+			:serarch filename from install package 
 		-p package-name
 			:display details of package 
 		-L package name
