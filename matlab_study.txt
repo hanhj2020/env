@@ -1,0 +1,285 @@
+第一章：mathlab基础
+使用帮助
+	help	xx 
+	doc	xx
+	help显示xx命令的简略信息
+	doc显示xx命令的详细信息
+
+几个常用命令：
+	clear	清除当前工作区全局变量
+	clc	clear command	清除命令窗口
+	clf	clear figure	清除图形窗口
+	echo	命令区回显显示开关。此命令仅在m文件中使用，在命令行中无效。？？没有用
+	disp	显示文本或变量 disp(x)
+	path	显示当前搜索命令的路径。
+			editpath可以编辑当前路径
+			addpath  path -end/begin	可以将path加入到当前的路径的前面
+			或后面
+	who	显示当前工作区的变量名
+	whos	显示当前工作区变量的详细信息
+	which	显示命令所在的位置
+	what	显示指定或当前目录下的命令
+	
+	默认输入命令时，当按回车后会执行此命令，并回显结果。如果后面接上；表示不会回显
+	如果输入多条命令，后面不按回车而是shift+回车则不执行，直到接收到回车才执行。
+	
+	mathlab中的数据
+	mathlab中的数据可以分为字符型，数值型，结构型，单元型，java类，函数句柄
+	数值型除非特别指明，一般都是双精度的浮点型double占8个字节
+	inf无穷大，nan-not a number
+
+变量赋值：
+变量名=数据
+数组的赋值：
+	mathlab中数组的下标从1开始
+	例如：
+	一维数组
+		var=1:5	,产生1,2,3,4,5,间隔为1
+		var=1:2:5	,产生1.3.5	间隔为2
+		var=linspace(a,b,n),产生a到b之间n个数，包括ab。如果n没有，则默认是n=100
+	二维数组：
+		var=[1,2,3;4,5,6]	用；分开多行
+	数组的引用
+		data=var(1,2)  	data=2 用(行，列)来取数
+		data=var(1,:)	data为var的第一行元素，用分号：来取所有元素
+		data=var(:,1)	data为var的第一列元素
+	数组元素的删除
+		var(1,:)=[]	删除第一行元素。用[]表示空，即将对应元素删除.注
+		意不能删除数组中的个别元素，否则破坏结构。
+	一些特殊矩阵构造
+		ones	全1矩阵
+		zeros	全0矩阵
+		eye	单位对角阵
+	数组的信息：
+		length(var)	数组最长维度上的长度
+		size(var)		数组各个维度的长度
+		numel(var)	数组元素个数
+		sum(var(:))	数组元素求和
+		判断元素类型
+		class(var)		
+		ischar
+		isinteger
+		isfloat
+
+结构的赋值
+	例如：
+	stu.name='aaa'
+	stu.age=18
+	stu.sex=1
+	stu(2).name='ccc'
+	stu(2).age=18
+	stu(2).sex=1
+	通过结构构造函数
+	stu=struct('name','aaa','age',18,'sex',1)
+		通过属性-值对来赋值
+	{}构成单元，比如上面的结构如果对多个赋值
+	stu=struct('name',{'aaa','bbb','ccc'},'age',{18,18,16},'sex',{1,1,1});
+	
+	结构的引用：
+	data=stu(1)	取得stu结构中的第一个结构
+	data=stu(1).name	取得stu结构中第一个结构中的name变量
+	
+函数句柄
+	fun=@xx		xx是存在的函数名
+字符串处理
+	字符串合并
+	str=[a b]		a,b分别是两个字符串
+	字符串比较
+	strcmp(a,b)	成功返回1
+	strncmp(a,b,n)
+	strcmpi(a,b)	忽略大小写
+	strncmpi(a,b,n)
+	
+	num2str	字符串与数字的转换
+	str2num
+	字符串
+单元型数据：
+	单元型数据的关键字是{}。与数据一样的赋值取值。不过在单元中，每个元素可以是不同类型的数据
+	赋值：
+		a{1,1}='abc'
+		a{1,2}=[1:3]
+	取值：
+		a=a{1,1}
+		
+矩阵数学运算：
+	+ - * /  \	\是左除Ax=b，x=A\b
+		+，-运算必须是同等大小的矩阵
+		*	A*B，参与运算的矩阵A的列数=B的行数
+		.*，./	点乘，点除，参与运算的要么是标量，或标量与矩阵，或同等大小的矩阵。
+	条件运算符：与C类似
+		>,<,>=,<=,==，~=。参与运算如果是矩阵，则返回的是对每个元素进行条件运算的结果。
+	逻辑运算符：
+		&，|，~，xor
+	短路逻辑运算符：
+		&&，||，与逻辑运算符所不同的是如果前面一个逻辑满足，则不执行后面一个逻辑判断。这里两边的操作数必须是单个值。
+		
+		
+	矩阵运算：
+		norm	范数。对向量或矩阵的度量，或称长度。有不同的度量方法，即尺子不同。在matlab中的norm函数为对于向量A=[a1,a2....an] norm(A)=sqrt(a1^2+a2^2+...).在线性代数中称为2类范数。还有1类，无穷大范数。
+		rank		秩。在线性方程组中即为独立方程数。在向量空间里为独立的向量数（非线性相关）。
+		det		行列式。按照一定规则计算的矩阵的值。线性方程组有唯一解的条件是det不等于0.det等于0的矩阵称为奇异矩阵。
+		rref		行化简
+				A*x=b
+				x=rref([A,b])
+				或  x=A\b
+		inv		求逆
+				A*A(-1)=I
+				求逆等价于rref(a,I)
+		dot		向量点乘。点乘结果是一个数。是一个向量在另一个向量上的投影。
+				|u1	u2|
+				|v1	v2|
+				u1，u2是u向量的x，y坐标
+				v1，v2是v向量的x，y坐标
+				dot(u,v)	=u1*v1+u2*v2
+						=norm(u)*norm(v)*cos(a).	a是u，v之间的夹角。
+				可以用物理上的力的做功来理解。
+		cross	向量的叉乘。叉乘的结果是一个向量。其大小是u，v所形成的平行四边形面积，方向按照右手原则垂直于该平面。
+				|u1	u2	u3|
+				|v1	v2	v3 |
+				cross运算要求u，v等长，并且至少有3个元素。
+				norm(cross(u,v))	=u1*v2-u2*v1
+						=norm(u)*norm(v)*sin(a).	a是u，v之间的夹角。		 		
+		针对元素的初等函数
+			三角函数：
+				sin，cos，tan，atan等
+			取整函数：
+				floor	对下取整
+				ceil		对上取整
+				mod		求模		mod(x,y)=x-floor(x./y).*y，当x，y同符号时，mod(x,y)=rem(x,y)。当x，y不同符号时mod(-x,y)=rem(-x./y)+y
+				rem		求余		rem(x,y)=x-fix(x./y)*y。
+				fix		对0取整
+				round	四舍五入取整。即对最近的整数取整。
+			对数函数，指数函数，幂函数		y=a^x指数函数，y=x^a幂函数
+				log		以e为底
+				log10	以10为底
+				log2		以2为底
+				exp		以e为底的幂，等同e^
+				pow2	以2为底的幂，等同2^
+				sqrt		开方
+				nthroot	求根	,nthroot(x,n)	这里x必须是实数
+			复数函数：
+				abs	求模
+				angle	求角度
+				complex	构造复数
+				conj		求共轭
+				real		求实部
+				imag	求虚部
+			微分，积分函数
+				airy		解d^2(w)/dz^2-zw=0二次微分方程
+				bassel	解z^2*d^2(y)/dz^2+zdy/dz+(z^2-v^2)y=0
+			数论函数：
+				factor	分解质因子
+				gcd		最大公因子great common division gcd(a,b)
+				isprime	是否是质数
+		其他：
+			坐标轴转化：
+				pol2cart	极坐标到笛卡尔	polar cart
+				cart2pol	笛卡尔到极坐标
+				polar(theater,r)	极坐标
+
+第四章：mathlab基本编程
+	mathlab的编程就是将在命令行中所敲得命令用文件保存下来。以便日后使用，后缀名为m。
+	所以mathlab的编程有两种。一种是函数，一种是脚本。
+	脚本就是类似于将命令行保存下来。当运行脚本的时候，其中所定义的变量也将变成全局变量。
+	函数与脚本所不同的是，其所定义的变量会保存在其自身的函数空间中，即使调用了脚本也是如此。当返回时，这些变量将被释放。
+	函数文件形式：
+		xx.m	xx是函数名
+		function	returnval=xx(arg1,arg2...)
+		% common
+		% common
+		body
+		.....
+		return 
+	
+	function	是关键字，returnval是返回值的变量名，xx是函数名（注意需要与文件名一致）。%是注释，注释内容会在执行help xx的时候显示出来。
+	最后return是返回，可以不要。
+	流程控制：
+		总的来说，matlab中的流程控制与c语言类似
+		循环：
+			for i=1:3
+				。。。
+			end
+			while condition
+				...
+			end
+		条件：
+			if	condition
+				...
+			end
+			if	condition
+				...
+			else
+				...
+			end
+			if 	condition
+				...
+			elseif condition
+				...
+			else
+				...
+			end
+			switch var
+				case var1
+					....
+				case var2
+					....
+			end
+		流程中的控制：
+			break
+			continue
+			return
+			try	异常捕获
+				...
+			catch
+				...
+			end
+			input	暂停程序，从键盘获得输入
+				ret=input('promt')		将获得的键盘返回给ret
+				ret=input('prompt','s')	将获得的键盘作为字符串返回给ret
+				如果没有输入任何字符而按回车，则返回空矩阵，可以用isempty来检测。
+			keyboard		暂停程序，控制台进入K状态，此时可以执行任何matlab命令。在K状态，输入return然后回车，则返回。
+			pause(n)		暂停程序，如果不带参数，此时按任意键返回。如果带参数，则等待n秒，然后返回。
+		调试：
+			一：直接打印，disp
+			二：通过界面
+			三：通过控制台
+				设置断点：
+					dbstop in mfile at line
+					dbstop in mfile at fun
+					dbstop in mfile at line @ if condition
+					。。。
+					dbstop if error
+					dbstop if all error	与上面的区别在于包括try。。catch。而上面不包括
+					dbstop if warning
+					dbstop if caught error 捕捉tru catch的错误
+				清除断点
+					dbclear all
+					dbclear in mfile
+					....
+				dbtype
+				dbcont
+第五章数据可视化
+		二维
+			plot
+				plot(y)
+				plot(x,y)
+				plot(x,y,'option')
+			polar
+		三维
+			plot3
+			mesh
+		坐标轴
+			axis		
+				axis([xmin,xmax,ymin,ymax)
+				axis square
+				axis equal
+				axis on/off
+				grid on/off
+				hold on/off
+				subplot(m,n,i)
+						
+				
+				
+				
+			
+			
