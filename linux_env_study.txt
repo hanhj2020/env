@@ -198,17 +198,12 @@ regular expression正则表达式
 		vi 中匹配空行^\s*$
 
 	还有pcre，perl compile regular expression
-	
-
 	更多的正则表达式可参见info grep regualr
 
 使用正则表达式的linux程序		
 grep	在文件中搜索字符(global regualr expression print)
 	调用格式 
 	grep optional PATTEN files 
-
-
-
 	optional
 	-E	按照扩展re来处理
 	-F	按照固定字符串匹配算法处理，kmp算法。
@@ -475,12 +470,13 @@ rsync	增量拷贝
 
 	shell的重定向：		
 		输入重定向：
-			prog < input
-			用input文件作为prog的标准输入。与prog input 相同，liunx许多程序默认的输入是标准输入，如果有文件作为参数，就用文件作为标准输入。
+			prog < xxx
+			liunx许多程序默认的输入是标准输入，如果不带参数，就是用标准输入作为输入。如果有文件作为参数，就用文件作为标准输入。
+			采用一个<号，表示将xxx作为prog的参数而替代了标准输入。与prog input 相同，
 			prog << xxx 
 			采用两个<号表示xxx作为分界符，在其后的内容作为prog的输入，直到再次遇见xxx。
 			prog <<< xxx
-			采用三个<号表示，将xxx作为prog的输入
+			采用三个<号表示，将xxx作为prog的输入。
 		输出重定向：
 			prog > file 
 			将标准输出重新定向到文件file，如果file不存在就新建，否则覆盖。
@@ -506,7 +502,7 @@ rsync	增量拷贝
 
 		管道：
 			管道是将前一个程序的标准输出与下一个程序的标准输入相连接。将前一个程序的标准输出作为后一个程序的标准输入。
-			ls |grep aaa.会看到什么？这个命令是在当前目录中找是否有包括aaa作为文件名的文件。而不是在列出文件中查找aaa的内容。实际上应当将列出的文件作为参数给grep，实现这个功能的是xargs,命令为ls | xargs aaa 。
+			ls |grep aaa.会看到什么？这个命令是在当前目录中找是否有包括aaa作为文件名的文件。而不是在列出文件中查找aaa的内容。如果想这么做应当将列出的文件作为参数给grep，实现这个功能的是xargs,命令为ls | xargs grep aaa 。xargs的功能是将前面命令的输出作为参数附加到后面一个命令中。如果命令行太长，可以用-s来扩大，最长为128kb。
 	shell的条件判断：
 		shell判断一个程序是否执行成功，是看程序返回值是否为0,如果是0,表示执行成功;结果非0,表示执行不成立。
 		在shell中的条件判断有test或者[。注意[是一个程序，和test这个程序是一样的。比如test $a = 9 或者 [ $a = 9 ].test和[的唯一区别在于用[后面必须跟上]。还有一点就是既然[是一个程序，后面的内容就是其参数，所以[后面必须跟一个空格。test判断内容包括：

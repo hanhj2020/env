@@ -1,0 +1,96 @@
+第一章：帮助
+	:help key	(h)	显示帮助。如果带key，则显示key的帮助。
+	:options	显示选项帮助
+	在vim中执行shell命令需要在命令前加上惊叹号
+	:!command
+	$vimruntime	vim的环境变量/usr/share/vim/vim73
+	:scriptnames	显示脚本文件
+第三章：移动
+	在normal状态下
+	h	左移
+	l	右移
+	j	上移
+	k	下移
+	w	向后移动到下一个单词的首位置
+	b	向前移动到前一个单词的首位置
+	e	向后移动到下一个单词的尾位置
+	ge	向前移动到前一个单词的尾位置
+	如果w，b，e是大写字母，W，B，E则认为单词是以,空格)等作为分隔。这样移动将更快。
+	以上字母前面都可以加上数字，以代表移动多少数量。
+	gg	:跳转到开始
+	G	：跳转到结尾
+
+	0	跳转到本行开始
+	$	跳转到本行的结束。
+	gnumber	跳转到number行
+	%	跳转到匹配的(){}[]处。在编程的时候比较快捷。
+	fc	跳转的找到的c字符处	find character
+	ctrl-f	向前翻页	foward
+	ctrl-b	向后翻页	backward
+	zt	将当前光标所在位置提到屏幕顶行	z想象成一个折叠的纸，t-top
+	zb	将当前光标所在位置移到屏幕底行。b-bottom
+	zz	将当前光标所在位置移到屏幕中央。
+	:number	可以直接跳转到number行
+	:set number		(nu)	显示行号
+	:set nonumber	(nonu)	不显示行号
+
+	/str	搜索str，如果找到，会将str反显。此时按n将跳转到下一个，shift-b将跳转的前一个。
+	/str实际上是字符串匹配，可以用正则表达式中的符号。比如精确匹配单词the，而不是somethere。可以用/\<the\>,这里\是转义符，><表示定位在结束还是开头。关于正则表达式可以参见《linux_env_study.txt》和《linux_env.txt》中的相关内容。
+	:set ignorecase		(ic)	搜索时忽略大小写，这是默认的。
+	:set noignorecase	(noic)	不忽略大小写，即大小写敏感。
+	如果不想输入太多的字符，可以将光标定位到某个单词，然后输入*，此时vim会自动提取光标所在处的单词向后进行搜索。输入#，将向前跳转。
+	:set incsearch		(is)	可以在输入查找字符串的时候就开始匹配。
+	:set noincsearch	(nois)	可以取消上面设置。
+	:set wrapscan		(ws)	搜索时回转
+	:set nowrapscan		(nows)	取消搜索回转
+	ctrl-]	将以光标所在处的单词为关键字，跳转到其相关联的地方（称为tag标记）
+	ctrl-o或ctrl-t从跳转处返回。
+	:mark [a-zA-Z0-9]	(ma)	设置标记，这样就可以快速跳转
+	`mark				跳转到标记处,`是键盘左上角的反引号
+	:marks				显示标记
+
+第四章文本编辑
+	a	进入插入模式，并将光标向后移动1位
+	i	进入插入模式，光标不移动。
+	o	进入插入模式，在当前行后插入一行。
+	O	进入插入模式，在当前行前插入一行。
+
+	dd	删除一行
+	ndd	删除n行
+	dw	删除一个单词
+	dfc	删除从当前光标到所找到的第一个c字符之间的字符，包括c。
+	d$	删除当前到行尾的字符
+	x	删除当前光标下的字符。相当于dl	l表示右移
+	X	删除当前光标左边的字符。相当于dh	h表示左移
+	c	与d类似，但是删除后将进入插入模式
+	cl	与dl类似，但是删除后将进入插入模式。快捷键是s
+	cc	与dd类似，并进入插入模式。快键键是S
+	yy	复制一行	y-yank 拉
+	nyy	复制n行
+	p	粘贴
+	v	进入visual模式
+	ctrl-v进入列块的visual模式
+	具体以上用法参见《linux_env.txt》
+第五章定制vim	
+	vim的选项很多，通过定制可以更方便的使用vim
+	我们可以手动定制vim的一些选项，比如 
+	:set nu on 显示行号 
+	:set	可以查看当前的选项情况
+	:set someoption&可以将某个option恢复到默认值。
+	这里不用赘述，具体配置项可以参见options
+	这里描述如果添加一个已经写好的plugin。vim支持插件，以增强vim的功能。
+	vim的安装目录一般在 /usr/share/vim/vim73,这是vim的$vimruntime变量的位置。在此目录下面有macros，定义了全局配置；/ftplugin目录定义不同文件类型的插件。将macros或ftplugin目录下需要的文件，拷贝到~/.vim/plugin目录下。就可以支持这些插件了。插件的文件名后缀一般是vim
+	同时，也可以将上述目录中的相关插件的txt文件拷贝到~/.vim/doc目录下，然后再vim中执行:helptags ~/.vim/doc就可以在帮助文件里支持这些插件了。
+	2.关于颜色
+		:syntax	enable可以打开语法高亮。
+		:colorscheme (colo)	设置配色方案
+			配色方案在 /usr/share/vim/vim73/colors/目录下 
+第六章多文件编辑：
+	窗口移动：
+		ctrl-w H	将当前窗口左移
+		ctrl-w	J	将当前窗口上移
+		ctrl-w	K	将当前窗口下移
+		ctrl-w	L	将当前窗口右移
+
+
+
