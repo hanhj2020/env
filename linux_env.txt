@@ -2298,6 +2298,9 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 
 #pdftk：合并切割pdf
 
+#pandoc:
+	将markdown格式的文本转换成其他格式的文本.
+
 #svn
 	版本库
 	svnserve 服务端
@@ -2336,10 +2339,3 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 			svn add:添加文件
 			svn ci -m ""：提交修改
 			svn diff :比较修改等操作
-
-		
-
-
-
-
-
