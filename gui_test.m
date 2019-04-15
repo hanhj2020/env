@@ -24,7 +24,7 @@ function varargout = gui_test(varargin)
 
 % Edit the above text to modify the response to help gui_test
 
-% Last Modified by GUIDE v2.5 25-Mar-2019 18:13:23
+% Last Modified by GUIDE v2.5 27-Mar-2019 15:15:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -70,10 +70,10 @@ end
 
 function ret=reset_cfg(handles)
 handles.r1=[2  2  2];
-handles.Angle1=[0 -120 120 0 0 ];
+handles.Angle1=[0 -120 120 0 0 0 0 ];
 handles.Name1=char('Ua','Ub','Uc','U0');
 handles.step1=10;
-handles.r2=[0.5 0.5 0.5];
+handles.r2=[0.5 0.5 0.5 0];
 handles.Angle2=[0 -120 120];
 handles.Name2=char('Ia','Ib ','Ic','I0');
 handles.step2=10;
@@ -154,12 +154,29 @@ v2=handles.v2(1)+handles.v2(2)+handles.v2(3);
 ag1=angle(handles.v1(1)-handles.v1(2));%angle of uab
 ag2=angle(handles.v2(1));%angle of ia
 ag=ag1-ag2-pi/6;%angle of uab-ia
+if ag<0
+    ag=ag+2*pi
+end
+handles.Angle1(5)=ag/pi*180;
+ag1=angle(handles.v1(2)-handles.v1(3));%angle of uab
+ag2=angle(handles.v2(2));%angle of ia208.382
+ag=ag1-ag2-pi/6;%angle of uab-ia
+if ag<0
+    ag=ag+2*pi
+end
+handles.Angle1(6)=ag/pi*180;
+ag1=angle(handles.v1(3)-handles.v1(1));%angle of uab
+ag2=angle(handles.v2(3));%angle of ia
+ag=ag1-ag2-pi/6;%angle of uab-ia
+if ag<0
+    ag=ag+2*pi
+end
+handles.Angle1(7)=ag/pi*180;
 
 handles.Angle1(4)=angle(v1)/pi*180;
 handles.r1(4)=abs(v1);
 handles.Angle2(4)=angle(v2)/pi*180;
 handles.r2(4)=abs(v2);
-handles.Angle1(5)=ag/pi*180;
 handles.d1=max(handles.r1);
 handles.d2=max(handles.r2);
 if(handles.d1>handles.d2)
@@ -370,18 +387,20 @@ if(handles.d1>handles.d2)
     draw_phase(handles.Angle2,handles.r2,handles.Name2);
     hold off;
 else
-    draw_phase(handles.Angle2,handles.r2,handles.Name1);
+    draw_phase(handles.Angle2,handles.r2,handles.Name2);
     hold on;
-    draw_phase(handles.Angle1,handles.r1,handles.Name2);
+    draw_phase(handles.Angle1,handles.r1,handles.Name1);
 end
 
 function ret=set_vector(handles)
 set(findobj('tag','rUa'),'String',[num2str(handles.r1(1)) ]);
 set(findobj('tag','rUb'),'String',[num2str(handles.r1(2)) ]);
 set(findobj('tag','rUc'),'String',[num2str(handles.r1(3)) ]);
+set(findobj('tag','rU0'),'String',[num2str(handles.r1(4)) ]);
 set(findobj('tag','rIa'),'String',[num2str(handles.r2(1)) ]);
 set(findobj('tag','rIb'),'String',[num2str(handles.r2(2)) ]);
 set(findobj('tag','rIc'),'String',[num2str(handles.r2(3)) ]);
+set(findobj('tag','rI0'),'String',[num2str(handles.r2(4)) ]);
 set(findobj('tag','ang_Ua'),'String',[num2str(handles.Angle1(1)) ]);
 set(findobj('tag','ang_Ub'),'String',[num2str(handles.Angle1(2)) ]);
 set(findobj('tag','ang_Uc'),'String',[num2str(handles.Angle1(3)) ]);
@@ -399,6 +418,8 @@ set(findobj('tag','ang_Ub_Ib'),'String',[num2str(mod(handles.Angle1(2)-handles.A
 set(findobj('tag','ang_Uc_Ic'),'String',[num2str(mod(handles.Angle1(3)-handles.Angle2(3),360)) 'бу']);
 set(findobj('tag','ang_U0_I0'),'String',[num2str(mod(handles.Angle1(4)-handles.Angle2(4),360)) 'бу']);
 set(findobj('tag','ang_Uab_Ia'),'String',[num2str(mod(handles.Angle1(5),360)) 'бу']);
+set(findobj('tag','ang_Ubc_Ib'),'String',[num2str(mod(handles.Angle1(6),360)) 'бу']);
+set(findobj('tag','ang_Uca_Ic'),'String',[num2str(mod(handles.Angle1(7),360)) 'бу']);
 ret=handles;
 function edit2_Callback(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
@@ -795,5 +816,57 @@ function rUa_KeyPressFcn(hObject, eventdata, handles)
 % hObject    handle to rUa (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+
+
+function rU0_Callback(hObject, eventdata, handles)
+% hObject    handle to rU0 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rU0 as text
+%        str2double(get(hObject,'String')) returns contents of rU0 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rU0_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rU0 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc
+    set(hObject,'BackgroundColor','white');
+else
+    set(hObject,'BackgroundColor',get(0,'defaultUicontrolBackgroundColor'));
+end
+
+
+
+function rI0_Callback(hObject, eventdata, handles)
+% hObject    handle to rI0 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rI0 as text
+%        str2double(get(hObject,'String')) returns contents of rI0 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rI0_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rI0 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc
+    set(hObject,'BackgroundColor','white');
+else
+    set(hObject,'BackgroundColor',get(0,'defaultUicontrolBackgroundColor'));
+end
 
 
