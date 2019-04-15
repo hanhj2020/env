@@ -1,7 +1,7 @@
-文件及文件系统相关,系统,网络,应用
+#文件及文件系统相关,系统,网络,应用
 
 
-unix系统的组成：
+##unix系统的组成：
 
 	|----------------------------|
 	|	应用程序				 |	
@@ -62,7 +62,6 @@ unix系统的组成：
 　　ctrl+prtsc 全屏截取到剪切板\
 
 
-#文件管理相关
 
 ##vi
 
@@ -149,7 +148,6 @@ unix系统的组成：
 
 ###历史命令窗口:
 
-
 　　1）方法1：输入q：显示历史命令窗口\
 　　    q:(注意不是在commond窗口中输入q，而是在普通模式中直接输入q：)\
 　　    会显示一个命令窗口,显示所有历史命令,用上下键移到相应命令上回车就可执行.\
@@ -158,7 +156,6 @@ unix系统的组成：
 
 
 ###暂时退出vi:
-
 
 　　crtl+z\
 　　返回:fg\
@@ -180,7 +177,6 @@ unix系统的组成：
 	unmap xx 
 
 ###阅读源文件在文件中跳转:
-
 
 　　需要查看的文件目录下输入:cscope -bR . 命令,会在当前目录下生成cscope.out文件。\
 　　在vim配置文件中添加\
@@ -215,39 +211,40 @@ unix系统的组成：
 ##chmod
 
 
-　　 基本操作:chmod xxx file\
-　　       文件权限解释：\
-　　           linux中所有文件（包括目录，设备）都具有权限属性。我们执行ls -l 命令可以看到如下结果：\
-　　           drwxr-xr-x 2 hanhj hanhj  4096 11月 30 09:25 Desktop\
-　　           -rw-rw-r-- 1 hanhj hanhj     4 11月  9 09:15 dic.txt\
-　　           lrwxrwxrwx 1 hanhj hanhj    56 11月 30 09:23 si -> /media/big/wine/Program Files/SourceInsight/Insight3.exe\
-　　           。。。\
-　　           第一列就是代表文件的权限\
-　　           比如对于第一个文件Desktop 它的权限是 drwxr-xr-x\
-　　           第一个字母代表文件类型 如果是‘-’代表是普通文件，‘d’代表是目录，‘c’代表是字符型设备（比如串口），‘b’代表是块设备（比如硬盘），‘l’代表符号链接。\
-　　           后面每三个为一组，表示不同分类用户的权限\
-　　           第一组表示文件所属用户的权限，rwx分别代表读、写、执行权限，如果相应位为‘-’代表没有相应的权限。\
-　　           第二组代表文件所属用户组的权限。\
-　　           第三组代表处以上外的用户所具有的权限。\
-　　           以上权限也可以用数字表示。用数字标识法，每个文件权限用四个8进制数表示，每个数由4,2,1相加而成，如果对应位省略掉，则设置为0.\
-　　           第一个数代表 suid，sgid权限 。1-代表粘滞位，2代表sgid权限，4代表suid权限。\
-					suid,sgid一般只对二进制程序有用，它的意思是当用户执行此程序时，具有该程序的用户或组身份，而不管此用户原来的身份。利用此特性，当用户执行一个用户id为root的程序时，就具有了root身份,是比较危险的。粘滞位表示当用户第一次执行此程序时，将文件内容留在内存中，这样可以提高下次访问的速度。这个是比较老的用法，现在普遍采用缓存技术，在linux中此位用来表示用户是否对文件所在目录具有权限。
-					举个例子：
-					比如某个文件a.c,该文件的所有者和组是hanhj。chmod o-r-w-x a.c去掉other的所有权限，这样其他用户就不能使用这个文件。编译一个程序xx打开a.c文件,xx的所有者和组是hanhj。如果对这个程序不加s权限chmod u+s xx ,则当其他用户比如tom执行这个程序的时候，他的身份是tom，他不能打开a.c文件，因为它属于other组，没有读写a.c文件的权限。但是如果将xx程序加上suid权限，则tom执行这个xx程序的时候就变成xx这个程序的所有者身份，则它可以打开a.c文件。
-　　           第二个数字代表用户权限 1-代表执行权限，2代表写权限，4代表读权限。\
-　　           第三个数字代表用户组权限，数字含义同上。\
-　　           第四个数字代表其他用户权限，数字含义同上。\
-　　           比如777代表所有用户均具有读写执行权限，755代表用户具有读写执行权限，而用户组和其他用户具有读和执行权限。\
-　　了解以上知识我们就可以对文件的权限进行改变。\
-　　如对上面的dict。txt文件执行下面的命令：chmod 754 dic.txt 然后ls -l 显示如下：\
-　　drwxr-xr-x 2 hanhj hanhj  4096 11月 30 09:25 Desktop\
-　　-rwxr-xr-- 1 hanhj hanhj     4 11月  9 09:15 dic.txt\
-　　可见dic。txt文件用户权限加上了执行权限，用户组权限去掉了写权限，加上了执行权限。\
-　　除了用数字改变权限外，还可以用字母改变权限\
-　　u代表用户，g代表用户组，o代表其他用户，a代表全部。\
-　　+代表加上权限，-代表去掉权限。\
-　　r代表读权限，w代表写权限，x代表执行权限，X代表当目标文件对用户来说是可执行文件或者是目录时才设置X权限，s代表设置set-uid和set-gid权限。s只有和u和g一起使用。\
-　　例如同样以上的命令可以用以下方法实现：chmod u+x g-w+x dic.txt\
+　　基本操作:chmod xxx file\
+　　文件权限解释：\
+　　    linux中所有文件（包括目录，设备）都具有权限属性。我们执行ls -l 命令可以看到如下结果：\
+　　    drwxr-xr-x 2 hanhj hanhj  4096 11月 30 09:25 Desktop\
+　　    -rw-rw-r-- 1 hanhj hanhj     4 11月  9 09:15 dic.txt\
+　　    lrwxrwxrwx 1 hanhj hanhj    56 11月 30 09:23 si -> /media/big/wine/Program Files/SourceInsight/Insight3.exe\
+　　    。。。\
+　　    第一列就是代表文件的权限\
+　　    比如对于第一个文件Desktop 它的权限是 drwxr-xr-x\
+　　    第一个字母代表文件类型 如果是‘-’代表是普通文件，‘d’代表是目录，‘c’代表是字符型设备（比如串口），‘b’代表是块设备（比如硬盘），‘l’代表符号链接。\
+　　    后面每三个为一组，表示不同分类用户的权限\
+　　    第一组表示文件所属用户的权限，rwx分别代表读、写、执行权限，如果相应位为‘-’代表没有相应的权限。\
+　　    第二组代表文件所属用户组的权限。\
+　　    第三组代表处以上外的用户所具有的权限。\
+　　    以上权限也可以用数字表示。用数字标识法，每个文件权限用四个8进制数表示，每个数由4,2,1相加而成，如果对应位省略掉，则设置为0.\
+　　    第一个数代表 suid，sgid权限 。1-代表粘滞位，2代表sgid权限，4代表suid权限。\
+	 		suid,sgid一般只对二进制程序有用，它的意思是当用户执行此程序时，具有该程序的用户或组身份，而不管此用户原来的身份。利用此特性，当用户执行一个用户id为root的程序时，就具有了root身份,是比较危险的。粘滞位表示当用户第一次执行此程序时，将文件内容留在内存中，这样可以提高下次访问的速度。这个是比较老的用法，现在普遍采用缓存技术，在linux中此位用来表示用户是否对文件所在目录具有权限。
+	 		举个例子：
+	 		比如某个文件a.c,该文件的所有者和组是hanhj。chmod o-r-w-x a.c去掉other的所有权限，这样其他用户就不能使用这个文件。编译一个程序xx打开a.c文件,xx的所有者和组是hanhj。如果对这个程序不加s权限chmod u+s xx ,则当其他用户比如tom执行这个程序的时候，他的身份是tom，他不能打开a.c文件，因为它属于other组，没有读写a.c文件的权限。但是如果将xx程序加上suid权限，则tom执行这个xx程序的时候就变成xx这个程序的所有者身份，则它可以打开a.c文件。
+　　    第二个数字代表用户权限 1-代表执行权限，2代表写权限，4代表读权限。\
+　　    第三个数字代表用户组权限，数字含义同上。\
+　　    第四个数字代表其他用户权限，数字含义同上。\
+　　    比如777代表所有用户均具有读写执行权限，755代表用户具有读写执行权限，而用户组和其他用户具有读和执行权限。\
+
+		了解以上知识我们就可以对文件的权限进行改变。\
+		如对上面的dict。txt文件执行下面的命令：chmod 754 dic.txt 然后ls -l 显示如下：\
+		drwxr-xr-x 2 hanhj hanhj  4096 11月 30 09:25 Desktop\
+		-rwxr-xr-- 1 hanhj hanhj     4 11月  9 09:15 dic.txt\
+		可见dic。txt文件用户权限加上了执行权限，用户组权限去掉了写权限，加上了执行权限。\
+		除了用数字改变权限外，还可以用字母改变权限\
+		u代表用户，g代表用户组，o代表其他用户，a代表全部。\
+		+代表加上权限，-代表去掉权限。\
+		r代表读权限，w代表写权限，x代表执行权限，X代表当目标文件对用户来说是可执行文件或者是目录时才设置X权限，s代表设置set-uid和set-gid权限。s只有和u和g一起使用。\
+		例如同样以上的命令可以用以下方法实现：chmod u+x g-w+x dic.txt\
 
 	权限限制：
 		当某个进程访问某个文件时，系统会将启动进程的用户与文件的权限属性相比较。如果用户是文件主，则按照文件主的权限访问。如果用户是文件的组用户，则按照文件组的权限访问，最后如果用户是其他用户，则按照文件的其他用户权限访问。
@@ -263,44 +260,9 @@ unix系统的组成：
 
 ##umask
 
-
 　　该命令用于设置权限掩码。\
 　　当创建新文件时，新文件的权限就是777-掩码，比如umask=0002，则创建新文件夹的权限为777-0002=775，普通文件的权限是666-0002=664（执行权限不用umask来设置，因为此设置会影响系统安全）。\
 
-
-##在ubuntn下挂载windows的fat32分区
-
-第一步：修改/etc/fstab;
-
-　　sudo vi /etc/fstab\
-　　相关内容如下：/dev/sda7 /media/big vfat defaults,utf8,umask=022,nosuid,nodev,uid=1000,gid=1000  0   0\
-　　/dev/sda7  需要挂载的硬盘设备名\
-　　/media/big   挂载的路径，就是文件存放的地方\
-　　vfat         文件系统名\
-　　以下是配置选项\
-　　defaults, 默认配置 属性包括rw, suid, dev, exec, auto, nouser, and async.其他好理解，suid代表允许具有set-uid和set-gid权限，具体uid，gid的用法参见后面的文件权限解释。\
-　　dev 代表解释字符和块设备。\
-　　auto 代表系统起来时是否自动挂载此文件系统。nouser 表示不允许一般用户（如非root用户）挂载此文件系统。async 代表异步操作\
-　　utf8,  代表语言编码类型\
-　　umask=022, 代表所设置的文件系统中文件权限设置（具体参见后面的文件权限解释），这里的设置代表用户权限为可读写可执行，用户所在组成员为可读，可执行，其他用户为可读，可执行。\
-　　nosuid,  代表不具有set-uid set-gid权限\
-　　nodev,  代表不解释字符和块设备\
-　　uid=1000， 用户id，代表挂载此文件系统后的文件所属的用户。如果不知道uid是多少，可以查看/etc/passwd文件\
-　　gid=1000   组用户id，代表挂载此文件系统后的文件所属的用户组。同样的，如果不知道gid是多少，可以查看/etc/passwd文件\
-　　0   0   最后两个参数是，第一个被dump命令所用，代表是否需要dump。第二个参数被fsck所用，表示系统起来时fsck的顺序。\
-
-
-第二步：建目录
-
-　　修改好以上参数后，还需要在我们需要挂载文件系统的地方建个目录\
-　　   (sudo)mkdir /media/big  是否需要sudo看你建目录的地方，如果属于root用户的地方就要加sudo。如果是建在root用户的地方（我的机子就是建在/media目录下，它属于root用户），还需要用chown命令\
-　　    将其改成你想要挂载的用户和组。chown 用户组：用户名 挂载的目录 。例如sudo chown user1:user1 /media/big\
-
-
-第三步：挂载
-
-
-　　 执行(sudo) mount -a 就可以将windows fat分区按照我们想要的路径和用户名和组挂载上了。\
 
 ##mount:
 
@@ -339,7 +301,43 @@ unix系统的组成：
 				blkid options device
 			选项：
 				-p probe
-				-i info
+				-i info 
+
+
+	使用mount命令在在ubuntn下挂载windows的fat32分区的例子:
+
+		第一步：修改/etc/fstab;
+		
+		　　sudo vi /etc/fstab\
+		　　相关内容如下：/dev/sda7 /media/big vfat defaults,utf8,umask=022,nosuid,nodev,uid=1000,gid=1000  0   0\
+		　　/dev/sda7  需要挂载的硬盘设备名\
+		　　/media/big   挂载的路径，就是文件存放的地方\
+		　　vfat         文件系统名\
+		　　以下是配置选项\
+		　　defaults, 默认配置 属性包括rw, suid, dev, exec, auto, nouser, and async.其他好理解，suid代表允许具有set-uid和set-gid权限，具体uid，gid的用法参见后面的文件权限解释。\
+		　　dev 代表解释字符和块设备。\
+		　　auto 代表系统起来时是否自动挂载此文件系统。nouser 表示不允许一般用户（如非root用户）挂载此文件系统。async 代表异步操作\
+		　　utf8,  代表语言编码类型\
+		　　umask=022, 代表所设置的文件系统中文件权限设置（具体参见后面的文件权限解释），这里的设置代表用户权限为可读写可执行，用户所在组成员为可读，可执行，其他用户为可读，可执行。\
+		　　nosuid,  代表不具有set-uid set-gid权限\
+		　　nodev,  代表不解释字符和块设备\
+		　　uid=1000， 用户id，代表挂载此文件系统后的文件所属的用户。如果不知道uid是多少，可以查看/etc/passwd文件\
+		　　gid=1000   组用户id，代表挂载此文件系统后的文件所属的用户组。同样的，如果不知道gid是多少，可以查看/etc/passwd文件\
+		　　0   0   最后两个参数是，第一个被dump命令所用，代表是否需要dump。第二个参数被fsck所用，表示系统起来时fsck的顺序。\
+		
+		
+		第二步：建目录
+		
+		　　修改好以上参数后，还需要在我们需要挂载文件系统的地方建个目录\
+		　　   (sudo)mkdir /media/big  是否需要sudo看你建目录的地方，如果属于root用户的地方就要加sudo。如果是建在root用户的地方（我的机子就是建在/media目录下，它属于root用户），还需要用chown命令\
+		　　    将其改成你想要挂载的用户和组。chown 用户组：用户名 挂载的目录 。例如sudo chown user1:user1 /media/big\
+		
+		
+		第三步：挂载
+		
+		
+		　　 执行(sudo) mount -a 就可以将windows fat分区按照我们想要的路径和用户名和组挂载上了。\
+			
 
 ##网络共享：\
 　　
@@ -442,17 +440,17 @@ unix系统的组成：
 				比如 mount -t nfs 192.168.15.23 /mnt/tmp -o nolock ,intr,rsize=1024,wsize=1024 
 	
 ##tftp
-		服务器：sudo /etc/init.d/tftpd-hpa start
-			config_file:/etc/default/tftpd-hpa 
-		客户端：
-			busy box :
-			get file:tftp ip -g -r file
-				tftp 192.168.15.62 -g -r xxd 
-			put file :tftp ip -p -l file
-			linux：
-				tftp Host
-				put file
-				get file
+	服务器：
+		启动服务器：
+			sudo /etc/init.d/tftpd-hpa start
+		配置文件：
+			/etc/default/tftpd-hpa 
+	客户端：
+		下载文件:
+			tftp ip -g -r file
+			ex：tftp 192.168.15.62 -g -r xxd 
+		上传文件：	
+			tftp ip -p -l file
 			
 ##ls
 	用途：显示目录内容
@@ -695,7 +693,7 @@ unix系统的组成：
 　　 :查找文件\
 　　 基本操作:\
 	
-	find options test_expression  action
+	find options expression  action
 	options:
 		-xdev	排除非本文件系统文件
 		-mount	同-xdev
@@ -713,7 +711,7 @@ unix系统的组成：
 		-prune 如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。\
 		-amin 查找指定分钟前访问过的文件。
 			注意：这里所说的指定分钟前是指第n分钟前，是指查找n分钟到n+1分钟之间所修改的文件，如果访问时间在n+1分钟之前就不会找到。如果想找n分钟之前访问的文件应当在n前面加+。下面关于时间的查找情况一样。\
-		-atime 查找指定天数前访问过的文件\
+		-atime 查找指定天数前访问过的文件.例如:find . -atime +3,查找3天前访问过的文件\
 		-cmin 查找指定分钟前改变文件状态的文件\
 		-ctime 查找指定天数前改变文件状态的文件\
 		-mmin 查找指定分钟前修改文件内容的文件\
@@ -785,7 +783,7 @@ unix系统的组成：
 　　 -m 查找man\
 　　 -s 查找src\
 
-#tar
+##tar
 	调用格式：
 		tar [options] [zipfiles] [files]
 	选项：
@@ -805,7 +803,7 @@ unix系统的组成：
 		解压文件：
 			tar -xzvf xx.tar.gz -C /tmp
 			tar -xjvf xx.tar.gz2 -C /tmp
-#zip
+##zip
 	调用格式：
 		zip [options] zipfile files
 	选项：
@@ -813,12 +811,14 @@ unix系统的组成：
 		-d	删除文件
 		-v	显示操作过程
 	
+##unzip
 	调用格式：
 		unzip [options] zipfile 
+	选项：	
 		-l	list files 
 		-d  改变输出目录
 		-v	显示操作过程
-#gzip
+##gzip
 	调用格式：
 		gzip [options] file 
 		gunzip [options] file.gz 
@@ -829,7 +829,7 @@ unix系统的组成：
 		-c 改变输出为标准输出.
 			gzip默认在file压缩后，将在原文件后面加上后缀.gz以替换原文件。为了保留原文件可以gzip -c file > file.gz.注意后面要加上>file.gz,否则gzip将压缩结果输出到屏幕上，会出现乱码。如果想压缩多个文件可以gzip -c a.txt b.txt >file.gz 
 		zcat可以显示压缩后的文件内容，相当于gunzip -c file.gz 
-#rar
+##rar
 	调用格式：
 		rar <action> [options] rarfile [files] [path_to_extract]
 	action：
@@ -851,7 +851,7 @@ unix系统的组成：
 		l   列出压缩文件内容
 	注意如果path_to_extract不存在，则不会解压。这点与zip，tar不同
 
-#另 压缩总结
+##压缩总结
 	.tar			tar -xvf
 	.gz				gzip -d  /gunzip解压
 	.tar.gz/.tgz	tar -xzf
@@ -919,6 +919,27 @@ unix系统的组成：
 	real xx 程序实际执行时间，与当前系统执行任务有关
 	user xx  用户指令执行时间
 	sys  xx  系统指令执行时间（调用内核）
+
+##date
+
+	调用格式：
+		date [options] +FORMAT
+	选项：
+		-d str	按照str中指定的时间显示。这个str可以是人类可以理解的时间。比如：date -d '2019-1-1'
+		-s str  按照str中指定的时间设置时间。
+
+		FORMAT用来格式化时间
+		%Y	年
+		%y	两位数的年
+		%m	月
+		%d	日
+		%H	时
+		%M	分
+		%S	秒
+		%w  周几，用数字表示。
+		%W  年中的第几周
+		%a	周几，用缩写的英文表示
+		%A	周几，用全写的英文表示
 
 ##apt-key
 
@@ -2217,15 +2238,18 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 
 ##ros 机器人操作系统
 	https://wenku.baidu.com/view/1d15d1fd284ac850ac02422a.html
-#连接库
+
+##连接库
 	编译程序时，往往涉及到库的路径问题，可以采用：
 	1.修改LD_LIBRARY_PATH变量方式，修改环境变量的方法参见export说明。
 	2.修改  /etc/ld.so.conf.d/下面文件，将需要的路径添加进来。
-#bash脚本执行
+
+##bash脚本执行
 	1。bash xx 启动一个bash执行脚本。执行xx不会影响当前环境
 	2. chmod u+x xx 给脚本加上执行属性，然后 ./xx 。此方法也是启动一个bash去执行。
 	3. source xx 。在当前bash中执行脚本。执行xx会影响当前环境。
 	4. .空格xx 。也是在当前bash中执行脚本。
+
 ##Makefile编写：
 	Makefile用来管理包括多个文件的项目的编译，因为一般来说用手工编写，因此适用于比较小规模的项目，如果项目文件较多建议使用自动化程度较高的cmake或automake等工具。
 	Makefile类似与bash脚本文件，最基本的包括定义，依赖关系两个部分，此外makefile中也有控制语句，函数等，我们只要使用常用的部分基本就可以了，没有必要弄得太复杂。
@@ -2281,7 +2305,7 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 		$(CC) -L$(proj_root_dir)/lib -labc $(objs) -o $@	
 	...
 	
-编写so库：
+##编写so库：
 	gcc -fPIC -c -g -Wall a.c
 	gcc -shared -o a.so a.o
 	使用的时候：
@@ -2289,19 +2313,19 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 	或者在 /etc/ld.so.conf.d/中添加你想要的路径
 	静态库：ar rcs a.a a.o
 		
-#iconv:用于转换文字编码
+##iconv:用于转换文字编码
 	iconv -f infilecode -t tofilecode inputfile -o outputfile
 	iconv -l :list all support code
 	icov -f CN-GB -t utf-8 a.txt -o a.txt.utf8
-#file 显示文件编码信息
+##file 显示文件编码信息
 	-i 按照mime形式显示
 
-#pdftk：合并切割pdf
+##pdftk：合并切割pdf
 
-#pandoc:
+##pandoc:
 	将markdown格式的文本转换成其他格式的文本.
 
-#svn
+##svn
 	版本库
 	svnserve 服务端
 	调用格式：
