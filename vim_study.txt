@@ -86,8 +86,12 @@
 		:colorscheme (colo)	设置配色方案
 			配色方案在 /usr/share/vim/vim73/colors/目录下 
 第六章多文件编辑：
+	打开多文件:
+		方法1:在控制台时,输入多个文件名。
+		方法2：在命令模式中输入:e 文件名。e-edit
+		方法3：在命令模式中输入：args 文件名。相当于启动vim 给其多个参数。
 	窗口移动：
-		ctrl-w H	将当前窗口左移
+		ctrl-w  H	将当前窗口左移
 		ctrl-w	J	将当前窗口上移
 		ctrl-w	K	将当前窗口下移
 		ctrl-w	L	将当前窗口右移
