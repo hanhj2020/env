@@ -75,6 +75,7 @@
 	vim的选项很多，通过定制可以更方便的使用vim
 	我们可以手动定制vim的一些选项，比如 
 	:set nu on 显示行号 
+	:set list 显示控制字符
 	:set	可以查看当前的选项情况
 	:set someoption&可以将某个option恢复到默认值。
 	这里不用赘述，具体配置项可以参见options
