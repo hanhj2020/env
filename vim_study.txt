@@ -76,6 +76,8 @@
 	我们可以手动定制vim的一些选项，比如 
 	:set nu on 显示行号 
 	:set list 显示控制字符
+	:set filetype	显示当前文件的文件类型。
+		文件类型自动检测：filetype on.文件类型检测是用$vimruntime/filetype.vim中来检测，用:filetype 可以显示当前文件自动检测的情况
 	:set	可以查看当前的选项情况
 	:set someoption&可以将某个option恢复到默认值。
 	这里不用赘述，具体配置项可以参见options

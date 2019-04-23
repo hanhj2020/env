@@ -2229,8 +2229,8 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 	0.0.0.0 1234 192.168.1.23 1234 
 
 #pdftk 将多个pdf文件连接成一个文件
-	pdf file1 file2 ... cat output all.pdf 
-	安装pdftk sudo apt install pdftk
+	pdftk file1 file2 ... cat output all.pdf 
+
 ##sysctl:用来控制一些系统参数
 	-a 显示所有系统参数
 
