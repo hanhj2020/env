@@ -1,0 +1,45 @@
+%File Name:makefile.tex
+%Created Time: 2019-04-27 11:44:42 week:6
+%Author: hanhj
+%Mail: hanhj@zx-jy.com 
+\documentclass{article}
+\usepackage{CJK}
+\usepackage{graphicx}
+\usepackage{indentfirst}%产生首行缩进
+\usepackage{listings}
+%\setlength{\parindent}{2em}
+%\setlength{\parskip}{10pt}
+\pagestyle{headings}
+\lstset{language=C}
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+\title{Makefile文件使用说明}
+\author{hanhj}
+\maketitle
+	\section*{前言}
+	Makefile是一种脚本文件，被make命令所使用，用来自动执行一些命令，从而简化人们的工作。最常见的用途是用来编译程序，比如编译c或cpp文件。当然也可以用来做其他一些自动化工作，比如编译tex文件，生成pdf文档。编译doxygen文件，生成帮助文档等等。
+	\par
+	所以可以理解makefile文件就是一个用来实现自动化工作的脚本文件，与其他比如sh脚本文件一样的，只不过sh文件被bash所解释执行，而makefile文件被make所解释执行，二者有相同的地方，也有一些不同的地方，比如关于变量定义，使用都很相似，而在流程控制方面有些不同。此外，makefile也有一些自己的处理函数。
+	\section{基本命令}
+	\subsection {第一个makefile}
+	\par
+		假如我们有test.c文件，想把它编译成test程序。在命令行中，我们输入如下命令：gcc test.c，就可以了。但是，如果每次修改完test.c我们都要敲如上的字符，觉得太麻烦了，这时makefile就可以登场了，敲入如下代码，然后保存到Makefile文件中，这时，我们每次修改完test.c文件，直接敲make就可以得到test程序了。
+	\begin{lstlisting}
+	test:test.o
+		gcc test.c -o test
+	\end{lstlisting}
+	注意第二行，前面需要用Tab键缩进。
+	\par
+		解释一下，第一行test:test.o,前面的test表示要生成的目标，后面的test.o表示为了生成这个目标所要依赖的文件，就是说为了生成test这个程序，需要test.o这个文件，这句话表示的就是这种依赖关系。  
+	\par
+	第二行gcc test.c -o test表示的是为了生成这个目标所要执行的动作，其实就是我们在命令行中所敲入的命令。不过需要注意的是在makefile文件中，描述这种动作的语句需要在前面用Tab键缩进。
+	\par 
+	Makefile的基本语法就是这样。
+	\begin{lstlisting}
+	target:depend file
+		command
+	\end{lstlisting}
+
+
+\end{CJK}
+\end{document}
