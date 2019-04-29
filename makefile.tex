@@ -23,7 +23,7 @@
 	\section{基本命令}
 	\subsection {第一个makefile}
 	\par
-		假如我们有test.c文件，想把它编译成test程序。在命令行中，我们输入如下命令：gcc test.c，就可以了。但是，如果每次修改完test.c我们都要敲如上的字符，觉得太麻烦了，这时makefile就可以登场了，敲入如下代码，然后保存到Makefile文件中，这时，我们每次修改完test.c文件，直接敲make就可以得到test程序了。
+假如我们有test.c文件，想把它编译成test程序。在命令行中，我们输入如下命令：gcc test.c，就可以了。但是，如果每次修改完test.c我们都要敲如上的字符，觉得太麻烦了，这时makefile就可以登场了，敲入如下代码，然后保存到Makefile文件中，这时，我们每次修改完test.c文件，直接敲make就可以得到test程序了。
 	\begin{lstlisting}
 	test:test.o
 		gcc test.c -o test

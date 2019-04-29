@@ -2,6 +2,7 @@ man 用户手册
 	man -k 正则表达式
 	例如 man -k ls
 	-M pathtoman.设置man手册查找路径 default is /usr/share/man 
+	-t 将man手册转换成ps格式文件，并在标准输出中输出。可以用man -t xx |ps2pdf - xx.pdf将其转换成pdf文档。
 info	显示命令更多的信息
 	格式 
 		info command

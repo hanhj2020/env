@@ -1,3 +1,4 @@
+
 1.安装latex软件
 	为了使用latex需要安装如下如软件：
 	texlive									：基础
@@ -16,7 +17,7 @@
 	在liunux下查看pdf文档有evince，okular，xpdf等 
 
 中文支持：
-1）方法1：用CJK，cjk是chinese，Japan，Korer三国。cjk是德国人写的一种中文挂件。
+1）方法1：用CJK，cjk是chinese，Japan，Korea中日韩三国。cjk是德国人写的一种中文挂件。
 
 	\documentclass{article}
 	\usepackage{CJK}			%使用CJK

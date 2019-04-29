@@ -1,4 +1,4 @@
-target=makefile.pdf
+target=makefile.pdf latex_study.pdf
 all:$(target)
 %.pdf:%.dvi
 	dvipdf $< 
