@@ -1,24 +1,333 @@
-\documentclass{article}
+\documentclass[fleqn]{article}
 \usepackage{CJK}
 \usepackage{graphicx}
-\usepackage{indentfirst}%产生首行缩进
+%\usepackage{indentfirst}%产生首行缩进
 \usepackage{listings}
+\thispagestyle{headings}
 \lstset{language=C}
 \begin{document}
 \begin{CJK}{UTF8}{gbsn}
-\title{Latex使用简要说明}
+\title{\LaTeX 使用简要说明}
 \author{hanhj}
 \maketitle
 \section{安装latex软件}
 	\par 
-	为了使用latex需要安装如下如软件：\\
-	texlive									：基础\\
-	texlive-xetex							：编译器\\
-	tex-cjk-chinese，texlive-lang-chinese	：中文支持\\
-	texmaker:latex							：latex编辑器，可选\\
-	\begin{lstlisting}	
-	afdfd
-	\end{lstlisting}
+	为了使用latex需要安装如下如软件：
+	\begin{verbatim}
+	texlive									：基础
+	texlive-xetex							：编译器
+	tex-cjk-chinese，texlive-lang-chinese	：中文支持
+	texmaker:latex							：latex编辑器，可选
+	\end{verbatim}
+	
+\section {第一个latex文档}
+	\begin{verbatim}
+		\documentclass{article}
+		\begin{document}
+			Hello world
+		\end{document}
+	\end{verbatim}
+	将以上文档保存为test.tex \\
+	编译：pdflatex test.tex	默认输出pdf\\
+	在linux下查看pdf文档有evince，okular，xpdf等\\ 
+\section{中文支持}
+	\begin{itemize}
+	\item 使用CJK来支持中文：CJK是chinese，Japan，Korea中日韩三国。CJK是德国人写的一种中文挂件。
+		\begin{verbatim}
+			\documentclass{article}
+			\usepackage{CJK}			%使用CJK
+			\begin{CJK}{UTF8}{gbsn}		%指定编码UTF8,字体gbsn
+			\begin{document}
+				你好,世界
+			\end{CJK}
+			\end{document}
+		\end{verbatim}
+	编译：pdflatex test.tex 
+	\par
+	关于编译：latex文档的编译工具有latex,xelatex,pdflatex.\\
+	传统的方法：先用latex生成dvi文件，然后用dvips转成ps文件，再用ps2pdf转成pdf文件。\\
+	latex xx.tex\\
+	dvips xx.dvi \\
+	ps2pdf xx.ps
+	\par 
+	第二步也可省略，用dvipdf直接将dvi文件转换成pdf，dvipdf xx.dvi。
+	\par
+	更直接的方法是用pdflatex，直接将tex文件转换成pdf。pdflatex xx.tex
+	\par
+	另外一种直接的方法是用xelatex，也可直接将tex文件转换成pdf。但是这种方法需要在文档中使用xetex或ctex来支持中文(参见下文)。xelatex xx.tex 
+	\item 使用xeTex来支持中文 
+		\begin{verbatim}
+			\documentclass{article}
+			\usepackage{xeCJK}
+			\setCJKmainfont{AR PL UMing CN} %设置中文字体
+			\begin{document}
+				你好，世界
+			\end{document}
+		\end{verbatim}
+	编译：xelatex test.tex 	
+	\item 使用ctex来支持中文。ctex是中国人写的从底层支持中文的一种方法。	
+		\begin{verbatim}
+		\documentclass{ctexart}
+		\usepackage{ctex}
+		\begin{document}
+		...
+		\end{document}
+		\end{verbatim}
+	\par 
+	编译：xelatex test.tex。
+	\par
+	\item	中文字体
+		\begin{itemize} 
+		\item 当使用CJK时\\可选用的字体在：/usr/share/texmf/tex/latex/CJK/UTF8/ 目录下，有bkai楷体，gbsn宋体，gkai楷体，bsmi，goth，min。
+		\begin{verbatim}
+			\begin{CJK}{UTF8}{gbsn}		%指定编码UTF8,字体gbsn。
+		\end{verbatim}
+		在这里可以选择不同字体，如gkai，bkai等。
+		\item 当使用ctex时\\ctex内置支持几种字体宋体，黑体，仿宋，楷书，在 /usr/share/texlive/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-fandol.def中定义了一些预定义：
+			\begin{verbatim} 
+				\songti \heiti \fangsong \kaishu 
+			\end{verbatim} 
+			可以在document之前使用这些预定义。例如：
+			\begin{verbatim}
+				\documentclass{ctexart}
+				\usepackage{ctex}
+				\heiti
+				\begin{document}
+				...
+				\end{document}
+				注意：需要用xelatex来编译。
+			\end{verbatim}
+		\item 另外可以使用ubuntu中的系统字体。\\
+		首先：用fc-list :lang=zh 查找当前系统中的中文字体。然后使用
+			\begin{verbatim}
+				setCJKmainfont{字体}来设置。
+			\end{verbatim}
+			比如fc-list命令输出有下面一行：	/usr/share/fonts/truetype/arphic/uming.ttc: AR PL UMing TW MBE:style=Light 。然后在tex文件中加入：
+			\begin{verbatim}
+				\documentclass{article}
+				\usepackage{xeCJK}
+				setCJKmainfont{AR PL uming TW MBE} %就可以使用这种字体了。
+				\begin{document}
+				...
+				\end{document}
+				注意：需要用xelatex编译。
+			\end{verbatim}
+		\end{itemize}
+	\end{itemize}
+\section{基础}
+	你现在已经按照上面的说明，建立第一个latex文档，并支持中文了。现在解释一下第一个文档：
+	\begin{verbatim}
+		\documentclass{article}
+		\begin{document}
+			Hello world
+		\end{document}
+	\end{verbatim}
+	Latex文档由控制命令和正文组成。其中控制命令由$\backslash$后面跟一个命令组成。比如：
+	\begin{verbatim}
+	\documentclass{article}
+	\end{verbatim}
+	命令只由字母组成，latex以命令之后的空格，数字或非字母的字符作为该命令的结束。命令可以带参数，用\{...\}括起来，也可以带选项[...],比如：
+	\begin{verbatim}
+		\documentclass[UTF8]{article} %表示文档采用utf8编码
+	\end{verbatim}
+	\subsection{文档结构}
+	\[	
+	\textrm{引言部分}\left\{ 
+			\begin{array}{ll}
+				\backslash documentclass\{article\} & \textrm{这个是定义文档格式}\\
+				  \backslash usepackage\{graphicx\} & \textrm{这个是引用宏包}\\
+																		 ...& \textrm{其他一些宏包} \\
+				  \backslash maketitle & \textrm{其他一些命令}\\
+				... 
+			\end{array}
+			\right.
+	\]
+	\[
+	\textrm{正文部分}\left\{
+			\begin{array}{ll}
+				\backslash begin\{document\} & \textrm{表示正文开始}\\
+				...\\
+				\backslash end\{document\} & \textrm{表示正文结束}
+			\end{array}
+		\right.
+	\]
+	文档类documentclass的参数包括：article(论文，期刊)，proc（会议文集），report，book等。\\
+	其配置项包括：fleqn(行间公式左对齐，默认中间对齐)，10pt，11pt（文中字体大小，默认10pt）等等。
+	宏包是为了增强latex的功能，所发布的命令包。比如通过graphicx包可以插入图片。\\
+	命令是对全文的一些处理：比如setCJKmainfont设置字体，maketitle设置文档首页内容（包括标题，作者，日期）。
+
+	\subsection{保留字符}
+		在latex中有一些字符是作为保留用的特殊字符，通常在正文中不会被打印出来：
+		\[	
+			\begin{array}{l|l}
+				\hline
+				\#	&		\\ 
+				\hline
+				\&	&		\textrm{代表表格中的连接符}\\ 
+				\hline
+				\%	& \textrm{代表注释}\\
+				\hline
+				\$	&\textrm{代表数学符号}\\
+				\hline
+				\{ \} &\textrm{ 代表参数}\\
+				\hline
+				\wedge	&\textrm{代表上标}\\
+				\hline
+				\_	&\textrm{代表下标}\\
+				\hline
+				\backslash &\textrm{代表命令}	\\
+				\hline
+			\end{array}
+		\]
+		如果在正文中想打印这些字符，在前面加上$\backslash$,特别的对与$\backslash$要用$\backslash$backslash来表示，$\wedge$要用$\backslash$wedge来表示。
+\section{排版}
+	\subsection{标题}
+		正文的标题可以用下面的文字生成：
+		\begin{verbatim}
+			\begin{document}
+				\title{文章的标题}
+				\author{作者}
+				\today
+				\maketitle
+				...
+			\end{document}
+		\end{verbatim}
+		这样就可以生成标题了。\ldots 是正文其他部分。
+	\subsection{节}
+		节是内容的比较大的集中部分
+		\begin{verbatim}
+			\section{节的标题}
+		\end{verbatim}
+		节会产生编号(如果在section后跟*则不会产生编号)。在节中还可以分成字节，子子节，分别用$\backslash$subsection,和$\backslash$subsubsection来产生。
+	\subsection{段}	
+		段是一段内容的集合，是比节小一点的内容的集合。用$\backslash$par来产生。除非强制分行，否则内容在一段内是连续的，不会另起一行。在两段之间空两行，也可以达到分段的目的。\\
+		段的起始，根据设定可以产生缩进。可以手动设置：\begin{verbatim}
+			\setlength{\parindent}{20em}
+		\end{verbatim}或者用包$\backslash$usepackage\{indentfirst\}。 \\
+		强制分行，可以在行尾加上$\backslash$$\backslash$。或者$\backslash$newline.
+	\subsection{其他一些分段命令}
+		paragraph:用来产生一段，与section类似，但是不会产生编号。\\
+		part:用来分部。比section更大的分段，它不会影响部与部之间的节编号。\\
+		newpage:另起一页。\\
+		linebreak[n],nolinebreak[n]:新增n行\\
+		pagebreak[n],nopagebreak[n]:新增n页
+	\subsection{环境}	
+		前面描述的命令都是单条命令，在latex中还有一种叫做环境的命令，它用begin开头，end结尾.形如：
+		\begin{verbatim}
+			\begin{command}
+				...
+			\end{command}
+		\end{verbatim}
+		意思是这条命令将影响到所包括的内容。document就是一种环境变量。除此以外还有如下的一些常用的环境命令：
+		\[
+			\begin{array}{l|l}
+				\hline
+					itemize &\textrm{无序列表}\\
+				\hline
+				    eumerate &\textrm{有序列表}\\
+				\hline
+					tabular &\textrm{表格}\\
+				\hline
+					array &\textrm{数学公式中的多行公式}	\\
+				\hline
+					verbatim &\textrm{代码}\\	
+				\hline
+			\end{array}
+		\]
+		
+
+		\underline{itemize用法：}
+		\begin{verbatim}
+			\begin{itemize}
+					\item xxx
+					\item xxx
+					...
+			\end{itemize}
+		\end{verbatim}
+		\underline{enumerate用法：}
+		\begin{verbatim}
+			\begin{enumerate}
+					\item xxx
+					...
+			\end{enumerate}
+		\end{verbatim}
+		\underline{verbatim用法：}
+		\begin{verbatim}
+			\begin{verbatim}
+				随便写，就像code一样
+			\end{verbatim }
+		\end{verbatim}
+		\underline{tabular用法：}
+		\begin{verbatim}
+		\begin{tabular}[文字位置]{列对齐}
+			row1_column1 & row1_column2 ...
+			...
+			\end{tabular}
+		\end{verbatim}
+		下面是一段示例：\\
+		\begin{tabular}[t]{|l|l|}
+			\hline
+			A & B \\
+			\hline
+		   a1 & b1 \\
+			\hline
+		   a2& b2\\
+			\hline
+		\end{tabular}
+		\begin{verbatim}
+			\begin{tabular}[t]{|l|l|}
+			\hline
+			A & B \\
+			\hline
+			a1 & b1 \\
+			\hline
+			a2& b2\\
+			\hline
+			\end{tabular}
+		\end{verbatim}
+		文字位置用t表示对上对齐，b表示对下对齐，c表示居中。\\
+		列对齐用l表示左对齐，r表示右对齐，c表示居中。中间用$\mid$表示画竖线。\\
+		hline表示画横线，cline\{n,n\}表示在第n列中画竖线。\\
+		\underline{array用法：}\\
+		下面是一段示例：
+		\[
+		\left\{ 
+			\begin{array}{ll}
+				I_x<dz\\
+				U_x<dz 
+			\end{array}
+		\right.
+	\]
+	\begin{verbatim}
+	\[
+		\left\{ 
+			\begin{array}{ll}
+				I_x<dz\\
+				U_x<dz 
+			\end{array}
+		\right.
+	\]
+	\end{verbatim}
+
+	\subsection{引用}
+		论文中经常有引用的参考文献，用如下方法实现：\\
+		定义参考文献：
+		\begin{verbatim}
+			\begin{thebibliography}
+					\bibitem{标号} 文献描述
+					...
+		\end{verbatim}
+		然后在引用的地方：
+		\begin{verbatim}
+			\cite{标号}
+		\end{verbatim}
+		
+		
+
+\begin{thebibliography}{2}
+		\bibitem{p1} latex官方文档
+\end{thebibliography}		
+
 \end{CJK}
 \end{document}
 
