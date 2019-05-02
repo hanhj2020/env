@@ -3,7 +3,9 @@ all:$(target)
 %.pdf:%.dvi
 	dvipdf $< 
 %.dvi:%.tex
-	latex $< 
+	latex $<  
+	-makeindex $(basename $<).idx
+	latex $<
 .PHONY:clean
 clean:
-	rm -f *.log *.aux $(target)
+	rm -f *.out *.fls *.idx *.ind *.dvi *.ps *.log *.toc *.aux *.ilg *.lof *.lot $(target)

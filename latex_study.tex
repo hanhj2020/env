@@ -3,16 +3,22 @@
 \usepackage{graphicx}
 %\usepackage{indentfirst}%产生首行缩进
 \usepackage{listings}
+\usepackage{makeidx}
+\usepackage{mylatex}
 \thispagestyle{headings}
 \lstset{language=C}
+\makeindex
 \begin{document}
 \begin{CJK}{UTF8}{gbsn}
 \title{\LaTeX 使用简要说明}
 \author{hanhj}
 \maketitle
+\newpage
+\tableofcontents
+\newpage
 \section{安装latex软件}
 	\par 
-	为了使用latex需要安装如下如软件：
+	为了使用latex需要安装如下软件：
 	\begin{verbatim}
 	texlive									：基础
 	texlive-xetex							：编译器
@@ -114,7 +120,7 @@
 			\end{verbatim}
 		\end{itemize}
 	\end{itemize}
-\section{基础}
+\section{文档结构}
 	你现在已经按照上面的说明，建立第一个latex文档，并支持中文了。现在解释一下第一个文档：
 	\begin{verbatim}
 		\documentclass{article}
@@ -152,16 +158,17 @@
 		\right.
 	\]
 	文档类documentclass的参数包括：article(论文，期刊)，proc（会议文集），report，book等。\\
-	其配置项包括：fleqn(行间公式左对齐，默认中间对齐)，10pt，11pt（文中字体大小，默认10pt）等等。
-	宏包是为了增强latex的功能，所发布的命令包。比如通过graphicx包可以插入图片。\\
+	其配置项包括：fleqn(行间公式左对齐，默认中间对齐)，10pt，11pt（文中字体大小，默认10pt）等等。\\
+	宏包是为了增强latex的功能所发布的命令包。比如通过graphicx包可以插入图片。\\
 	命令是对全文的一些处理：比如setCJKmainfont设置字体，maketitle设置文档首页内容（包括标题，作者，日期）。
 
 	\subsection{保留字符}
 		在latex中有一些字符是作为保留用的特殊字符，通常在正文中不会被打印出来：
+		\begin{table}[!htp]
 		\[	
 			\begin{array}{l|l}
 				\hline
-				\#	&		\\ 
+				\#	&自定义命令中的参数	\\ 
 				\hline
 				\&	&		\textrm{代表表格中的连接符}\\ 
 				\hline
@@ -179,9 +186,12 @@
 				\hline
 			\end{array}
 		\]
-		如果在正文中想打印这些字符，在前面加上$\backslash$,特别的对与$\backslash$要用$\backslash$backslash来表示，$\wedge$要用$\backslash$wedge来表示。
-\section{排版}
-	\subsection{标题}
+			\caption{保留字符}
+		\end{table}
+		\par
+		如果在正文中想打印这些字符，在前面加上$\backslash$,特别的对于$\backslash$要用$\backslash$backslash来表示，$\wedge$要用$\backslash$wedge来表示。
+\section{基本排版}
+	\subsection{标题}\index{title}
 		正文的标题可以用下面的文字生成：
 		\begin{verbatim}
 			\begin{document}
@@ -193,34 +203,72 @@
 			\end{document}
 		\end{verbatim}
 		这样就可以生成标题了。\ldots 是正文其他部分。
-	\subsection{节}
+	\subsection{节}\index{section}
 		节是内容的比较大的集中部分
 		\begin{verbatim}
 			\section{节的标题}
 		\end{verbatim}
 		节会产生编号(如果在section后跟*则不会产生编号)。在节中还可以分成字节，子子节，分别用$\backslash$subsection,和$\backslash$subsubsection来产生。
-	\subsection{段}	
-		段是一段内容的集合，是比节小一点的内容的集合。用$\backslash$par来产生。除非强制分行，否则内容在一段内是连续的，不会另起一行。在两段之间空两行，也可以达到分段的目的。\\
-		段的起始，根据设定可以产生缩进。可以手动设置：\begin{verbatim}
+	\subsection{段}\index{par}	
+		段是一段内容的集合，是比节小一点的内容的集合。
+		\begin{verbatim}
+			\par 
+		\end{verbatim}
+		在两段之间空两行，也可以达到分段的目的。除非强制分行，否则在一段内只有一行，不会另起一行。\\
+		如果想强制分行，可以在行尾加上$\backslash$$\backslash$。或者$\backslash$newline.\\
+		段的开始，根据设定可以产生缩进。可以手动设置：
+		\begin{verbatim}
 			\setlength{\parindent}{20em}
-		\end{verbatim}或者用包$\backslash$usepackage\{indentfirst\}。 \\
-		强制分行，可以在行尾加上$\backslash$$\backslash$。或者$\backslash$newline.
-	\subsection{其他一些分段命令}
+		\end{verbatim}
+		或者用引言部分用包$\backslash$usepackage\{indentfirst\}。 \\
+	\subsection{其他一些分段命令}\index{paragraph}\index{part}\index{newpage}\index{linebreak}\index{pagebreak}
 		paragraph:用来产生一段，与section类似，但是不会产生编号。\\
 		part:用来分部。比section更大的分段，它不会影响部与部之间的节编号。\\
 		newpage:另起一页。\\
 		linebreak[n],nolinebreak[n]:新增n行\\
 		pagebreak[n],nopagebreak[n]:新增n页
-	\subsection{环境}	
+	\subsection{强调}\index{emph}
+		为了突出某些内容，可能需要对文字作出一些强调。强调包括下划线，斜体，黑体。
+		\begin{verbatim}
+			\underline{...} 下划线
+			\emph{...}		斜体 
+			\textit{...}	这也是斜体
+			\textbf{...}	黑体
+		\end{verbatim}
+		\underline{下划线},\emph{斜体,hello},\textbf{黑体}
+
+	\subsection{交叉引用}\index{label}
+		在文档内可能需要对某些内容做标记，当别处引用此内容时，可以快速能够跳到该处。
+		\begin{verbatim}
+			\label{mark}	在需要做标记的地方
+			\ref{mark}		在引用的地方，显示标记号
+			\pageref{mark}	在引用的地方，显示标记的页号
+		\end{verbatim}
+	\subsection{脚注}\index{footnote}
+		\begin{verbatim}
+			\footnote{...}	在需要做脚注的地方
+		\end{verbatim}
+		\footnote{this is a footnote}脚注
+	\subsection{摘要}\index{abstract}
+		\begin{verbatim}
+			论文中常在开头做摘要
+			\abstract{...}
+		\end{verbatim}
+		
+
+	\subsection{环境}\index{begin}\index{end}	
 		前面描述的命令都是单条命令，在latex中还有一种叫做环境的命令，它用begin开头，end结尾.形如：
 		\begin{verbatim}
 			\begin{command}
 				...
 			\end{command}
 		\end{verbatim}
-		意思是这条命令将影响到所包括的内容。document就是一种环境变量。除此以外还有如下的一些常用的环境命令：
+		意思是这条命令将影响到所包括的内容。document就是一条环境命令。除此以外还有如下的一些常用的环境命令：
+		\begin{table}[!hbp]
 		\[
 			\begin{array}{l|l}
+				\hline
+					flushleft,flushright &\textrm{左对齐，右对齐}\\
 				\hline
 					itemize &\textrm{无序列表}\\
 				\hline
@@ -234,9 +282,11 @@
 				\hline
 			\end{array}
 		\]
+			\caption{常用环境命令}
+		\end{table}	
 		
 
-		\underline{itemize用法：}
+		\underline{itemize用法：}\index{itemize}
 		\begin{verbatim}
 			\begin{itemize}
 					\item xxx
@@ -244,20 +294,20 @@
 					...
 			\end{itemize}
 		\end{verbatim}
-		\underline{enumerate用法：}
+		\underline{enumerate用法：}\index{enumerate}
 		\begin{verbatim}
 			\begin{enumerate}
 					\item xxx
 					...
 			\end{enumerate}
 		\end{verbatim}
-		\underline{verbatim用法：}
+		\underline{verbatim用法：}\index{verbatim}
 		\begin{verbatim}
 			\begin{verbatim}
 				随便写，就像code一样
 			\end{verbatim }
 		\end{verbatim}
-		\underline{tabular用法：}
+		\underline{tabular用法：}\index{tabular}\index{hline}\index{cline}
 		\begin{verbatim}
 		\begin{tabular}[文字位置]{列对齐}
 			row1_column1 & row1_column2 ...
@@ -291,13 +341,13 @@
 		\underline{array用法：}\\
 		下面是一段示例：
 		\[
-		\left\{ 
-			\begin{array}{ll}
-				I_x<dz\\
-				U_x<dz 
-			\end{array}
-		\right.
-	\]
+			\left\{ 
+				\begin{array}{ll}
+					I_x<dz\\
+					U_x<dz 
+				\end{array}
+			\right.
+		\]
 	\begin{verbatim}
 	\[
 		\left\{ 
@@ -308,8 +358,136 @@
 		\right.
 	\]
 	\end{verbatim}
+	\subsection{数学公式}\index{math}
+		数学公式在latex中有两种打印方式：行内或行间。行内就是在一行之内，用\$...\$来表示。行间就是位于两行之间，用
+		\begin{verbatim}
+			\[
+			...
+			\]
+		\end{verbatim}
+		或者用
+		\begin{verbatim}
+			\begin{math}
+				...
+			\end{math}
+		\end{verbatim}
+		或者用 
+		\begin{verbatim}
+			\begin{equation}
+				...
+			\end{equation}
+		\end{verbatim}
+		比如：$a^2+b^2=c$这是行内公式。
+		\[
+			x^2+y^2=z 
+		\]
+		这是行间公式。\\
+		math与equation的区别在于equation会自动给公式加上编号（默认在右侧），而math不会。\\
+		数学公式的写法基本与自然写法一样，只不过要记住公式中各个元素的表达方式。比如$\alpha$用$\backslash$alpha来表示，$\sum$用$\backslash$sum来表示。具体元素的表达方法参见\cite{p1},多用几次就熟悉了。这里提几个修饰符：\\
+		\begin{table}[!htp]
+		\begin{tabular}[t]{l|l}
+			\hline
+			$\wedge$ &上标,可以用来表示次方，积分或求和公式的上限。\\
+			\hline
+			$\_$  &下标，可以用来表示公式中的下标，积分或求和公式中的下限。\\
+			\hline
+			$\overline{m+n}$ & 上划线,$\backslash$overline \\
+			\hline
+			$\underline{m+n}$ & 下划线,$\backslash$underline \\
+			\hline
+			$\overbrace{a+b+c}$ & 上括号，$\backslash$overbrace\\ 
+			\hline
+			$\underbrace{a+b+c}$ & 下括号，$\backslash$underbrace\\ 
+			\hline
+			$\frac{a}{b}$ & 分号，$\backslash$frac\{a\}\{b\}\\
+			\hline
+			空格 &$\backslash$quad or $\backslash$qquad\\
+			\hline
+			公式中的字串 & $\backslash$mathrm\{...\} \\
+			\hline
+		\end{tabular}
+			\caption{数学公式}
+		\end{table}	
+	\subsection{表和图}\index{table}\index{figure}
+		文档中常有表和图，需要给它们编号，table和figure就是为表和图加上编号的命令。table,figure在latex中称为浮动体。
+		\begin{verbatim}
+			\begin{figure}[option]
+				插入图片
+			\end{figure}
 
-	\subsection{引用}
+			\begin{table}[option]
+				插入表格
+			\end{table}
+		\end{verbatim}
+		使用默认的figure往往不能将图片放到期望的位置。这时可以用选项[!htp]。
+		\begin{table}[!htp]
+			\begin{tabular}{l|l}
+				\hline
+				h & here 明确的位置\\
+				\hline
+				t & top	页面顶部\\
+				\hline
+				b & bottom	页面底部\\
+				\hline
+				p & page 在一个只有浮动体的页面\\
+				\hline
+				! & 取消大多数浮动体的默认设置\\
+				\hline
+			\end{tabular}
+			\caption{浮动体位置}
+		\end{table}\\
+		为了插入图片，需要使用graphicx包。
+		\begin{verbatim}
+			usepackage{graphicx}
+			\begin{document}
+			...
+				\includegraphics[option]{filename} %这里插入图片
+
+			\end{document}
+		\end{verbatim}
+		filename可以不带后缀名，让latex自己在当前目录中找图片。如果用latex编译，支持的文件格式为eps。如果用pdflatex编译，支持的文件格式包括png，pdf，jpg，mps。不幸的是pdflatex并不支持eps，所以如果用pdflatex来编译，需要将eps文件转换成其所支持的文件。\\
+		includegraphics的选项包括：
+		\begin{table}[!hp]
+			\begin{tabular}{l|l}
+				\hline
+				scale &	缩放\\
+				\hline
+				width & 宽度\\
+				\hline
+				height & 高度\\
+				\hline
+				angle & 角度\\
+				\hline
+			\end{tabular}
+			\caption{graphicx的选项}
+		\end{table}
+		\par
+		高度和宽度的单位可以是:mm,cm,in（1英寸=25.4mm）,pt(point $1point\approx\frac{1}{3}mm $),em(当前字母M的宽度)，ex(当前字母x的高度)。\label{unit}
+		\par
+		表和图的索引可以用:
+		\begin{verbatim}
+			\listoftables
+			\listoffigures
+		\end{verbatim}
+		来生成，一般放在文档最后。
+		\subsection{索引}\index{index}
+		在文档中对一些关键词进行索引，将该索引表放在文档的最后，可以方便的在文档中查找关键词是非常有用的。
+		\par
+		为了生成索引，需要在引言部分引入makeidx包，并且调用makeindex命令。在正文中需要产生索引的地方调用index命令，在需要打印索引表的地方调用printindex命令。
+		\begin{verbatim}
+			\usepackage{makeindex}	%引入makeidx包
+			...
+			\makeindex				%调用makeindex命令，生成index
+			\begin{document}
+			...
+				\index{key}		%产生索引
+			...
+
+				\printindex		%打印索引表
+			\end{document}
+		\end{verbatim}
+		在编译的时候，需要两次编译。即latex xx.tex,makeindex xx.idx,latex xx.tex。第一次编译生成索引文件idx，用makeindex程序将idx文件转换成ind文件，第二次编译的时候就会将ind文件包括进来，在printindex处打印。
+		\subsection{引用}\index{thebibliography}
 		论文中经常有引用的参考文献，用如下方法实现：\\
 		定义参考文献：
 		\begin{verbatim}
@@ -321,13 +499,70 @@
 		\begin{verbatim}
 			\cite{标号}
 		\end{verbatim}
-		
-		
 
+\section{扩展latex}
+	以上是latex的基本用法，为了提高效率，增加功能有必要对基本latex进行扩展。	\subsection{用户自定义命令}
+		为了提高效率，可以将常用的命令定义成用户自定义命令，从而可以减少敲键盘的次数。用户自定义命令用newcommand,renewcommand来定义。前者适合原系统没有定义的命令，后者适合系统已经定义的命令，用来重新定义。（类似于vim中的map）命令。命令定义需要放在引言处。
+		\begin{verbatim}
+			\newcommand{\command}[n]{define}
+			\renewcommand{\command}[n]{define}
+		\end{verbatim}
+		command是新定义的命令名，define是需要执行的动作，n是参数个数，参数个数从1到9，如果没有定义，默认是0。参数从命令后开始1,2...。在定义中引用参数使用\#1,\#2...。下面是一个例子：假设将$\backslash$la定义成\LaTeX
+		\begin{verbatim}
+			\newcommand{\la}[1]{\LaTaX{#1}}
+		\end{verbatim}
+		这是使用$\backslash$laAAA的效果\la{AAA} .
+	\subsection{用户自定义环境命令}
+		\begin{verbatim}
+			\newenvironment{command}[n]{action on begin}{action after end}
+		\end{verbatim}
+		下面的例子假设在输入字串的两边加上$[]$
+		\begin{verbatim}
+			\newenvironment{tl}
+				{
+					\textbf{[}%定义begin动作
+				}
+				{
+					\textbf{]}%定义end动作
+				}
+		\end{verbatim}
+		这里使用了tl环境命令
+		\begin{verbatim}\begin{tl}Hello\end{tl}\end{verbatim}的效果：\begin{tl}Hello\end{tl}
+	\subsection{定义用户自己的包}
+		上述命令放在导言区，每次需要包括比较麻烦，可以类似c的文件，将上述内容放在一个sty文件中，然后使用usepackage命令包括进来就比较方便了。
+
+		sty文件内容与上述内容类似，只不过需要在第一句加上ProvidesPackage\{包名\}。下面是一个sty文件的例子：
+		\begin{verbatim}
+			\ProvidesPackage{mylatex}
+			\newsavebox{\newname}
+			\newcommand{\la}[1]{\LaTeX\textbf{#1}}
+			\newenvironment{tl}
+				{
+					\textbf{[}%
+				}
+				{
+					\textbf{]}%
+				}
+		\end{verbatim}
+		该文件放在编译文件的同一个目录，或者放在/.texmf/tex/latex目录下面。同时设置环境变量TEXMFHOME：export TEXMFHOME=/.texmf/tex/latex。上面的目录是用户私有的，也可以放在系统的包目录：\mbox{/usr/share/texmf/tex/latex中}。
+	\subsection{其他包}
+		在网络上www.ctan.org网站上可以搜索到其他有用的包。\\
+		从上面下载包到本地，一般是压缩文件。解压文件到 /usr/share/texmf/tex/latex/目录下。包里面dtx文件是发行文件，用latex编译该文件会生成sty文件，这个就是我们需要的包文件。\\
+		执行mktexlsr,或texhash命令更新latex文件名数据库，就可以使用了。\\
+		\textbf{生成帮助：}\\
+			用latex来编译dtx文件，然后会生成dvi文件，再用dvips转成pdf文件，必要的话可能还需要makeindex来生成索引文件。以上是生成帮助的手动方法，有些包将以上过程封装在一个脚本中，也是一样的。
+	\subsection{帮助}
+		texdoc 包名，可以查看本地包的帮助信息。\\
+		本地的包放在两处，一处是发行的包放在 /usr/share/texlive/texmf-dist/tex/latex/。一处是插件，放在 /usr/share/texmf/tex/latex/下面。
+
+
+\newpage
 \begin{thebibliography}{2}
 		\bibitem{p1} latex官方文档
-\end{thebibliography}		
-
+\end{thebibliography}
+\newpage
+\listoftables
+\printindex
 \end{CJK}
 \end{document}
 
