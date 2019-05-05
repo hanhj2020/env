@@ -5,6 +5,7 @@
 \usepackage{listings}
 \usepackage{makeidx}
 \usepackage{mylatex}
+%\usepackage{hyperref}
 \thispagestyle{headings}
 \lstset{language=C}
 \makeindex
@@ -499,7 +500,14 @@
 		\begin{verbatim}
 			\cite{标号}
 		\end{verbatim}
-
+		\subsection{在pdf文档中加入左侧书签}
+		需要引入hyperref宏包。由于hyperref使用了扩展CJK，所以需要用xelatex来支持中文。
+		\begin{verbatim}
+			\usepackage{xeCJK}
+			\setCJKmainfont{AR PL UMing CN} %宋体，可以选用其他字体
+			\usepackage{hyperref}
+			...
+		\end{verbatim}
 \section{扩展latex}
 	以上是latex的基本用法，为了提高效率，增加功能有必要对基本latex进行扩展。	\subsection{用户自定义命令}
 		为了提高效率，可以将常用的命令定义成用户自定义命令，从而可以减少敲键盘的次数。用户自定义命令用newcommand,renewcommand来定义。前者适合原系统没有定义的命令，后者适合系统已经定义的命令，用来重新定义。（类似于vim中的map）命令。命令定义需要放在引言处。
@@ -547,7 +555,7 @@
 		该文件放在编译文件的同一个目录，或者放在/.texmf/tex/latex目录下面。同时设置环境变量TEXMFHOME：export TEXMFHOME=/.texmf/tex/latex。上面的目录是用户私有的，也可以放在系统的包目录：\mbox{/usr/share/texmf/tex/latex中}。
 	\subsection{其他包}
 		在网络上www.ctan.org网站上可以搜索到其他有用的包。\\
-		从上面下载包到本地，一般是压缩文件。解压文件到 /usr/share/texmf/tex/latex/目录下。包里面dtx文件是发行文件，用latex编译该文件会生成sty文件，这个就是我们需要的包文件。\\
+		从上面下载包到本地，一般是压缩文件。解压文件到 /usr/share/texmf/tex/latex/目录下。包里面有ins文件，是安装文件，用latex来编译，可以生成必要的sty等文件。如果没有ins文件，也会有dtx文件是发行文件，用latex编译该文件会生成sty文件，这个就是我们需要的包文件。\\
 		执行mktexlsr,或texhash命令更新latex文件名数据库，就可以使用了。\\
 		\textbf{生成帮助：}\\
 			用latex来编译dtx文件，然后会生成dvi文件，再用dvips转成pdf文件，必要的话可能还需要makeindex来生成索引文件。以上是生成帮助的手动方法，有些包将以上过程封装在一个脚本中，也是一样的。
