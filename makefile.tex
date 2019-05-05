@@ -165,7 +165,7 @@
 		\hline
 		变量名 & 命令 & 默认文件后缀名\\
 		\hline
-		\$CC & cc， c程序编译器 & c\\
+		\$(CC) & cc， c程序编译器 & c\\
 		\hline
 		\$(CXX) & g++， c++程序编译器 & cpp,cc,C\\
 		\hline
@@ -282,7 +282,7 @@
 			\begin{verbatim}
 				$(fun,arg1,arg2...)
 			\end{verbatim}
-		\subsubsection{变量替换函数}
+		\subsubsection{模式变量替换}
 		\begin{verbatim}
 			$(list_str:patten=replace)
 			将list_str中匹配到patten的部分替换成replace。严格的说这个不算函数。
@@ -300,9 +300,9 @@
 			depend_file=$(subst,o,d,$(objs))
 			结果depend_file为func.d main.d
 		\end{verbatim}
-		\subsubsection{patsubst变量替换函数}
+		\subsubsection{patsubst模式变量替换函数}
 		\begin{verbatim}
-			$(subset,patten,replace,txt)
+			$(patsubset,patten,replace,txt)
 			将txt中匹配到patten的字符替换成replace。可以使用通配符。
 			举例：
 			objs=func.o main.o
@@ -316,27 +316,31 @@
 		j（jobs）表示多条任务同时进行。如果不带参数将不对并发数进行限制。如果命令中有多个-j选项，则以最后一个为准。
 	\subsubsection{进入子目录}
 		make -C  dir\par
-		make进入子目录dir执行。该命令对于组织大型项目很有效。例如项目主目录下有sub1,sub2两个目录。\par
+		make进入子目录dir执行。该命令对于组织大型项目很有效，称为递归make。例如项目主目录下有sub1,sub2两个目录。\par
 		\begin{verbatim}
 			subdir=sub1 sub2
 			for i in $(subdir) do;make -C $$(i) ;done ;
 		\end{verbatim}\par
-		\$\$i第意思是由于在make命令中出现\$i,所以需要在前面再加一个\$。	
+		\$\$i第意思是由于在make命令中出现了变量\$i,所以需要在该变量前面再加一个\$。	
 	\section{扩展用法}
 	\subsection{自动化建立依赖关系}
 		对于c程序来说，目标依赖源程序，源程序中包括头文件。当改变c源程序的时候，当make时会重构程序，但是改变h程序往往不能自动重构，这时候就需要建立c源程序与h头文件的依赖关系，从而当h文件改变的时候通知c程序改变，进而导致程序重构。
 		\par
-		gcc编译器有一个-M选项，可以预编译c程序，建立.o文件所依赖的c程序以及h程序的依赖关系。-MM选项可以建立c程序与标准头文件以及用户h文件之间的依赖关系。
+		gcc编译器有一个-M选项，可以预编译c程序，建立.o文件所依赖的c程序以及h程序的依赖关系。-MM选项可以建立.o文件与c程序，标准头文件以及用户h文件之间的依赖关系。
 		\begin{verbatim}
 			target=test
 			objs=fun.o main.o
-			-include $(obs:.o=.d)
+			depend_file=$(objs:%.o=%.d)
+			-include $(depend_file) #包括进来依赖关系文件
 			%.o:%.c
 			    gcc $< -o $@
 			%.d:%.c
-			    gcc -M $< -o $@
+			    gcc -M $< -o $@ #建立.d依赖关系文件，该文件中包括.o和.c,.h文件的依赖关系
 			$(target):$(objs)
 			    gcc $^ -o $@
+			.PHONY:clean
+			clean:
+			    rm -f $(depend_file) $(objs) $(target)
 		\end{verbatim}
 
 	\subsection{条件判断}
