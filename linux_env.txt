@@ -1826,82 +1826,125 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 　　　　info f 显示调用栈\
 　　显示信息: show\
 　	　　show ada -- Generic command for showing Ada-specific settings\
-　　显示数据：print，简写p\
-　　　　变量：p/f f表示显示格式，可以是\
-　　　　　　x 按十六进制格式显示变量。 \
-　　　　　　d 按十进制格式显示变量。 \
-　　　　　　u 按十六进制格式显示无符号整型。 \
-　　　　　　o 按八进制格式显示变量。 \
-　　　　　　t 按二进制格式显示变量。 \
-　　　　　　a 按十六进制格式显示变量。 \
-　　　　　　c 按字符格式显示变量。 \
-　　　　　　f 按浮点数格式显示变量。　　 \
-　　　　　　print base@length:显示数组，base是数组的起始地址名称，length是显示的长度\
-　　　　内存：x \
-　　　　　　x addr\
-　　　　　　x/nfh addr \
-　　　　　　n 	is numbers will show\
-　　　　　　f 	数据显示形式，比如x表示16进制，o表示8进制，d表示十进制，c表示字符，f表示浮点，s表示字符串\
-　　　　　　h	表示每个数字的宽度，b表示1个byte，h表示半个字2个byte，w表示一个字4个byte，g表示8个byte\
-　　自动显示变量：display expr每当到达断点时自动显示变量\
-　　　　`display /i $pc` 会在断点时显示机器代码和源代码。\
-　　　　`undisplay dnums`\
-　　　　`delete display dnums`\
-　　显示数组或变量类型：whatis 变量，or ptype 变量,ptype比whatis显示更多信息。\
-　　特殊变量：`$pc`：程序计数器，`$fp`当前堆栈指针,`$sp`栈指针,`$ps`当前处理器状态\
-　　设置变量：set 变量=value\
-　　执行：run 全速运行，简写r；next 不进入的单步执行，简写n；step 进入的单步执行，简写s。continue 继续执行，简写c。\
-　　函数调用：call function-name\
-　　    eg：call fun（1,3）\
-　　程序暂停：程序暂停的方法有断点，观察点和catch。\
+　　显示数据：
+		显示变量：print，简写p\
+　　　　	p/f  var
+			f表示显示格式，
+	　　　　　　x 按十六进制格式显示变量。 
+	　　　　　　d 按十进制格式显示变量。 
+	　　　　　　u 按十六进制格式显示无符号整型。 
+	　　　　　　o 按八进制格式显示变量。 
+	　　　　　　t 按二进制格式显示变量。 
+	　　　　　　a 按十六进制格式显示变量。
+	　　　　　　c 按字符格式显示变量。 
+	　　　　　　f 按浮点数格式显示变量。　　 
+　　		特殊变量：
+				`$pc`：程序计数器，
+				`$fp`当前堆栈指针,
+				`$sp`栈指针,
+				`$ps`当前处理器状态
+　　　　显示数组：
+			　print base@length
+				base是数组的起始地址名称，length是显示的长度
+　　　　内存：x 
+　　　　　　x/nfh addr 
+　　　　　　n 	is numbers will show
+　　　　　　f 	数据显示形式，
+				x表示16进制，
+				o表示8进制，
+				d表示十进制，
+				c表示字符，
+				f表示浮点，
+				s表示字符串
+　　　　　　h	表示每个数字的宽度，
+				b表示1个byte，
+				h表示半个字2个byte，
+				w表示一个字4个byte，
+				g表示8个byte
+　　	自动显示变量：display expr
+			每当到达断点时自动显示变量
+		　　`display /i $pc` 会在断点时显示机器代码和源代码。
+　　　　	`undisplay dnums`
+	　　　　`delete display dnums`
+　　显示数组或变量类型：
+			whatis 变量， 
+			ptype 变量,
+			ptype比whatis显示更多信息。
+
+　　设置变量：
+		set 变量=value\
+　　执行：
+		run 全速运行，简写r；
+		next 不进入的单步执行，简写n；
+		step 进入的单步执行，简写s。
+		continue 继续执行，简写c。\
+
+　　函数调用：
+		call function-name\
+　　	call fun（1,3）\
+　　程序暂停：
+		程序暂停的方法有断点，观察点和handle。\
+
 　　　　断点：break 简写b\
-　　　　 　  b linesnumber:设置行断点;\
-　　　　 　  b function-name：设置函数断点\
-　　　　 　  b line or function if contion：设置条件断点\
-　　　　 　   eg：b 20 if count==100\
-　　　　 　  b filename：linenumber or filename：function-name：设置多文件的断点。\
-　　　　 　  commands： 用来设置程序暂停后的动作，由commands 。。。 end组成\
-　　　　 　  比如 b foo if count==100\
-　　　　 　  commands\
-　　　　 　  	printf “count==100”\
-　　　　 　  	continue\
-　　　　 　  end\
-　　　　 　  使用commands可以方便自动化测试。\
-　　　　 　  设置好条件断点后可以用condition命令来修改条件\
-　　　　 　  	condition bnum expr\
-　　　　 　  	condition bnum 清除条件\
-　　　　 　  ignore bnum count，表示忽略断点count次\
-　　　　设置观察点：watch 变量，设置观察点后，当观察点数据发生变化，可以自动停下来。	 　  \
-　　　　捕捉信号：handle handle-name control\
-　　　　	handle-name：SIGPIPE，SIGINT。。。\
-　　　　	control:\
-　　　　	 nostop：不停止程序，也不发送给程序\
-　　　　	 stop:停止程序\
-　　　　	 print：显示一条信息\
-　　　　	 noprint：\
-　　　　	 pass：将信号发送给程序\
-　　　　	 nopass：停止程序，但不发送信号给程序\
-　　　　	 \
-　　　　	 catch event，event可以是：\
-　　　　	 	throw\
-　　　　	 	catch\
-　　　　	 	exec\
-　　　　	 	fork\
-　　　　	 	vfork\
-　　　　	 	load/unload\
-　　　　	 	\
-　　　　维护暂停点：delete，enable，disable，clear\
-　　　　 　 删除断点：delete breakpoint-number，如果不带number则删除所有断点。简写d，比如d 2\
-　　　　 　 禁止断点：disable breakpoint-number\
-　　　　 　 允许断点：enable breakpoint-number\	\
-　　　　 继续运行：\
-　　　　 	step [ignore count]	 \
-　　　　 	coutinue [count]\
-　　　　 	next [count]\
-　　栈：\
+			设置断点：
+			 　 设置行断点:		b linesnumber
+　　　　 　		设置文件的断点	b filename:linenumber 
+　　　　 　		设置函数断点	b function-name
+　　　　 　		设置条件断点	b which  if contion
+	　　　　 　		 eg：b 20 if count==100
+					对于条件的维护：
+						对于已经设置的断点，可以添加删除，忽略条件。
+							添加条件：	condition bnum expr
+							消除条件： 	condition bnum 
+							忽略条件：	ignore bnum count，表示忽略断点count次\
+			查看断点 info b
+　　　　 　 删除断点：delete breakpoint-number，简写d，比如d 2
+				如果不带number则删除所有断点。
+　　　　 　 禁止断点：disable breakpoint-number
+　　　　 　 允许断点：enable breakpoint-number	
+	　　　　继续运行：
+　　　　		step [ignore count]	 
+	　　　　 	coutinue [count]
+　　	　　 	next [count]
+	　　　	设置程序暂停后的动作：
+				由commands 。。。 end组成
+　　　　 　			b foo if count==100
+		　　　　 　		commands
+　　　　		 　			printf “count==100”
+　　　　 　					continue
+　　　　 　				end
+	　　　　 　		使用commands可以方便自动化测试。设置好条件断点后可以用condition命令来修改条件
+				
+　　　　观察点：watch 变量，
+			设置观察点后，当观察点数据发生变化，可以自动停下来。
+			设置watch：watch var
+			查看watch ：info watch
+			删除watch ：delete watch watch_number
+
+　　　　捕捉信号：
+			handle handle-name control
+	　　　　	handle-name：SIGPIPE，SIGINT。。。
+	　　　　	control:
+		　　　　	 nostop：不停止程序，也不发送给程序\
+　　　　			 stop:停止程序\
+		　　　　	 print：显示一条信息\
+　　　　			 noprint：\
+		　　　　	 pass：将信号发送给程序\
+　　　　			 nopass：停止程序，但不发送信号给程序
+　　　　	 
+　　　　	 catch event，
+				event可以是：\
+　　　　	 		hrow\
+		　　	 	catch\
+　　　　			exec\
+　　　　			fork\
+	　　　　	 	vfork\
+　　	　　	 	load/unload\
+　　　　	 	
+　　栈：frame\
 　　　　bt：显示当前调用栈\
-　　　　f，frame 显示当前代码\
-　　　　info f 显示栈信息		\
+　　　　f	显示当前代码\
+　　　　info f 显示栈信息,寄存器信息		\
 　　[gdb help](gdb_help.html)
 
 	gdb的移植：
