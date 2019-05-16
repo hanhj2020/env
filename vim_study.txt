@@ -1,20 +1,20 @@
-第一章：帮助
-	%	跳转到匹配的(){}[]处。在编程的时候比较快捷。
+第一章 帮助
 	:help key	(h)	显示帮助。如果带key，则显示key的帮助。
 	:options	显示选项帮助
 	在vim中执行shell命令需要在命令前加上惊叹号
 	:!command
 	$vimruntime	vim的环境变量/usr/share/vim/vim73
 	:scriptnames	显示脚本文件
-第三章：移动
-	1）关于vim的状态：
+	%	跳转到匹配的(){}[]处。在编程的时候比较快捷。
+第三章 移动
+	1) 关于vim的状态：
 		刚进入vim的时候，vim处于普通(normal)状态，此时只能用键盘上的上下左右或特殊键的组合来移动光标。不能编辑文本。
-		在normal状态下，键入i,a,o或I,A,O键，vim将进入编辑（edit）状态，此时可以键入字符。在edit状态按ESC键，将退出edit状态，恢复到normal状态。
+		在normal状态下，键入i,a,o或I,A,O键，vim将进入编辑（edit) 状态，此时可以键入字符。在edit状态按ESC键，将退出edit状态，恢复到normal状态。
 		在normal状态下，键入:vim将进入命令(command)状态。此时光标位于最下一行，并有提示符:。此时可以输入命令。在命令状态中按ESC键，将退出command状态，恢复到normal状态。
 	在以下的描述中如果英文前面有:表示是在命令状态下。比如:number,表示在命令状态下输入number字符。
 	如果名词后面带一个括号，则括号中的字符作为前面名词的缩略。比如number(nu),表示可以用nu来代替number。
 
-	2）一般的移动
+	2) 一般的移动
 	在normal状态下
 	h	左移
 	l	右移
@@ -38,13 +38,13 @@
 	zt	将当前光标所在位置提到屏幕顶行	z想象成一个折叠的纸，t-top
 	zb	将当前光标所在位置移到屏幕底行。b-bottom
 	zz	将当前光标所在位置移到屏幕中央。
-	ctrl-]	将以光标所在处的单词为关键字，跳转到其相关联的地方（称为tag标记）
+	ctrl-]	将以光标所在处的单词为关键字，跳转到其相关联的地方（称为tag标记) 
 	ctrl-o或ctrl-t从跳转处返回。
 	:number	可以直接跳转到number行
 	:set number		(nu)	显示行号
 	:set nonumber	(nonu)	不显示行号
 
-	2）用标记跳转：
+	2) 用标记跳转：
 	m[a-zA-Z]：设置标记，光标移动到想要做标记的地方，然后敲mx。
 	`mark：	跳转到标记处,`是键盘左上角的反引号,mark是刚才所做的标记。
 	注意用小写字母是在本文档中设置标记，离开本文档该标记就消失。如果用大写字母做标记，则是全局的,可以在多个文件中跳转。
@@ -57,7 +57,7 @@
 		]表示最后修改结束的位置。
 	:marks	显示标记
 
-	4）搜索字符串
+	4) 搜索字符串
 	/str 搜索str，如果找到，会将str反显。此时按n将跳转到下一个，shift-n跳转的前一个。
 	/str实际上是字符串匹配，可以用正则表达式中的符号。比如精确匹配单词the，而不是somethere。可以用/\<the\>,这里\是转义符，><表示定位在结束还是开头。关于正则表达式可以参见《linux_env_study.txt》和《linux_env.txt》中的相关内容。
 	:set ignorecase		(ic)	搜索时忽略大小写，这是默认的。
@@ -68,8 +68,7 @@
 	:set wrapscan		(ws)	搜索时回转
 	:set nowrapscan		(nows)	取消搜索回转
 
-
-第四章文本编辑
+第四章 文本编辑
 	a,A	进入编辑模式，并将光标向后移动1位
 	i,I	进入编辑模式，光标不移动。
 	o	进入编辑模式，在当前行后插入一行。
@@ -91,8 +90,9 @@
 	v	进入visual模式
 	ctrl-v进入列块的visual模式
 	具体以上用法参见《linux_env.txt》
-第五章定制vim	
-	1）使用vim自带选项。
+
+第五章 定制vim	
+	1) 使用vim自带选项。
 		vim的选项很多，通过定制可以更方便的使用vim.
 	我们可以手动定制vim的一些选项，比如 
 	:set(se) number(nu)	显示行号 
@@ -110,21 +110,21 @@
 	:se		查看当前的选项情况
 	这里不用赘述，具体配置项可以参见options(用:options)
 
-	2）添加一个plugin。
-	vim支持插件，以增强vim的功能。（用:scriptnames(scr)可以显示当前装入的脚本文件）
+	2) 添加一个plugin。
+	vim支持插件，以增强vim的功能。（用:scriptnames(scr)可以显示当前装入的脚本文件) 
 	vim的安装目录一般在 /usr/share/vim/vimxx(xx是当前vim的版本号),这是vim的$vimruntime变量的位置。在此目录下面有:
 	macros:		定义了全局配置；
 	/ftplugin	定义不同文件类型的插件。
 	将macros或ftplugin目录下需要的文件，拷贝到~/.vim/plugin目录下。就可以支持这些插件了。插件的文件名后缀一般是vim
 	将上述目录中的相关插件的txt文件拷贝到~/.vim/doc目录下，然后再vim中执行:helptags ~/.vim/doc就可以在帮助文件里支持这些插件了。
 
-	3)关于颜色
+	3) 关于颜色
 		:syntax	enable可以打开语法高亮。
 		:colorscheme (colo)	设置配色方案
 			配色方案在 /usr/share/vim/vimxx/colors/目录下 
 
-第六章多文件编辑：
-	打开多文件:
+第六章 多文件编辑：
+	1) 打开多文件:
 		方法1:在控制台时,输入多个文件名。
 			如：vim a b c
 		方法2：在命令模式中输入:edit(e) 文件名。
@@ -132,18 +132,48 @@
 			:e!	丢弃当前文件修改，重新读入文件。利用这一点，可以在当当前文件别其他程序修改后，重新读入文件。
 		方法3：在命令模式中输入：args 文件名。相当于启动vim 给其多个参数。
 		:args a b c
-	切换文件：
+	2) 切换文件：
 		:next(n)	切换到下一个文件
 		:previous(prev)	切换到前一个文件
 		ctrl-^	在当前文件与执行了切换动作的两个文件之间来回切换。
 
-	保存文件：
+	3) 保存文件：
 		:w	:保存当前缓冲区到进入时打开的文件。
 		:w filename ：保存当前缓冲区到文件filename中。缓冲区没变，即当前缓冲区针对的还是原来打开的文件，如果修改了没有保存，缓冲区的标志仍然是没有保存。此时在vim状态栏中所指示的文件名依然是原来的文件。
 		:saveas (sav) filename:文件改名并保存。将当前缓冲区名改为filename，并保存。
-	窗口移动：
-		ctrl-w  H	将当前窗口左移
-		ctrl-w	J	将当前窗口上移
-		ctrl-w	K	将当前窗口下移
-		ctrl-w	L	将当前窗口右移
+		% 代表当前编辑的文件。
+
+	4) 窗口移动：
+		ctrl-w  H	到当前窗口左边
+		ctrl-w	J	到当前窗口上边
+		ctrl-w	K	到当前窗口下边
+		ctrl-w	L	到当前窗口右边
+		:files	在状态栏中显示当前编辑的文件
+	5) 全部：
+		:wall(wa)	保存所有文件
+		:qall(qa)	退出所有窗口
+	6) 比较两个文件
+		vimdiff a b	这个是命令行，不是在vim程序中.相当于vim -d a b.
+		:diffsplit(diffs) file 将当前缓冲区中的文件与file比较。
+		:close(clo)关闭比较
+
+第七章 分隔窗口
+	:split(sp)[file]	水平建立一个窗口。如果不带file，则将当前文件分隔成水平两个部分。如果带file，则在新窗口打开文件file
+	:vsplit(vsp)[file] 垂直分隔
+	:new[file]	水平开一个新窗口，并建立一个新文件缓冲区。
+	:vnew[file]	垂直开一个新窗口，并建立一个新文件缓冲区。
+	:close(clo)	关闭当前窗口
+	:only(on)	关闭除当前窗口的其他窗口。
+
+
+
+
+
+
+
+
+
+
+
+
 
