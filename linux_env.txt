@@ -1046,180 +1046,64 @@
 　　 `a|b`:表示条件或,比如[p|p]ython,表示匹配python或python.注意在grep中需要加上-E或者调用egrep才能有效\
 
 
-##sed  行编辑器
+##sed  流编辑器 stream edit for filtering and transform text
 
-　　sed用于对输入的文本逐行处理。sed不会改变源内容，除非特地指定。\
-　　	sed是在正则表达式的基础上，加上定位和动作对一行文本进行处理。
-　　格式：sed [选项] '脚本命令' 输入\
-　　选项：-e 执行后面的脚本命令，如果有多个脚本命令，可以用-e 隔开。\
-　　-f 脚本文件\
-　　-i 修改源文件\
-　　-n quiet 仅显示匹配字串的行\
-　　脚本命令格式：[定位]/正则表达式/动作,/表示分隔符，第一个分隔符之后表示要匹配的字串，第二个分隔符之后表示要替换的字串或内部命令，第三个分隔符之后表示内部命令。比如/Hi/p,表示匹配Hi字串，然后打印。
-- 定位符：\
-	x,y/
-　　可以是数字比如1：表示第一行；1,3表示1到3行，`$`表示结尾。定位也可以用匹配的方式:/pattern/,y;x,/pattern/
+　　概述：
+		sed用于对输入的文本逐行处理。sed不会改变源内容，除非特地指定。sed输出到标准输出。
+　　命令格式：
+		sed [选项] '脚本命令' inputfile
+　　选项：
+		-e 执行后面的脚本命令，如果有多个脚本命令，可以用-e 隔开。\
+	　　-f 脚本文件\
+　　	-i 修改源文件\
+	　　-n quiet 不显示自动匹配的字串\
 
-- 动作：\
-　　  常用的内部命令：\
-　　    a：当前行后添加一行；\
-　　    i：当前行前添加一行；\
-　　    c：改变当前行；\
-　　    d：删除当前行；\
-　　    w：将选中内容写入文件\
-　　    r：对于选中内容读入文件；\
-　　    s：替换匹配内容；\
-　　    y：将匹配行字符逐个替换；\
-　　    =：打印当前行号；\
-　　    ！：表示后面的命令对没有被选中的行发生作用。\
-　　假设有如下文本：\
-　　 line 1 aaa line\
-　　 line 2 bbb\
-　　 welcome\
-　　 line 4 ccc\
-　　 hello　　    
-　　p 表示打印\
-　　 `sed '/line/p' demo.txt`\
-　　  line 1 aaa line\
-　　  line 1 aaa line\
-　　  line 2 bbb\
-　　  line 2 bbb\
-　　  welcome\
-　　  line 4 ccc\
-　　  line 4 ccc\
-　　  hello\
-　　 `sed -n '/line/p' demo.txt`\
-　　  line 1 aaa line\
-　　  line 2 bbb\
-　　  line 4 ccc\
-　　 `sed '/line/!p' 1.txt`\
-　　  line 1 aaa line\
-　　  line 2 bbb\
-　　  welcome\
-　　  welcome\
-　　  line 4 ccc\
-　　  hello\
-　　  hello\
-　　` sed '/line/!=' 1.txt`\
-　　  line 1 aaa line\
-　　  line 2 bbb\
-　　  3\
-　　  welcome\
-　　  line 4 ccc\
-　　  5\
-　　  hello\
-　　d 表示删除,命令前需要输入范围，范围可以用数字表示，也可用`$`表示行尾，或者是匹配行\
-　　 `sed '1,3d' demo.txt`\
-　　  line 4 ccc\
-　　  hello\
-　　 `sed '/line/d' demo.txt`\
-　　  welcome\
-　　  hello \
-　　s 表示替换。s/匹配字串/替换字串/命令\
-　　 `sed 's/line/Line/g' demo.txt`\
-　　  Line 1 aaa Line\
-　　  Line 2 bbb\
-　　  welcome\
-　　  Line 4 ccc\
-　　  hello\
-　　 如果不带g，则第一行的后面一个line不会替代，g的意思是所有匹配的内容都将替代，否则如果某一行中有多个匹配内容，则只匹配第一个。\
-　　 `^`表示单词开头，`$`表示单词结尾。\
-　　 `sed 's/^line/Line/' demo.txt`\
-　　  Line 1 aaa line\
-　　  Line 2 bbb\
-　　  welcome\
-　　  Line 4 ccc\
-　　  hello\
-　　 `sed -e 's/line$/Line/' demo.txt`\
-　　  line 1 aaa Line\
-　　  line 2 bbb\
-　　  welcome\
-　　  line 4 ccc\
-　　  hello\
-　　 如果想替换匹配行的所有内容\
-　　 `sed 's/line.* /Line/' demo.txt`\
-　　  Line\
-　　  Line\
-　　  welcome\
-　　  Line\
-　　  hello\
-　　r 命令 读取文件，将匹配行替换成所读取的文件\
-　　 `cat demo.txt|sed '/line/r a.txt'`\
-　　  line 1 aaa line\
-　　  this is line\
-　　  repleace\
-　　  line 2 bbb\
-　　  this is line\
-　　  repleace\
-　　  welcome\
-　　  line 4 ccc\
-　　  this is line\
-　　  repleace\
-　　  hello\
-　　w 命令 将匹配行写入文件\
-　　 `sed '/line/w 1.txt' demo.txt`  \
-　　  line 1 aaa line\
-　　  line 2 bbb\
-　　  welcome\
-　　  line 4 ccc\
-　　  hello\
-　　  hanhj@hanhj-Ideapad-Z460:~/biji$ cat 1.txt\
-　　  line 1 aaa line\
-　　  line 2 bbb\
-　　  line 4 ccc\
-　　a\ 命令 添加内容到当前行的下面一行\
-　　 `sed '/line/a\ sss' demo.txt`\
-　　  line 1 aaa line\
-　　   sss\
-　　  line 2 bbb\
-　　   sss\
-　　  welcome\
-　　  line 4 ccc\
-　　   sss\
-　　  hello\
-　　i\命令 添加内容到当前行的上面一行\
-　　 `sed '/line/i\ sss' demo.txt`\
-　　   sss\
-　　  line 1 aaa line\
-　　   sss\
-　　  line 2 bbb\
-　　  welcome\
-　　   sss\
-　　  line 4 ccc\
-　　  hello\
-　　c\命令 将匹配行修改，c和s同样可以达到修改的目的，但是c是修改整行，s可以替换其中的字符\
-　　 `sed '/line/c\sss' demo.txt`\
-　　  sss\
-　　  sss\
-　　  welcome\
-　　  sss\
-　　  hello\
-　　y 命令 将匹配行字符逐个替换\
-　　 `sed 'y/linewo/LINEWO/' demo.txt`\
-　　  LINE 1 aaa LINE\
-　　  LINE 2 bbb\
-　　  WELcOmE\
-　　  LINE 4 ccc\
-　　  hELLO
-	  多个sed命令可以用-e，{}，和;分号来分割。
+　　	脚本命令：[地址]动作
+			动作分为无地址动作，无地址或只有1个地址的动作，有地址范围的动作。
+			无地址动作：
+				: label 做标记?
+				#comment 注释
+			无地址或只有一个地址的动作：
+				=		打印行号
+				i text 在地址前插入文本
+				a text 在地址后插入文本
+				r file 在地址后插入文本
+				R file 在地址后插入文本，并对每一行解释执行。？
+			地址范围的动作：
+				p		打印当前行
+				c text 将选定行替换成text。(整行替换)
+				d		删除选定行
+				s/patten/repleace/	将匹配的部分替换成replace
+				y/source/dest/		将source中出现的字符，替换成dest中的对应字符。要求source和dest必须等长。
+				w file	将选定部分写到文件中。
+			
+			地址：地址可以是用数字，也可用匹配来产生。	
+				$	表示最后一行。（正则表达式中的$表示一行的行尾位置）
+				n1,n2	范围从n1行到n2行
+				n1,+N	范围从n1到后面N行
+				n1,~N	范围从n1间隔N行
+					比如sed '1,~2p',则打印奇数行
+				/patten/ 匹配字串地址
 
-
-- 例子：\
-　　 删除空行：`sed '/^$/d' demo.txt` \
-　　 行尾添加内容：`sed 's/$/append/' demo.txt`\
-　　 行尾删除刚才添加的内容：`sed 's/append$//' demo.txt`\
-　　 大小写转换 `sed 's/[a-z]/\u&/g' demo.txt`,`sed 's/[A-Z]/\l&/g' demo.txt`\
-　　 注意：\d,\u,\l,不能用在正则表达式的匹配中，只能用在转换中，如果在匹配中只能是字母本身。
+				如果地址后跟!则表示地址范围是以上地址取反。
+	- 例子：\
+	　　 删除空行：`sed '/^$/d' demo.txt` \
+	　　 行尾添加内容：`sed 's/$/append/' demo.txt`\
+	　　 行尾删除刚才添加的内容：`sed 's/append$//' demo.txt`\
+	　　 大小写转换 `sed 's/[a-z]/\u&/g' demo.txt`,`sed 's/[A-Z]/\l&/g' demo.txt`\
+	　　 注意：\d,\u,\l,不能用在正则表达式的匹配中，只能用在转换中，如果在匹配中只能是字母本身。
 
 ##awk
+	概述：
+		awk是另一个类似于sed的行文本处理程序，awk的原理是逐行读入文本，按照定义好的分割符将文本切割成多列，然后通过类似于c的脚本进行处理。awk认为输入的文本是结构的，可以分割成多列。sed只能提供内定的一些处理命令，而awk可以通过编程来实现比较复杂的处理。
+	命令格式：
+		awk [option] '[BEGIN{}]{command}[END{}]' 输入文本。
 
-	awk是另一个类似于sed的行文本处理程序，awk的原理是逐行读入文本，按照定义好的分割符将文本切割成多列，然后通过类似于c的脚本进行处理。awk认为输入的文本是结构的，可以分割成多列。sed只能提供内定的一些处理命令，而awk可以通过编程来实现比较复杂的处理。
-	基本命令：awk [option] '[BEGIN{}]{}[END{}]' 输入文本。
-	在awk中命令需要用'{}'来包括。begin中的命令是读入之前的操作，end中的命令是读入完成之后的操作。
-	如果{}中的操作含有更多的操作，可以再次嵌套。
-	动作之间用;分隔。
-	调用awk有三种方法，1直接调用。2.通过-f选项调用脚本。3.将脚本加上执行权限，直接运行脚本。
-	options
+		在awk中命令需要用'{}'来包括。begin中的命令是读入之前的操作，end中的命令是读入完成之后的操作。
+		如果{}中的操作含有更多的操作，可以再次嵌套。
+		动作之间用;分隔。
+		脚本文件可以直接执行。
+	选项：
 		-f 输入的awk脚本文件
 		-F 定义分隔符，例如-F"\t"
 			默认的分割符是空格，每行的分割结果用$1,$2...来表示。
@@ -1236,8 +1120,8 @@
 	parameter:
 		可以给awk输入参数，在awk中可以直接引用输入参数，比如
 			1)awk -v OFS="." 'BEGIN{print OFS}' test.txt
-			或：2)awk -v OFS="." -f test.awk test.txt
-			或：3)./test.awk OFS="." test.txt 
+			2)awk -v OFS="." -f test.awk test.txt
+			3)./test.awk OFS="." test.txt 
 			需要指出的是如果采用方法3,在begin的时候，变量是没有被赋值的，此时变量被当作是输入文件，所以是无效的，只有当执行读入文本操作的的时候才有效。
 
 	awk中语句：
@@ -1788,49 +1672,66 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 　　一般第三方的库，会在配置文件时指出--prefix=xxx的选项，用于指明安装目录，我们一般放在/usr 或者/usr/local目录下，这样一般是在linux默认的搜寻路径中。\
 
 
-##gdb:
-
-
-调试程序，需要在编译和连接时加上-g选项。\
+##gdb:调试程序，需要在编译和连接时加上-g选项。\
 启动：\
 　　gdb exe_file\
 　　gdb PID exe_id  运行时调试\
-　　启动时参数：\
-　　　--symbols=SYMFILE\
-　　从指定文件中读取符号表。\
+　　参数：\
+　　--symbols=SYMFILE\
+　　	从指定文件中读取符号表。\
 　　--se=FILE \
-　　从指定文件中读取符号表信息，并把他用在可执行文件中。 \
+　　	从指定文件中读取符号表信息，并把他用在可执行文件中。 \
 　　--core=COREFILE \
-　　调试时core dump的core文件。 \
+　　	调试时core dump的core文件。 \
 　　--directory=DIR\
-　　加入一个源文件的搜索路径。默认搜索路径是环境变量中PATH所定义的路径  			\
+　　	加入一个源文件的搜索路径。默认搜索路径是环境变量中PATH所定义的路径\
+帮助：
+	man gdb
+	进入gdb后:help xx
 
-调试时命令：\
-　　设置输入参数：set args\
-　　显示输入参数：show args\
-　　装入调试程序：file xx\
-　　源程序：\
-　　　　list\
-　　　　list line\
-　　　　list -向前显示\
-　　　　list +向后显示\
-　　　　set listsize count设置一次显示的行\
-　　　　list first，last\
-　　　　edit，编辑代码，需要设置EDITOR环境变量，如果没有设置默认是/usr/bin/ed\
+调试时命令：
+	在gdb中输入命令，支持tab补齐。
+
+　　设置输入参数：set args
+		例如：set	args 1 2 3 ：设置输入参数1 2 3
+　　显示输入参数：show args
+		不用info args
+　　装入调试程序：file xx
+
+　　源程序：list 简写l
+		list		显示当前行范围前后的源程序
+		list line	显示当前文件的line范围前后的源程序
+　　　	list -line	向前显示\
+　　　	list +line	向后显示\
+　　　	list first，last
+		list file:line	显示文件file的line行
+　　　	set listsize count设置一次显示的行\
+　　　	edit，编辑代码，简写ed
+			需要设置EDITOR环境变量，如果没有设置默认是/usr/bin/ed\		
+		其他一些相关命令：
 　　　　make,编译代码\
 　　　　cd 改变路径\
 　　　　pwd 显示路径\
 　　　　shell 执行shell，需要设置SHELL环境变量，如果没有设置默认是/usr/bin/sh\
-　　显示信息：info ，简写i。比如i b表示显示断点\
-　　　　info locals 显示当前局部变量\
-　　　　info args 显示输入参数\
-　　　　info f 显示调用栈\
-　　显示信息: show\
-　	　　show ada -- Generic command for showing Ada-specific settings\
+　　显示信息：info ，简写i。
+		info xx	;xx是定义的一些信息体。
+		xx包括：
+			break	断点信息
+			locals	局部变量
+			args	输入参数\
+	　　　　frame	调用栈
+			...
+　　显示调试程序（debuger）的信息: show
+		show xx ；xx是定义的一些调试程序信息。
+		xx包括：
+			ada -- Generic command for showing Ada-specific settings
+			annotate	注释的级别。
+			args		显示参数
+			...
 　　显示数据：
-		显示变量：print，简写p\
-　　　　	p/f  var
-			f表示显示格式，
+		显示变量：print，简写p
+　　　　	print/format  var
+			format表示显示格式。包括：
 	　　　　　　x 按十六进制格式显示变量。 
 	　　　　　　d 按十进制格式显示变量。 
 	　　　　　　u 按十六进制格式显示无符号整型。 
@@ -1857,11 +1758,11 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 				c表示字符，
 				f表示浮点，
 				s表示字符串
-　　　　　　h	表示每个数字的宽度，
-				b表示1个byte，
-				h表示半个字2个byte，
-				w表示一个字4个byte，
-				g表示8个byte
+　　　　　　h	表示每个数字的宽度，默认是word
+				b表示1个byte，		(byte)
+				h表示半个字2个byte，(short)
+				w表示一个字4个byte，(word)
+				g表示8个byte		(longlong)
 　　	自动显示变量：display expr
 			每当到达断点时自动显示变量
 		　　`display /i $pc` 会在断点时显示机器代码和源代码。
@@ -1873,7 +1774,8 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 			ptype比whatis显示更多信息。
 
 　　设置变量：
-		set 变量=value\
+		set 变量=value
+		例如：set args 1 2 3
 　　执行：
 		run 全速运行，简写r；
 		next 不进入的单步执行，简写n；
@@ -1888,33 +1790,38 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 
 　　　　断点：break 简写b\
 			设置断点：
-			 　 设置行断点:		b linesnumber
-　　　　 　		设置文件的断点	b filename:linenumber 
-　　　　 　		设置函数断点	b function-name
-　　　　 　		设置条件断点	b which  if contion
+			 　 设置行断点:		b line
+　　　　 　		设置文件的断点	b file:line 
+　　　　 　		设置函数断点	b function
+　　　　 　		设置条件断点	b line  if contion
 	　　　　 　		 eg：b 20 if count==100
-					对于条件的维护：
+					对于条件的维护：condition 简写cond
 						对于已经设置的断点，可以添加删除，忽略条件。
 							添加条件：	condition bnum expr
 							消除条件： 	condition bnum 
 							忽略条件：	ignore bnum count，表示忽略断点count次\
-			查看断点 info b
-　　　　 　 删除断点：delete breakpoint-number，简写d，比如d 2
-				如果不带number则删除所有断点。
-　　　　 　 禁止断点：disable breakpoint-number
-　　　　 　 允许断点：enable breakpoint-number	
+							bnum是已经存在的断点号。
+			查看断点 info break
+　　　　 　 删除断点：delete bnum，简写d，
+				比如d 2
+				如果不带bnum则删除所有断点。
+　　　　 　 禁止断点：disable bnum
+　　　　 　 允许断点：enable bnum	
 	　　　　继续运行：
-　　　　		step [ignore count]	 
+　　　　		step [count]	 
 	　　　　 	coutinue [count]
 　　	　　 	next [count]
-	　　　	设置程序暂停后的动作：
+				count是执行的步数，如果不带count默认是执行1步。
+	　　　	设置断点暂停后的动作：commands bnum
 				由commands 。。。 end组成
-　　　　 　			b foo if count==100
-		　　　　 　		commands
-　　　　		 　			printf “count==100”
-　　　　 　					continue
-　　　　 　				end
-	　　　　 　		使用commands可以方便自动化测试。设置好条件断点后可以用condition命令来修改条件
+				如果不带bnum，则以最近的一个断点为断点。
+				例如：
+　　　　 　			b foo if count==100	设置一个条件断点
+		　　　　 　	commands			设置断点后的命令。在gdb中敲commands后回车，gdb会出现>的提示符，此时可以输入命令。以end为结束。
+　　　　		 　		printf “count==100”
+　　　　 　				continue
+　　　　 　			end
+	　　　　 　		使用commands可以方便自动化测试。
 				
 　　　　观察点：watch 变量，
 			设置观察点后，当观察点数据发生变化，可以自动停下来。
