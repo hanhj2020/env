@@ -388,6 +388,34 @@
 		c: 将当前目录改变到光标所在文件的目录。
 		
 		ctrl-o回退到原窗口
+	当前目录：
+		:cd 
+		:pwd
+	查找文件：
+		gf	将光标移到文件名处gf。这个对于编辑程序很有用
+		:find xx
+		:sfind xx	开一个新窗口来显示文件
+		设置查找路径
+		:set path+=...
+	缓冲区
+		对于每个打开的文件对应一个缓冲区
+		:buffers	显示当前的缓冲区
+		:ls			同样的作用
+		缓冲区标志：
+			+	有改动
+			-	不可改动
+			u	未列出的缓冲区
+			h	隐藏的缓冲区
+			%	当前缓冲区
+			a	正在编辑的缓冲区
+			#	上次活动的缓冲区
+		:buffer(b) xx	显示buffers中列出的文件，xx是数字。这样就可以不敲入文件名。
+		:sbuffer(sb) xx	开一个新窗口
+		:bnext(bn)		下一个缓冲区
+		:blast(bl)
+		:bfirst(bf)
+		:bprivious(bp)
+		:bdelete(bd) xx	删除缓冲区。当删除一个缓冲区，其不再buffers列表中显示，但是如果用:buffers!,或:ls!还是可以显示的。
 
 
 
