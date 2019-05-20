@@ -891,6 +891,7 @@
 		由于shell要先对通配符展开，所以需要留意。
 		比如想查找当前目录下包括子目录中的c，cpp文件中包括return 0;语句的部分。
 		grep -r "return 0" *.cpp *.c 不会在子目录中查找，即使加上了-r选项。
+		grep -r "return 0" * --include=*.c 也不行（应当是bug，在3.1版本中不存在）
 		因为shell首先会对*.cpp *.c进行展开，这样待找的文件就不包括了子目录
 		解决办法是：
 			find . -name '*.c' -o -name '*.cpp' |xargs grep 'return 0;' 
