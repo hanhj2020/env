@@ -272,7 +272,7 @@
 				比如在正文中搜索fun1,到fun2之间的，将return 0 替换成return 1
 				/fun1/,/fun2/s=return 0=return 1=
 	3) 全局命令
-		:[range]global(g)/patten/command/flag
+		:[range]global(g)/pattern/command/flag
 			与substitute命令所不同的是后面可以是命令。
 			需要注意的是命令是在命令模式下输入的命令，而不是normal状态下的命令。
 	4）visual mode模式
@@ -503,10 +503,10 @@
 	重复键入：
 		在每次进入，退出编辑模式时所键入的内容被保存，此时可以在编辑模式下用ctrl-a粘贴这个内容。（感觉此功能不太实用）
 	复制上一行字符：(编辑模式)
-		ctrl-Y可以从上一行相同列的位置复制字符。
+		ctrl-y可以从上一行相同列的位置复制字符。
 			比如：上一行为
 				a->next=b->next
-				下一行将next改为prev，则可以在下一行一直按ctrl-Y直到>
+				下一行将next改为prev，则可以在下一行一直按ctrl-y直到>
 				然后修改为prev，再继续按ctrl-Y，修改下一个。
 			ctrl-e是从下一行复制。
 	从寄存器复制：
@@ -588,8 +588,61 @@
 		比如上面表格中的数字，选中后(visual模式下/200[0-9]),然后按ctrl-a可以增加数字。
 		ctrl-a	+
 		ctrl-x  -
-			
-第二十八章 折行
+	多个文件
+		对于多个文件的操作，可以利用前面所说的宏，也可以利用args参数
+		:args ...输入文件名。可以使用通配符
+		:argdo command
+		比如替换所有c文件中的return 0为return 1
+		:args *.c
+		:argdo %s/return 0/return 1/ge | update
+		ge	:g表示对每行所有匹配元素，e表示出错继续，update会在文件改变时保存。
+		argdo 也可以是windo，表示对所有窗口操作。
+	在shell中调用vim
+		扩展命令模式：ex
+			vim命令行有-e选项，此时vim进入扩展命令模式，将输入脚本解释成命令模式下的命令:command
+			比如完成以上同样的功能可以这样做：
+			先写一个vim脚本cc.vim
+			%s/return 0/return 1/ge
+			write
+			quit
+
+			然后在shell中输入：for i in *.c;do vim -s -e $i < cc.vim;done
+			-e	表示启用ex模式
+			-s	表示silent
+		normal模式：
+			vim -s script files
+			此时vim进入normal方式，-s 表示后面是noraml模式下的命令。
+			用此方法需要用script描述动作。
+			可以用vim -w script file 来记录动作到script文件中，此时可以正常操作，然后用-s来执行。
+			-w	是追加方式
+			-W	是重写方式
+
+第十七章 搜索
+	忽略大小写：
+		:se ic		忽略大小写
+		:se	noic	大小写敏感，精确
+		:se ic smartcase(scs) .这种方式下，如果所敲入的匹配字串有大写字母，则是大小写敏感。
+		正则表达式中的大小写
+			\cpattern	忽略大小写
+			\Cpattern	不忽略大小写
+			比如/\CWord	只能匹配Word
+			用\c，\C方式优先于ic，smartcase方式。
+	回绕：
+		:set wrap
+		:set nowrap
+	偏移：
+		当匹配时，默认光标会停在匹配单词的第一个字符。
+		/pattern/number	,number用来设置匹配时光标位于匹配行的偏移number行
+		/pattern/ex		:光标位于匹配单词尾,x表示偏移的数量，+n，-n
+		/pattern/bx		:光标位于匹配单词首,x表示偏移的数量，+n，-n
+	懒惰模式
+		正则表达式一般尽可能多的匹配字符，比如/tex.*t/	可以匹配text,texxt,tex3t等。而如果用/tex.\{-}t/,则只能匹配text，tet，tebt，不超过4个字母。
+	匹配空格或断行
+		/\n/	断行
+		/_s/	空格或断行
+	其他参见正则表达式，是一致的
+
+第十八章 折行
 	对于一个结构化文本，可能由多章构成，每章有多段，每段有多节。
 	对于一个源程序文档，可能由不同的缩进表示代码的层次。
 	通过折行，可以将同一章，段，节或层次的内容折叠起来，就像将一张纸折叠起来一样，在折叠处显示折叠起来的内容的首行内容，这样更容易看清文档的结构。
@@ -627,6 +680,11 @@
 		:mkview(mkvie) x x是需要保存的视图状态数字，可以保存10个视图状态。
 		:loadview(lo) x 装入视图。
 
+第十九章 之于程序
+	tag
+		利用tag可以对文本做标记，这样就可以快速到找到想要的地方。mark也相当于是tag，但是需要手动标记。
+		ctags是一个生成标记的程序，可以在所在目录，在shell中执行ctags -R，-R表示递归。默认是为当前目录所有文件生成
+		然后在vim中执行:tag tags
+fun2
 
-
-
+fun
