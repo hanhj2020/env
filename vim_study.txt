@@ -561,7 +561,7 @@
 	长行文本：
 		:se wrap	回绕
 		:se guioptions+=b
-    表格：
+	表格：
 		:se virtualedit(ve)=all	设置virtual 模式，虚位置。即使后面没有内容，光标也可移动。画表格的时候有用。
 		:se ve=	取消设置
 			_________________________
