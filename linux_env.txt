@@ -789,18 +789,17 @@
 		e	解压到当前目录
 		x	解压全目录
 		l   列出压缩文件内容
-	注意如果path_to_extract不存在，则不会解压。这点与zip，tar不同
+		如果用x，则path_to_exotract必须先存在
 
 ##压缩总结
-	.tar			tar -xvf
-	.gz				gzip -d  /gunzip解压
-	.tar.gz/.tgz	tar -xzf
-	.bz2			bzip2 -d /bunzip2
-	.tar.bz2		tar -xjf
-	.Z				uncompress
-	.tar.Z			tar -xzf
-	.rar			unrar e
-	.zip			unzip
+	.suffix			压缩					解压
+	.gz				gzip files				gzip -d/gunzip zipfile
+	.bz2			bzip2 files				bzip2 -d/bunzip2 zipfile
+	.tar			tar -cf zipfile files	tar -xf zipfile
+	.tar.gz/.tgz	tar -czf zipfile files	tar -xzf zipfile
+	.tar.bz2		tar -cjf zipfile files	tar -xjf zipfile
+	.rar			rar a zipfile files		unrar x zipfile [-d]
+	.zip			zip zipfile files		unzip zipfile [-d] 
 
 ##updatedb　更新搜索文件数据库
 	相关配置文件为/etc/updatedb.conf
@@ -1291,10 +1290,16 @@
 		a b c @d e
 		a1 b1 c1@d1 e1
 
-##xxd：显示二进制文件
-##od
-##hexedit 
+##xxd:显示二进制文件
 		-gn n为按照几个字节显示记录
+
+##od:显示二进制文件
+		-t type
+			c	c:character
+			ox	o:octal x:1,2
+			xx	x:hex	x:1,2,3..
+
+##hexedit 
 
 
 ##chkconfig 配置服务
