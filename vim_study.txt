@@ -822,7 +822,7 @@
 		特殊字符：
 			在映射中
 			|	表示执行多个命令	如：map <F2> write <Bar> | ls
-				<bar>	用来代替命令中的|
+				如果命令中出现|,则用<bar>代替命令中的|
 			<space>	空格
 	自定义命令：
 		:command def command
@@ -857,8 +857,16 @@
 					BufReadPost	将要编辑一个文件
 					FileType	检测文件类型，如果正常检测到一个文件类型
 					BufNewFile	建立新文件
-
+					...
 				nested	递归
+				command	command是在命令模式下所输入的命令.
+					举例：如果文件是c，cpp文件，则在输入{的时候，自动输入匹配的}，并在中间插入一行。
+					:autocmd FileType *.c *.cpp inoremap { {<cr><esc>}O
+					如果想用normal模式，则在命令前用normal，相当于在命令模式下输入normal进入normal模式。
+					比如：autocmd BufNewFile *.c normal G,将光标移动到最后。
+					command 可以用execute “...”来包括
+					可以强制触发另外的命令doautocmd events
+					如果对同一事件有多个定义，则会依次执行。
 		查看：
 			:autocmd		所有自动命令
 			:autocmd events 查看某个事件自动命令
@@ -866,7 +874,138 @@
 		重定义：
 			:autocmd!...
 		删除
-			:autocmd! events *
+			:autocmd! events * ,这将删除该事件的所有动作
 
+第二十二章 vim脚本
+
+
+第二十三章 文件类型 
+
+
+autocmd中的事件
+Reading
+|BufNewFile|		starting to edit a file that doesn't exist
+|BufReadPre|		starting to edit a new buffer, before reading the file
+|BufRead|			starting to edit a new buffer, after reading the file
+|BufReadPost|		starting to edit a new buffer, after reading the file
+|BufReadCmd|		before starting to edit a new buffer |Cmd-event|
+
+|FileReadPre|		before reading a file with a ":read" command
+|FileReadPost|		after reading a file with a ":read" command
+|FileReadCmd|		before reading a file with a ":read" command |Cmd-event|
+
+|FilterReadPre|		before reading a file from a filter command
+|FilterReadPost|	after reading a file from a filter command
+
+|StdinReadPre|		before reading from stdin into the buffer
+|StdinReadPost|		After reading from the stdin into the buffer
+
+Writing
+|BufWrite|			starting to write the whole buffer to a file
+|BufWritePre|		starting to write the whole buffer to a file
+|BufWritePost|		after writing the whole buffer to a file
+|BufWriteCmd|		before writing the whole buffer to a file |Cmd-event|
+
+|FileWritePre|		starting to write part of a buffer to a file
+|FileWritePost|		after writing part of a buffer to a file
+|FileWriteCmd|		before writing part of a buffer to a file |Cmd-event|
+
+|FileAppendPre|		starting to append to a file
+|FileAppendPost|	after appending to a file
+|FileAppendCmd|		before appending to a file |Cmd-event|
+
+|FilterWritePre|	starting to write a file for a filter command or diff
+|FilterWritePost|	after writing a file for a filter command or diff
+
+Buffers
+|BufAdd|		just after adding a buffer to the buffer list
+|BufCreate|		just after adding a buffer to the buffer list
+|BufDelete|		before deleting a buffer from the buffer list
+|BufWipeout|		before completely deleting a buffer
+
+|BufFilePre|		before changing the name of the current buffer
+|BufFilePost|		after changing the name of the current buffer
+
+|BufEnter|		after entering a buffer
+|BufLeave|		before leaving to another buffer
+|BufWinEnter|		after a buffer is displayed in a window
+|BufWinLeave|		before a buffer is removed from a window
+
+|BufUnload|		before unloading a buffer
+|BufHidden|		just after a buffer has become hidden
+|BufNew|		just after creating a new buffer
+
+|SwapExists|		detected an existing swap file
+
+Options
+|FileType|		when the 'filetype' option has been set
+|Syntax|		when the 'syntax' option has been set
+|EncodingChanged|	after the 'encoding' option has been changed
+|TermChanged|		after the value of 'term' has changed
+|OptionSet|		after setting any option
+
+Startup and exit
+|VimEnter|		after doing all the startup stuff
+|GUIEnter|		after starting the GUI successfully
+|GUIFailed|		after starting the GUI failed
+|TermResponse|	after the terminal response to |t_RV| is received
+
+|QuitPre|		when using `:quit`, before deciding whether to quit
+|VimLeavePre|	before exiting Vim, before writing the viminfo file
+|VimLeave|		before exiting Vim, after writing the viminfo file
+
+Various
+|FileChangedShell|	Vim notices that a file changed since editing started
+|FileChangedShellPost|	After handling a file changed since editing started
+|FileChangedRO|		before making the first change to a read-only file
+
+|ShellCmdPost|		after executing a shell command
+|ShellFilterPost|	after filtering with a shell command
+
+|CmdUndefined|		a user command is used but it isn't defined
+|FuncUndefined|		a user function is used but it isn't defined
+|SpellFileMissing|	a spell file is used but it can't be found
+|SourcePre|			before sourcing a Vim script
+|SourceCmd|			before sourcing a Vim script |Cmd-event|
+
+|VimResized|		after the Vim window size changed
+|FocusGained|		Vim got input focus
+|FocusLost|			Vim lost input focus
+|CursorHold|		the user doesn't press a key for a while
+|CursorHoldI|		the user doesn't press a key for a while in Insert mode
+|CursorMoved|		the cursor was moved in Normal mode
+|CursorMovedI|		the cursor was moved in Insert mode
+
+|WinNew|		after creating a new window
+|TabNew|		after creating a new tab page
+|TabClosed|		after closing a tab page
+|WinEnter|		after entering another window
+|WinLeave|		before leaving a window
+|TabEnter|		after entering another tab page
+|TabLeave|		before leaving a tab page
+|CmdwinEnter|		after entering the command-line window
+|CmdwinLeave|		before leaving the command-line window
+
+|InsertEnter|		starting Insert mode
+|InsertChange|		when typing <Insert> while in Insert or Replace mode
+|InsertLeave|		when leaving Insert mode
+|InsertCharPre|		when a character was typed in Insert mode, before
+					inserting it
+
+|TextChanged|		after a change was made to the text in Normal mode
+|TextChangedI|		after a change was made to the text in Insert mode
+|TextYankPost|		after text is yanked or deleted
+
+|ColorScheme|		after loading a color scheme
+
+|RemoteReply|		a reply from a server Vim was received
+
+|QuickFixCmdPre|	before a quickfix command is run
+|QuickFixCmdPost|	after a quickfix command is run
+
+|SessionLoadPost|	after loading a session file
+
+|MenuPopup|			just before showing the popup menu
+|CompleteDone|		after Insert mode completion is done
 
 
