@@ -12,7 +12,8 @@
 		刚进入vim的时候，vim处于普通(normal)状态，此时只能用键盘上的上下左右或特殊键的组合来移动光标。不能编辑文本。
 		在normal状态下，键入i,a,o或I,A,O键，vim将进入编辑（edit) 状态，此时可以键入字符。在edit状态按ESC键，将退出edit状态，恢复到normal状态。
 		在normal状态下，键入:vim将进入命令(command)状态。此时光标位于最下一行，并有提示符:。此时可以输入命令。在命令状态中按ESC键，将退出command状态，恢复到normal状态。
-		在以下的描述中如果英文单词前面有:表示是在命令状态下。比如:set,表示在命令状态下输入set命令。
+		在normal状态下，键入Q将进入Ex模式。此时键入visual回到normal状态。
+		在以下的描述中如果英文单词前面有:表示是在命令状态下。比如:set,表示在命令状态下输入set命令,否则为normal状态。
  		如果名词后面带一个括号，则括号中的字符作为前面名词的缩略。比如number(nu),表示可以用nu来代替number。
 		如果有xx->xxx，表示助记符，将xx理解成xxx。
 	2) 一般的移动
@@ -140,18 +141,19 @@
 		:set(se) number(nu)	显示行号 
 		:se list		显示控制字符
 		:se filetype	显示当前文件的文件类型。
-			文件类型自动检测：filetype on.文件类型检测是用$vimruntime/filetype.vim中来检测，用:filetype 可以显示当前文件自动检测的情况。
+		:filetype on	打开文件类型自动检测
+			文件类型检测是用$vimruntime/filetype.vim中来检测，用:filetype 可以显示当前文件自动检测的情况。
 		vi中的选项可以是：
 			布尔型变量：可以用:set xx 来打开，:set noxx来关闭。比如：
 				:se nu		打开行号显示
 				:se nonu	关闭行号显示
 			参数型选项：
 				:se xx=xxx	设置xx选项为xxx
-				:se xx?,或
+				:se xx?		显示当前值
 				:se xx		显示当前值
-				:se xx&	恢复xx为默认值
+				:se xx&		恢复xx为默认值
 		:se		查看当前的选项情况
-		关于选项这里不用赘述，具体配置项可以参见options(用:options)
+			关于选项这里不用赘述，具体配置项可以参见options(用:options)
 
 		.	重复命令：
 			在vim中会记录所敲入的任何命令，在normal状态下，键入.可以执行最后一次所执行的命令。
@@ -300,7 +302,8 @@
 			!表示要执行外部程序，
 			command是外部程序。
 			例如，将当前行下三行排序。执行如下命令：
-			在normal状态执行：!3j,此时命令行会出现:.,.+3!,输入sort就可以了。			在visual模式下，也可以执行。先选定范围，再输入!,此时vim会自动添加range部分,然后输入sort命令。
+			在normal状态执行：!3j,此时命令行会出现:.,.+3!,输入sort就可以了。		
+			在visual模式下，也可以执行。先选定范围，再输入!,此时vim会自动添加range部分,然后输入sort命令。
 	8） 部分写入文件
 		:[range]w file 
 		:[range]w >>file	追加
@@ -341,7 +344,7 @@
 		:grep something files 
 		此时会打开第一个匹配文件。
 
-第十章 命令行
+第十章 加速冒号命令
 	在命令行窗口可以：
 		tab	:自动补齐
 	历史命令：
@@ -349,9 +352,9 @@
 			冒号命令记录，/,?的搜索记录
 		冒号命令记录：
 			如果记得命令的开头几个字母，在:后输入字符，然后用上下键进行查找。ctrl-p同上键，ctrl-n同下键。prev，next。ctrl-u取消，此时可以重新输入命令。
-		:his /	查看/查找记录
-		:his ?	查看？查找记录
-		q:		打开冒号命令记录。此时光标在命令记录窗口中，处于normal状态，通过i，进入编辑状态，编辑好了按回车就可以执行该命令。
+		:his /	查看用/进行查找的记录。注意不是在his中进行查找
+		:his ?	查看用?进行查找的记录
+		q:		打开冒号命令记录。此时光标在命令记录窗口中，处于normal状态，此时可以通过光标移动，可以通过/来查找命令。按i，进入编辑状态，编辑好了按回车就可以执行该命令。
 
 第十一章 进退之间
 	记住编辑信息
@@ -395,7 +398,6 @@
 		D：删除文件
 		i: 显示大小日期信息（此时，将光标移动到日期或大小栏，按s，r可以按照大小或日期排序）
 		c: 将当前目录改变到光标所在文件的目录。
-		
 		ctrl-o回退到原窗口
 	当前目录：
 		:cd 
@@ -456,7 +458,7 @@
 			这些文件可以直接显示原文，保存时保存到压缩文件中。
 	加密文件：
 		vim -x file	给文件加密，此时输入密码。下一次打开的时候不需要-x，此时vim需要你提供密码。保存就直接保存，不需要密码。
-		:set key=	可以去掉密码,
+		:set key=	可以去掉密码。注意要保存，否则不会去掉。
 		:set key=xxx改变密码
 		:X			改变密码，不过密码输入时，显示的是*
 
@@ -552,10 +554,13 @@
 		:{range}left[margin]	左对齐，margin是左边空格,默认是0
 		:{range}right[width]	右对齐，width是宽度
 	缩进
-		:se autoindent	设置自动缩进，每新行沿用前面一行的缩进。
+		:se autoindent(ai)	设置自动缩进，每新行沿用前面一行的缩进。
+		:se noautoindent(noai)	:关闭自动缩进
 		:se shiftwidth(sw)	:设置每次缩进的缩进量
-		>{motion}	:则加缩进
+		>{motion}	:增加缩进
 		>>			:增加本行缩进
+		<{motion}	:减少缩进
+		<<			:减少本行缩进
 	tab宽度：
 		:se tabstop xx	
 	长行文本：
@@ -674,8 +679,11 @@
 		:set foldlevel	设置折叠深度。
 		set foldlevel=0表示尽可能折叠。zr，zm,zR,zM命令实际上是改变foldlevel数字来实现的。数字越大，表示需要折叠层次越高，即只有达到这个层次的地方才折叠，也就是展开。数字越小，表示需要折叠的层次越低，即只要达到这个层次的地方就折叠，也就是折叠。所以zR命令会在全文查找折叠层次，取最大值作为foldlevel。zM命令将foldlevel设置成0。
 	2) 自动折行
-		:se foldmethod=index 或marker，expr 
+		:se foldmethod=indent 或marker，expr 
 		:se foldlevel=0.可以根据情况来设置。如果在编辑的时候折行乱了，可以用此命令，重新折行。
+		:set foldopen=xx	:当光标移动到折行时,自动打开
+		:set foldclose=xx	:当光标离开折行时,自动关闭
+		xx默认有block，quickfix，tag等。可以将xx设置成all。	
 	3) 折行状态保存
 		:mkview(mkvie) x x是需要保存的视图状态数字，可以保存10个视图状态。
 		:loadview(lo) x 装入视图。
@@ -683,8 +691,182 @@
 第十九章 之于程序
 	tag
 		利用tag可以对文本做标记，这样就可以快速到找到想要的地方。mark也相当于是tag，但是需要手动标记。
-		ctags是一个生成标记的程序，可以在所在目录，在shell中执行ctags -R，-R表示递归。默认是为当前目录所有文件生成
-		然后在vim中执行:tag tags
-fun2
+		ctags是一个生成标记的程序，在shell中执行ctags -R，-R表示递归。默认是为当前目录下所有文件生成名为tags的tag文件。-f 可以指定输出文件名。
+		然后在vim中执行
+		:se tag+=tags
+		:tag(ta) xx	:查找名为xx的tag，如果找到将直接跳到该tag处。命令方式
+		ctrl-]	:将光标移动到待查找的单词，按ctrl-],如果找到，也可以跳转。
+		ctrl-t	:跳回来。
+		ctrl-w ]:在新窗口打开跳转处。ctrl-w表示获取光标下的单词。
+		:tnext(tn)		:跳转到下一个匹配的tag
+		:tprevious(tp)	:前一个
+		:tlast(tl)		:最后一个
+		:tfirst(tf)		:头一个
 
-fun
+		:tselect(ts) xx	:打开一个tag选择窗口，如果有多个匹配的tag
+		:ts /xx			:用正则表达式来搜索tag
+		ta,ts命令的不好之处在于会在当前编辑窗口打开tag，为了避免以上问题,可以开一个预览窗口preview
+		:ptag(pta)	xx
+		:ptselect(pts) xx
+		:pts /xx	
+		:pclose(pclo)	关闭预览窗口
+
+		:set taglength(tl):设置匹配tag的长度					 
+		tag浏览器：
+			:split(sp) tags	在新窗口打开默认的tags文件。如果生成的tag文件是另外的名字，则输入另外的名字。
+			:setlocal(setl) ts=99	清理一下,setlocal，同set但是仅对当前buffer有效。	
+			:nmap <buffer><cr> :tag <c-r>=expand("<cword>")<cr>
+				nmap表示映射一个noraml map
+				<buffer><cr>	表示要映射的动作，在buffer区按下回车键
+				:tag	命令
+				<c-r>	在输入状态下的命令替换
+				expand	展开函数
+				<cword> 取光标下的单词	<c-w>描述一个normal状态下取词动作
+				<cr>	回车
+			以上命令也可以用：
+			:nmap <buffer><cr> "aye<c-w>:tag <c-r>"a<cr>,意思是将光标下的单词放到寄存器a中，然后用tag跳到a寄存器中的内容处。
+
+第二十章 程序的编辑
+	编译程序：
+		vim允许在vim环境中编译程序，而不用退出。
+		:make {parameter} 
+		vim实际上是调用外部程序来编译。
+		:set makeprg=xx	:设置所调用的make程序。
+			举例：
+			:set makeprg=make
+	缩进
+		c语言的缩进可以用
+		:se cindent 打开。其可以自动根据{}，#if等来缩进
+	自动缩进
+		:filetype indent on	该命令根据文件类型选择缩进方式
+		:se filetype	:检查当前文件类型
+		:se runtimepath	:检查当前vim查找script的目录
+		自动整理代码：
+		gg=G	vim自动对全文处理缩进
+		其他缩进
+			前面已经提到
+				:se autoindent
+				:se smartindent	:没有cindent考虑周到
+			缩进量
+				:se shiftwidth=xx
+			在编辑模式下增减缩进量,每次增减1个shiftwidth。	
+				ctrl-t	+
+				ctrl-d	-
+			利用>,>>,<,<<
+				>i{		为{...}中的内容增加缩进
+				>a{		为包括{}增加缩进
+				<i{		为{...}中的内容减少缩进
+				<a{		为包括{}减少缩进
+				increase，append
+	制表符tab
+		:set tabstop=xx, 4或8
+		:set softtabstop=xx	,制表符和空格混合
+		:set expandtab	:只用空格
+		:%retab	将tab转换成空格
+		:%retab!反之
+	整理注释：
+		gq]/	效果是将多行整理成一行，根据textwidth
+			将光标移动到注释开头，然后执行命令
+			gq是整理文本的意思。]/寻找注释结尾。
+			或者用visual模式，选择后gq
+	自定义整理注释：
+		:se comments=xx, xx内容是{flag}:{comment key text}
+			举例：:se comments=://,s1:/*,ex:*/
+			指明了注释的关键字
+			flag
+				s	start
+				e	end
+				m	middle
+				num	offset to right
+				x	结束	
+				详细说明 参见h format-comments
+		如果要自定义注释内容可以用abbreviation(abb)
+		举例：
+			:abb ii /*<cr>author:xxx<cr>*/
+
+第二十一章 定义新命令
+	键映射
+		定义map
+			:map key command
+				map可以有多种模式
+				关键字	模式
+				map		normal visual operator-pending
+				nmap	normal
+				imap	insert
+				vmap	visual
+				cmap	command
+				omap	operate pending
+				map!	insert and command
+				operate pending是等待动作的模式比如按下d后，vim等待继续的motion操作。
+				举例：比如要定义F7来删除后面一段文本
+				omap <F7> a{
+					a{	就是一个motion a代表1个，{代表向后匹配段
+					这样当键入d<F7>就可以删除后面一段内容。
+				关于motion可以参见:h motion.txt
+				为了防止在映射中再次映射，可以定义noremap
+				关键字		模式
+				noremap		normal,visual,operate pending
+				nnoremap	normal
+				inoremap	insert
+				vnoremap	visual
+				cnoremap	command
+				onoremap	operator pending
+				noremap!	insert and command
+		显示map
+			:map 
+			:nmap
+			:..
+		删除map：
+			:unmap xx
+			...
+		特殊字符：
+			在映射中
+			|	表示执行多个命令	如：map <F2> write <Bar> | ls
+				<bar>	用来代替命令中的|
+			<space>	空格
+	自定义命令：
+		:command def command
+			用户可以自定义命令，注意def的名字第一个字母需要大写
+		:command	列出当前用户自定义命令
+		:command -nargs=xx command	设置参数数量
+			xx	：
+			number	number个参数
+			?		0,1
+			*		>=0
+			+		>=1
+			举例：
+				:command -nargs=+ Say :echo "<args>"
+				echo 在当前命令行窗口显示
+
+		使用参数
+			<args>			定义的时候要加" ",否则出错
+			<q-args>		可以不加" "
+			<f-args>		给函数用的
+				举例：
+				:command -nargs=* Say :Afun(<f-args>)
+		重新定义：
+			:command! ...
+		删除定义：
+			:delcommand xx
+
+	自动命令：
+		建立
+			:autocmd [group] events	{files} [nested] command
+				group	用来分组
+				events	事件
+					BufReadPost	将要编辑一个文件
+					FileType	检测文件类型，如果正常检测到一个文件类型
+					BufNewFile	建立新文件
+
+				nested	递归
+		查看：
+			:autocmd		所有自动命令
+			:autocmd events 查看某个事件自动命令
+			:autocmd * file_pattern	查看某个类型文件自动命令
+		重定义：
+			:autocmd!...
+		删除
+			:autocmd! events *
+
+
+
