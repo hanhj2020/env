@@ -918,7 +918,19 @@
 				let var='...'	不扩展
 				var1 . var2 字符串连接
 				举例：let a="\naaa",echo a，会打印换行，而let a='\naaa'则不会换行，直接打印\naaa
-			数组：？	
+			数组：
+				定义
+					:let var=[...]	,数组下标从0开始
+					:let var=[...]+[...]
+					比如：:let var=[1,2]
+				引用：
+					var[index]
+					var[from:to]
+					比如：
+					let a=var[index]
+					let a=var[from:to]
+
+
 		变量引用：
 			在vim中定义的用户变量直接引用
 				举例：
@@ -953,9 +965,15 @@
 		else
 			statement
 		endif
+
 		while condition
 			statement
 		endwhile 
+
+		for var in list
+			statement
+		endfor 	
+
 		continue
 		break
 		return
