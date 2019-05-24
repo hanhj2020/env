@@ -3,7 +3,8 @@
 	:options	显示选项帮助
 	在vim中执行shell命令需要在命令前加上惊叹号
 	:!command
-	$vimruntime	vim的环境变量/usr/share/vim/vim73
+	$VIM		vim的路径
+	$VIMRUNTIME	vim的运行路径,比如我的机子是/usr/share/vim/vim73
 	:scriptnames	显示脚本文件
 	%	跳转到匹配的(){}[]处。在编程的时候比较快捷。
 
@@ -142,7 +143,7 @@
 		:se list		显示控制字符
 		:se filetype	显示当前文件的文件类型。
 		:filetype on	打开文件类型自动检测
-			文件类型检测是用$vimruntime/filetype.vim中来检测，用:filetype 可以显示当前文件自动检测的情况。
+			文件类型检测是用$VIMRUNTIME/filetype.vim中来检测，用:filetype 可以显示当前文件自动检测的情况。
 		vi中的选项可以是：
 			布尔型变量：可以用:set xx 来打开，:set noxx来关闭。比如：
 				:se nu		打开行号显示
@@ -159,7 +160,7 @@
 			在vim中会记录所敲入的任何命令，在normal状态下，键入.可以执行最后一次所执行的命令。
 	2) 添加一个plugin。
 		vim支持插件，以增强vim的功能。（用:scriptnames(scr)可以显示当前装入的脚本文件) 
-		vim的安装目录一般在 /usr/share/vim/vimxx(xx是当前vim的版本号)。在vim中vim的安装位置保存在$vimruntime变量中。在此目录下面有:
+		vim的安装目录一般在 /usr/share/vim/vimxx(xx是当前vim的版本号)。在vim中vim的安装位置保存在$VIMRUNTIME变量中。在此目录下面有:
 		macros:		定义了全局配置；
 		/ftplugin	定义不同文件类型的插件。
 		将macros或ftplugin目录下需要的文件，拷贝到~/.vim/plugin目录下。就可以支持这些插件了。插件的文件名后缀一般是vim
@@ -382,9 +383,9 @@
 		如果有不同类型的窗口可用：mkview number,然后用：lo number来恢复。
 		或者用:mkview file ;:source file来恢复 
 	模式行：
-		对于某些文件，需要一些特别设置，而又不希望是全局的设置（直白的说就是希望改变.vimrc文件中的设置），这些设置不需要每次手动改变。vim提供的方法是在该文件中放入这些配置。语法是：any text vim:set {option}={value}...
+		对于某些文件，需要一些特别设置，而又不希望是全局的设置（直白的说就是希望改变.vimrc文件中的设置），这些设置不需要每次手动改变。vim提供的方法是在该文件中放入这些配置。语法是：any text vim:{option}={value}...
 		any text的意思是任意文本
-		比如 // vim:set textwidth=72
+		比如 // vim: tw=72 
 		在vim之前必须有一个空格，vim识别vim:关键字
 
 第十二章 文件查找
@@ -400,8 +401,9 @@
 		c: 将当前目录改变到光标所在文件的目录。
 		ctrl-o回退到原窗口
 	当前目录：
-		:cd 
-		:pwd
+		:cd	..	改变当前目录 
+		:pwd	显示当前目录
+		:lcd	改变当前窗口的目录，不会影响其他窗口
 	查找文件：
 		gf	将光标移到文件名处gf。这个对于编辑程序很有用
 		:find xx
@@ -738,7 +740,14 @@
 		c语言的缩进可以用
 		:se cindent 打开。其可以自动根据{}，#if等来缩进
 	自动缩进
-		:filetype indent on	该命令根据文件类型选择缩进方式
+		需要：
+		:filetype		检查当前文件检测相关的设置
+		一般有:filetype detection:on indent:on plugin:on 
+	fdsafdplugin
+	ma
+
+		:filetype on	打开文件类型检测
+		:filetype indent on	根据文件类型选择缩进方式
 		:se filetype	:检查当前文件类型
 		:se runtimepath	:检查当前vim查找script的目录
 		自动整理代码：
@@ -829,6 +838,11 @@
 			|	表示执行多个命令	如：map <F2> write <Bar> | ls
 				如果命令中出现|,则用<bar>代替命令中的|
 			<space>	空格
+		特别的，在事件前加上：
+			<buffer>	表示针对当前缓冲区
+			<unique>	表示唯一
+			<script>	表示针对该脚本
+			<nop>		表示该映射不做任何事，nop后面必须没有空格
 	自定义冒号命令：
 		建立命令：
 			:command def command
@@ -863,17 +877,20 @@
 			:command	列出当前用户自定义命令
 		重定义命令：
 			:command! ...	!表示强制覆盖
-		删除命令：
+		删除命令:
 			:delcommand xx
 	自动命令：
 		建立命令
-			:autocmd [group] events	{files} [nested] command
+			:autocmd [group] events	{pattern_files} [nested] command
 				group	用来分组
+						分组的命令用来对autocmd命令进行分组，以方便查找，删除等动作。
 				events	事件
 					BufReadPost	将要编辑一个文件
 					FileType	检测文件类型，如果正常检测到一个文件类型
 					BufNewFile	建立新文件
 					...
+				pattern_files:
+					文件匹配
 				nested	递归
 				command	command是在命令模式下所输入的命令.
 					举例：如果文件是c，cpp文件，则在输入{的时候，自动输入匹配的}，并在中间插入一行。
@@ -885,8 +902,19 @@
 					如果对同一事件有多个定义，则会依次执行。
 				vim内置事件：
 					:h autocmd 
+				gourp的用法：
+					定义命令的时候可以：
+						:au xxgroup
+						:au events pattern_files command
+						...
+						:augroup end 
+					it same as
+						:au xxgroup events pattern_files command 
+						:...
+				
 		查看命令：
 			:autocmd		所有自动命令
+			:autocmd group  查看某个组的自动命令
 			:autocmd events 查看某个事件自动命令
 			:autocmd * file_pattern	查看某个类型文件自动命令
 		重定义命令：
@@ -902,11 +930,11 @@
 			=两边不要有空格
 			变量范围：
 				在变量前可以加上限定词以限定范围
-				s	local
-				g	global
-				w	window
-				b	buffer 
-				v	预定义
+				s:	local
+				g:	global
+				w:	window
+				b:	buffer 
+				v:	预定义
 				比如:let s:a=1	限定于本脚本，局部变量
 			数字变量
 				可以是十进制，十六进制，八进制
@@ -937,7 +965,7 @@
 					let a=12
 					echo a
 			内部变量引用：
-				$var	环境变量 如$vimruntime
+				$var	shell环境变量 如$VIMRUNTIME
 				&var	选项 如&tw
 				@r		寄存器 如@1
 				
@@ -1041,25 +1069,154 @@
 		删除函数：
 			:delfunction(delfun) fun 
 	用户plugin:
-		用户plugin是用户编写的实现某种功能的脚本，一种是全局的放在~/.vim/plugin/目录下，另外一种与文件类型相关，放在~/.vim/ftplugin目录下。(ft->filetype)
+		用户plugin是用户编写的实现某种功能的脚本，一种是全局的，一种是与文件类型相关的。
+		全局的放在$VIMRUNTIME/plugin目录下。
+		文件类型相关的放在$VIMRUNTIME/ftplugin目录下。(ft->filetype)
+		VIMRUNTIME代表vim的运行路径。系统的一般在/usr/share/vim/vimxx，xx是vim的版本号。
+		用户的一般在~/.vim 
 		比如上面写的关于统计单词数的脚本就可以保存到全局目录下。
 		vim启动时会自动加载该文件。
-		为了避免重加载可以在文件开头定义以下语句：
-		if exist("loaded_a")
-			echo loaded a.vim
-			finish
-		endif
-		let loaded_a=1
-		相当于c语言中的头文件使用方法。
-		<SID>
-			SID用于map。将s标示的函数唯一编号，这样就与别人同名的函数不冲突。
-			nmap <leader>s :call <SID>MyFun()
-		帮助文件
-			在首行用*...*包住
+		全局plugin
+			新建全局plugin
+				为了避免重加载可以在文件开头定义以下语句：
+				if exist("loaded_a")
+					echo loaded a.vim
+					finish
+				endif
+				let loaded_a=1
+				相当于c语言中的头文件使用方法。
+				<SID>
+					SID用于map。将s标示的函数唯一编号，这样就与别人同名的函数不冲突。
+					nmap <leader>s :call <SID>MyFun()
+			帮助文件
+					在首行用*...*包住
+					比如：
+					*test.txt* 用helptags生成索引的时候会用到
+		文件plugin
+			文件plugin用来针对某种类型文件的动作。比如设置开头的文字。
+			设置文件类型
+				:setfiletype(setf) xx	但是一般不这么用，而是根据匹配情况来自动设置
+				根据后缀名设置：
+					:autocmd events pattern setf xx 
+					例如：
+						:au BufNewFile,BufReadPost *.h  setf h
+						将该句放在$VIMRUNTIME/filetype.vim中
+						其实系统的filetype.vim文件中有许多预定义的文件类型，一般不需要修改。但是我发现对于h文件并没有好的设置，所以我在~/.vim/目录下建立一个filetype.vim
+						if did_filetype()
+							finish
+						endif
+						augroup filetypedetect
+						au BufNewFile,BufRead *.h setf h
+						augroup end 
+						"did_filetype"代表是否允许filetype检测，通过:filetype on来设置。
+
+				根据文件内容设置
+					一些脚本一般在文件开头有一些信息，可以用来确定文件类型。比如：
+					#!/bin/bash 
+					这时可以用匹配字串的方法：
+						if did_filetype
+							finish
+						endif
+						let name=getline(1);
+						if name~='^!.*\<bash\>$'
+							setf bash
+						endif
+				在设置了一个文件类型后，如果后面脚本继续设定将被忽略。		
+			新建fileplugin：
+				文件plugin放在$VIMRUNTIME/ftplugin 目录下。名字以新建文件类型命名。比如建立一个h类型文件，命名为h.vim。这里放针对h类型文件的动作。
+
+	vim脚本的执行顺序：
+		通过:se runtimepath可以看到vim脚本的搜索路径：
+		runtimepath=~/.vim,/var/lib/vim/addons,/usr/share/vim/vimfiles,/usr/vim/vimxx,usr/share/vim/vimfiles/after,/var/lib/vim/addons/after,~/.vim/after
+		即：
+		~/.vim,
+			/var/lib/vim/addons,
+				/usr/share/vim/vimfiles,
+					/usr/vim/vimxx,
+				/usr/share/vim/vimfiles/after,
+			/var/lib/vim/addons/after,
+		~/.vim/after
+		所以用户目录下的.vim目录下的脚本，除了after目录最后执行外，其他都是首先执行。如果与系统的脚本名同名，也是首先执行。
+	其他：
+		<LocalLeader>	local for \
+		cpoptions(cpo)	compatible options 
+			:se cpo=aABceFs
+				aA...是一组具有特殊意义兼容性标志。
+				比如a，代表当:read 时，将文件名以当前窗口的文件名为文件名。
+				参见:h cpoptions
+		
+第二十三章 语法高亮
+	语法高亮的脚本位于$VIMRUMTIME/syntax目录下。对应每种文件类型有一种高亮文件
+	用户也可以创建一个自己的高亮脚本，并放在~/.vim/syntax目录下。
+	建立语法文件：
+		:syntax(syn) keyword {group} keyword ...
+			用关键字匹配
+			举例：
+			将goto break等控制语句放一组cStatement中
+			:syn keyword xStatement goto break return continue asm 
+		:syn match {group} regular
+			用正则表达式匹配
+			:syn match xIndentifier /\<l\>/
+		:syn region {group} start=/.../ end=/.../
+			区域匹配
+			:syn region xString start=/"/ end=/"/
+		:syntax keyword {group} keyword contained 
+			嵌套匹配
+			:syn keyword xTodo TODO contained
+			:syn region xComment start=/\/\*/ end=/\*\// contains=xTodo 
+			前者定义一个todo的匹配，后者定义一个/*...*/的匹配 
+			这样对于/*This is TODO*/的注释，对于TODO将以另外的形式显示。
+			嵌套匹配的一种形式是递归匹配
 			比如：
-			*test.txt* 用helptags生成索引的时候会用到
+				:syn region xBlock start=/{/ end=/}/ contains xBlock
+			contains 可以有多个限制
+				ALL	包括所有
+				ALLBUT 所有但排除
+				  :syn region xBlock start=/{/ end=/}/ contains=ALLBUT,xTodo
+				TOP	包括没有contained标志的组
+				contained	只包括有contained标志的组
+		:highlight(hi) link group1 group2
+			将group1连接到group2上高亮
+			举例：
+			:hi link xStatement Statement 
+		:syn sync ...	表示同步。在编辑的时候也匹配
+			...可以象前面的一样定义
+			也有一些参数
+			minline=xx	从前面多少行开始解析
+	包括另外的高亮文件
+		:rutime! other_syntax.vim 
+	可移植的高亮文件
+		文件头
+		" Vim syntax file
+		" Language:	C
+		" Maintainer:	Bram Moolenaar <Bram@vim.org>
+		" Last Change:	2012 Jan 14
+		
+		" Quit when a (custom) syntax file was already loaded
+		if exists("b:current_syntax")
+		  finish
+		endif
+	
+第二十四章 多语言
+	设置语言
+		:language(lang) 查看当前语言
+			选择语言目的是当选择该语言时vim现实的信息都是该语言的。
+			如果返回是C，是默认的英语。
+			lang是一个环境变量。来自于shell中的LANG。
+			系统所支持的语言在/usr/share/local/ 
+			可以选择一个：export LANG=xx 
+			vim所支持的语言在$VIMRUNTIME/lang/ 下面	
+		:se langmenu=xx 设置菜单的语言
+			菜单用的是$VIMRUMTIME/lang/menu_xx.code.vim 
+			如menu_zb_cn.utf-8.vim 
+	设置编码：
+		:set encoding=xx		vim buffer的编码
+		文件编码
+		:set fileencodings=		文件编码集
+		:set fileencoding=xx	文件编码
+	输入：
+		digraph 
+		或输入法
 
-第二十三章 文件类型 
 
-
-
+// vim:tw=72

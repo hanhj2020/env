@@ -7,15 +7,11 @@ endfunc
 "colorscheme torte
 "colorscheme murphy
 "colorscheme desert 
-"colorscheme elflord
+colorscheme elflord
 "colorscheme ron
 "colorscheme blue
-colo evening
-"set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
-"set termencoding=utf-8
-"set encoding=utf-8
-"set fileencodings=ucs-bom,utf-8,cp936
-"set fileencoding=utf-8
+"colorscheme peachpuff
+"colo evening
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 显示相关  
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -38,11 +34,7 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strf
 set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)  
 "set background=dark "背景使用黑色 
 set nocompatible  "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限  
-" 显示中文帮助
-if version >= 603
-	set helplang=cn
-	set encoding=utf-8
-endif
+
 " 设置配色方案
 "colorscheme murphy
 "字体 
@@ -54,10 +46,10 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 func SetTitle_common()
 	call setline(1, "/*")
-	call append(line("."), "File Name: ".expand("%")) 
-	call append(line(".")+1, "Author: hanhj") 
-	call append(line(".")+2, "Mail: hanhj@zx-jy.com ") 
-	call append(line(".")+3, "Created Time: ".strftime("%Y-%m-%d %T week:%w")) 
+	call append(line("."), " * File Name: ".expand("%")) 
+	call append(line(".")+1, " * Author: hanhj") 
+	call append(line(".")+2, " * Mail: hanhj@zx-jy.com ") 
+	call append(line(".")+3, " * Created Time: ".strftime("%Y-%m-%d %T week:%w")) 
 	call append(line(".")+4, "*/") 
 endfunc
 func SetTitle_cpp()
@@ -65,22 +57,33 @@ func SetTitle_cpp()
 	call append(line(".")+5, "#include<iostream>")
 	call append(line(".")+6, "using namespace std;")
 	call append(line(".")+7, "") 
+	call append(line(".")+8, "// vim:tw=72 ")
 	"新建文件后，自动定位到文件末尾
-	autocmd BufNewFile * normal G
+	normal G1kO
 endfunc
 func SetTitle_c()
 	call SetTitle_common()
 	call append(line(".")+5, "#include<stdio.h>")
 	call append(line(".")+6, "")
-	"新建文件后，自动定位到文件末尾
-	autocmd BufNewFile * normal G
+	call append(line(".")+7, "// vim:tw=72 ")
+	normal G1kO
+endfunc
+func SetTail()
+	call append(winline(), "// vim:tw=72 ")
+endfunc
+func SetTitle_h()
+	call SetTitle_common()
+	call append(line(".")+5, "#ifndef __".expand("%:r")."_".expand("%:e"))
+	call append(line(".")+6, "#define __".expand("%:r")."_".expand("%:e"))
+	call append(line(".")+7, "#endif //__".expand("%:r")."_".expand("%:e"))
+	call append(line(".")+8, "// vim:tw=72 ")
+	normal G1kO 
 endfunc
 func SetTitle_java()
 	call SetTitle_common()
 	call append(line(".")+5,"public class ".expand("%"))
 	call append(line(".")+6,"")
-	"新建文件后，自动定位到文件末尾
-	autocmd BufNewFile * normal G
+	normal GO
 endfunc
 func SetTitle_sh()
 	call setline(1, "\# File Name: ".expand("%")) 
@@ -88,9 +91,8 @@ func SetTitle_sh()
 	call append(line(".")+1, "\# mail: hanhj@zx-jy.com") 
 	call append(line(".")+2, "\# Created Time: ".strftime("%Y-%m-%d %T week:%w")) 
 	call append(line(".")+3, "\#!/bin/bash") 
-	call append(line(".")+4, "") 
-	"新建文件后，自动定位到文件末尾
-	autocmd BufNewFile * normal G
+	call append(line(".")+4, "\# vim:tw=72 ")
+	normal GO
 endfunc
 func SetTitle_tex()
 	call setline(1,"%File Name:".expand("%"))
@@ -104,12 +106,11 @@ func SetTitle_tex()
 	call append(line(".")+7, "\\begin{CJK}{UTF8}{gbsn}") 
 	call append(line(".")+8, "\\end{CJK}")
 	call append(line(".")+9, "\\end{document}")
-	autocmd BufNewFile * normal G1kO
+	normal G1kO
 endfunc
 "新建.c,.h,.sh,.java文件，自动插入文件头 
 autocmd BufNewFile *  exec ":call SetTitle()" 
 autocmd BufNewFile *.py 0r ~/.vim/template/pyconfig.py 
-"autocmd BufNewFile * normal G
 ""定义函数SetTitle，自动插入文件头 
 func SetTitle() 
 	if &filetype == 'sh' 
@@ -119,7 +120,7 @@ func SetTitle()
 	elseif &filetype == 'c'
 		call SetTitle_c()
 	elseif &filetype == 'h'
-		call SetTitle_common()
+		call SetTitle_h()
 	elseif &filetype == 'java'
 		call SetTitle_java()
 	elseif &filetype == 'plaintex'
@@ -144,13 +145,18 @@ nmap ss :w<cr>
 "nmap qa :qa<cr>
 "nmap <leader>w :w!<cr>
 "nmap <leader>f :find<cr>
+
 " 映射全选+复制 ctrl+a
-map <C-A> ggVGY
-map! <C-A> <Esc>ggVGY
+"nmap <C-A> ggVGY
+"map! <C-A> <Esc>ggVGY
+
 "缩进
-map <F12> gg=G
+nmap <F12> gg=G
+
 " 选中状态下 Ctrl+c 复制
-vmap <C-c> "+y
+"vmap <C-c> "+y
+"直接用y不就行了
+
 "去空行  
 nnoremap <F2> :g/^\s*$/d<CR> 
 "比较文件  
@@ -202,7 +208,7 @@ set clipboard+=unnamed
 "从不备份  
 set nobackup
 "make 运行
-:set makeprg=g++\ -Wall\ \ %
+":set makeprg=g++\ -Wall\ \ %
 "自动保存
 set autowrite
 set ruler                   " 打开状态栏标尺
@@ -213,8 +219,8 @@ set guioptions-=m           " 隐藏菜单栏
 "set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\
 " 设置在状态行显示的信息
 "set foldcolumn=0
-"set foldmethod=indent 
-"set foldlevel=10 
+set foldmethod=indent 
+set foldlevel=20 
 "set foldenable              " 开始折叠
 " 不要使用vi的键盘模式，而是vim自己的
 set nocompatible
@@ -245,19 +251,21 @@ set nobackup
 set noswapfile
 "搜索忽略大小写
 set ignorecase
-"
 "set noignorecase
 "搜索逐字符高亮
 set hlsearch
 set incsearch
 "行内替换
 set gdefault
-"编码设置
-set enc=utf-8
-set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 "语言设置
 set langmenu=zh_CN.UTF-8
-set helplang=cn
+"set helplang=cn "没用
+"编码设置
+set termencoding=utf-8
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp936
+set fileencoding=utf-8
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 " 我的状态行显示的内容（包括文件类型和解码）
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
 "set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
@@ -299,8 +307,10 @@ set matchtime=1
 set scrolloff=3
 " 为C程序提供自动缩进
 set smartindent
+"装入man，可以在vim中使用man
+source $VIMRUNTIME/ftplugin/man.vim	
 " 高亮显示普通txt文件（需要txt.vim脚本）
-au BufRead,BufNewFile *  setfiletype txt
+"au BufRead,BufNewFile *  setf txt
 "inoremap 在插入模式下非递归映射。i:insert, nore:no recuision
 "c-xx	代表ctrl
 "s-xx	代表shift
@@ -309,18 +319,17 @@ au BufRead,BufNewFile *  setfiletype txt
 "自动补全
 :inoremap ( ()<ESC>i
 :inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap } <c-r>=ClosePair('}')<CR>
 autocmd  FileType c,cpp inoremap { {<CR>}<ESC>O
-":inoremap } <c-r>=ClosePair('}')<CR>
 :inoremap [ []<ESC>i
 :inoremap ] <c-r>=ClosePair(']')<CR>
 :inoremap " ""<ESC>i
 :inoremap ' ''<ESC>i
-"定义在插入模式下的光标移动,c-h好像不能改，只能是bs键
-inoremap <c-g> <left>
+"定义在插入模式下的光标移动
+inoremap <c-h> <left>
 inoremap <c-l> <right>
 inoremap <c-j> <down>
 inoremap <c-k> <up>
-inoremap <c-x> <del>
 function! ClosePair(char)
 	if getline('.')[col('.') - 1] == a:char
 		return "\<Right>"
@@ -330,7 +339,7 @@ function! ClosePair(char)
 endfunction
 filetype plugin indent on 
 "打开文件类型检测, 加了这句才可以用智能补全
-"set completeopt=longest,menu
+set completeopt=longest,menu
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "cscope 设定
 cs add cscope.out
@@ -347,8 +356,8 @@ nmap <C-\>c :cs f c <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>t :cs f t <C-R>=expand("<cword>")<CR><CR>
 "taglist设定
 "不同时显示多个文件tag，只显示当前文件的tag"
-""let Tlist_Show_One_File=1
-""let Tlist_OnlyWindow=1
+let Tlist_Show_One_File=1
+let Tlist_OnlyWindow=1
 "让当前不被编辑的文件的方法列表自动折叠起来
 let Tlist_File_Fold_Auto_Close=1
 "把taglist窗口放在屏幕右侧，缺省放在左侧
@@ -358,13 +367,13 @@ let Tlist_Show_Menu=1
 "启动vim时自动打开taglist
 "let Tlist_Auto_Open=1
 "winmanager设定
-"let loaded_winmanager=1
-"let g:winManagerWindowLayout = 'FileExplorer|TagList'
-"let g:winManagerWindowLayout = 'NERDTree|TagList'
-"let g:winManagerWindowLayout = 'NERDTree|TagList,BufExplorer'
+let loaded_winmanager=1
+let g:winManagerWindowLayout = 'FileExplorer|TagList'
+let g:winManagerWindowLayout = 'NERDTree|TagList'
 let g:winManagerWindowLayout = 'NERDTree|TagList,BufExplorer'
-"let g:winManagerWindowLayout = 'NERDTree|Tagbar'
-"let g:AutoOpenWinManager=1
+let g:winManagerWindowLayout = 'NERDTree|TagList,BufExplorer'
+let g:winManagerWindowLayout = 'NERDTree|Tagbar'
+let g:AutoOpenWinManager=1
 nmap wm :WMToggle<CR>
 "tagbar设定
 "use by winmanager
