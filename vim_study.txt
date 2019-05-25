@@ -67,10 +67,11 @@
 		:marks	显示标记
 	4) 搜索字符串
 		/str 搜索str，如果找到，会将str反显。此时按n将跳转到下一个，shift-n跳转的前一个。
-		/str实际上是字符串匹配，可以用正则表达式中的符号。比如精确匹配单词the，而不是somethere。可以用/\<the\>,这里\是转义符，><表示定位在结束还是开头。关于正则表达式可以参见《linux_env_study.txt》和《linux_env.txt》中的相关内容。
+			/str实际上是字符串匹配，可以用正则表达式中的符号。
 		:set ignorecase		(ic)	搜索时忽略大小写，这是默认的。
 		:set noignorecase	(noic)	不忽略大小写，即大小写敏感。
-		如果不想输入太多的字符，可以将光标定位到某个单词，然后输入*，此时vim会自动提取光标所在处的单词向后进行搜索。输入#，将向前跳转。
+		如果不想输入太多的字符，可以将光标定位到某个单词，然后输入*，
+		此时vim会自动提取光标所在处的单词向后进行搜索。输入#，将向前跳转。
 		:set incsearch		(is)	可以在输入查找字符串的时候就开始匹配。
 		:set noincsearch	(nois)	可以取消上面设置。
 		:set wrapscan		(ws)	搜索时回转
@@ -94,6 +95,7 @@
 			dj	删除下一行
 			d4j	删除下面4行
 			dk	删除上一行
+			关于motion的详细解释见附录。
 
 		dfx	删除从当前光标到所找到的第一个字符x之间的字符，包括x。比如dfa，表示删除从当前光标到第一个字母a之间的内容。
 			dFx：向前删除
@@ -161,8 +163,8 @@
 	2) 添加一个plugin。
 		vim支持插件，以增强vim的功能。（用:scriptnames(scr)可以显示当前装入的脚本文件) 
 		vim的安装目录一般在 /usr/share/vim/vimxx(xx是当前vim的版本号)。在vim中vim的安装位置保存在$VIMRUNTIME变量中。在此目录下面有:
-		macros:		定义了全局配置；
-		/ftplugin	定义不同文件类型的插件。
+		/macros		:定义了全局配置；
+		/ftplugin	:定义不同文件类型的插件。
 		将macros或ftplugin目录下需要的文件，拷贝到~/.vim/plugin目录下。就可以支持这些插件了。插件的文件名后缀一般是vim
 		将上述目录中的相关插件的txt文件拷贝到~/.vim/doc目录下，然后再vim中执行:helptags ~/.vim/doc就可以在帮助文件里支持这些插件了。
 	3) 关于颜色
@@ -185,7 +187,8 @@
 		ctrl-^	在当前文件与执行了切换动作的两个文件之间来回切换。
 	3) 保存文件：
 		:w	:保存当前缓冲区到进入时打开的文件。
-		:w filename ：保存当前缓冲区到文件filename中。缓冲区没变，即当前缓冲区针对的还是原来打开的文件，如果修改了没有保存，缓冲区的标志仍然是没有保存。此时在vim状态栏中所指示的文件名依然是原来的文件。
+		:w filename ：保存当前缓冲区到文件filename中。缓冲区没变，即当前缓冲区针对的还是原来打开的文件，
+		如果修改了没有保存，缓冲区的标志仍然是没有保存。此时在vim状态栏中所指示的文件名依然是原来的文件。
 		:saveas (sav) filename:文件改名并保存。将当前缓冲区名改为filename，并保存。
 		% 代表当前编辑的文件。
 	4) 移动到窗口：
@@ -212,7 +215,9 @@
 
 第六章 分隔窗口
 	1) 基本命令
-		:split(sp)[file]	水平建立一个窗口。如果不带file，则将当前文件分隔成水平两个部分。如果带file，则在新窗口打开文件file
+		:split(sp)[file]	水平建立一个窗口。
+		如果不带file，则将当前文件分隔成水平两个部分。
+		如果带file，则在新窗口打开文件file
 		:vsplit(vsp)[file] 垂直分隔
 		:new[file]	水平开一个新窗口，并建立一个新文件缓冲区。
 		:vnew[file]	垂直开一个新窗口，并建立一个新文件缓冲区。
@@ -229,7 +234,8 @@
 		"xp	:显示宏。在任意空白行，在normal状态下输入"xp，x是宏名。
 			命令的解释："表示对寄存器操作，x是要操作的宏，p是paste。
 			实际上宏命令与d，y操作一样，也是将内容保存到一个寄存器中。
-			这里有必要再对我们熟悉的d，y操作进一步学习。实际上d，y操作的前面除了可以加上数字以表示重复外，还有一个["x]选项，意思是将d或y的内容保存到某个有名字的寄存器中。
+			这里有必要再对我们熟悉的d，y操作进一步学习。
+			实际上d，y操作的前面除了可以加上数字以表示重复外，还有一个["x]选项，意思是将d或y的内容保存到某个有名字的寄存器中。
 			所以，完整的d或y操作命令应当是:["x]y{motion},表示根据motion将内容复制到寄存器x中。比如：
 			"ayy	表示复制当前行内容到a寄存器中。只不过平时为了方便，我们不加上前面的寄存器选项，此时vim将内容保存到默认的寄存器中。
 		"xy$:修改宏。如果所记录的宏不正确，又不想重新输一遍，则可以在上面所显示的宏中进行修改，然后退出到noraml状态下，用此命令进行保存。
@@ -352,10 +358,12 @@
 		vim的历史命令有四个记录：
 			冒号命令记录，/,?的搜索记录
 		冒号命令记录：
-			如果记得命令的开头几个字母，在:后输入字符，然后用上下键进行查找。ctrl-p同上键，ctrl-n同下键。prev，next。ctrl-u取消，此时可以重新输入命令。
+			如果记得命令的开头几个字母，在:后输入字符，然后用上下键进行查找。
+			ctrl-p同上键，ctrl-n同下键。prev，next。ctrl-u取消，此时可以重新输入命令。
 		:his /	查看用/进行查找的记录。注意不是在his中进行查找
 		:his ?	查看用?进行查找的记录
-		q:		打开冒号命令记录。此时光标在命令记录窗口中，处于normal状态，此时可以通过光标移动，可以通过/来查找命令。按i，进入编辑状态，编辑好了按回车就可以执行该命令。
+		q:		打开冒号命令记录。此时光标在命令记录窗口中，处于normal状态.
+				此时可以通过光标移动，可以通过/来查找命令。按i，进入编辑状态，编辑好了按回车就可以执行该命令。
 
 第十一章 进退之间
 	记住编辑信息
@@ -383,7 +391,9 @@
 		如果有不同类型的窗口可用：mkview number,然后用：lo number来恢复。
 		或者用:mkview file ;:source file来恢复 
 	模式行：
-		对于某些文件，需要一些特别设置，而又不希望是全局的设置（直白的说就是希望改变.vimrc文件中的设置），这些设置不需要每次手动改变。vim提供的方法是在该文件中放入这些配置。语法是：any text vim:{option}={value}...
+		对于某些文件，需要一些特别设置，而又不希望是全局的设置（直白的说就是希望改变.vimrc文件中的设置），这些设置不需要每次手动改变。
+		vim提供的方法是在该文件中放入这些配置。
+		语法是：any text vim:{option}={value}...
 		any text的意思是任意文本
 		比如 // vim: tw=72 
 		在vim之前必须有一个空格，vim识别vim:关键字
@@ -490,7 +500,8 @@
 		:imap <C-j> <down>
 		:imap <C-k> <up>
 	自动补齐
-		在输入文本的时候，可以通过ctrl-p来补齐后面的内容。如果候补的内容不止一个，则会在一个列表中，此时可以用ctrl-p前翻，ctrl-n后翻。ctrl-u放弃。补齐部分的内容来自：
+		在输入文本的时候，可以通过ctrl-p来补齐后面的内容。如果候补的内容不止一个，则会在一个列表中，
+		此时可以用ctrl-p前翻，ctrl-n后翻。ctrl-u放弃。补齐部分的内容来自：
 			当前行
 			当前文件其他行
 			其他窗口
@@ -526,7 +537,9 @@
 		:abbrevia(ab)			列出缩写
 		:unabbrevia(unab)	xx	删除缩写
 	键入特殊字符：(编辑模式)
-		如果在输入过程中输入一个特殊字符，而不想让vim解释成特殊意义，可以用ctrl-v。比如在文本中输入中按下ESC键，此时你的意思是要在文本中输入ESC这个键，而不是退出编辑模式，此时就可以先按ctrl-v键，然后再按esc键。
+		如果在输入过程中输入一个特殊字符，而不想让vim解释成特殊意义，可以用ctrl-v。
+		比如在文本中输入中按下ESC键，此时你的意思是要在文本中输入ESC这个键，而不是退出编辑模式，
+		此时就可以先按ctrl-v键，然后再按esc键。
 		 -这个就是输入结果。
 		ctrl-v 后面可以跟
 			十进制数字	比如13	代表CR
@@ -643,7 +656,8 @@
 		/pattern/ex		:光标位于匹配单词尾,x表示偏移的数量，+n，-n
 		/pattern/bx		:光标位于匹配单词首,x表示偏移的数量，+n，-n
 	懒惰模式
-		正则表达式一般尽可能多的匹配字符，比如/tex.*t/	可以匹配text,texxt,tex3t等。而如果用/tex.\{-}t/,则只能匹配text，tet，tebt，不超过4个字母。
+		正则表达式一般尽可能多的匹配字符，比如/tex.*t/可以匹配text,texxt,tex3t等，
+		而如果用/tex.\{-}t/,则只能匹配text，tet，tebt，不超过4个字母。
 	匹配空格或断行
 		/\n/	断行
 		/_s/	空格或断行
@@ -669,17 +683,26 @@
 		zo	：z open 折行打开，在折行的地方按空格也可以打开折行。
 		zr	:减少折叠层次，折叠打开。与zo所不同的是对全文有效，而zo仅仅是对光标所在的折叠处有效。
 		zm	:增加折叠层次，折叠起来。是zr的反命令，与zc不同的地方与zr命令一样。
-		zR	：全文展开。与zr命令所不同的是，zr每次仅减少一层的折叠层次，如果有比此层更深的层次则不展开，而zR为尽可能的展开更多的层次，即将所有折叠的地方都展开。
-		zM	：全文折叠。与zm命令所不同的是，zm每次仅增加一层的折叠层次，此层的上一层并不折叠，而zM则尽可能的折叠更多的层次，即将所有能够折叠的地方都折叠起来，这时可以比较清楚的看到文档的大纲。
+		zR	：全文展开。
+			与zr命令所不同的是，zr每次仅减少一层的折叠层次，如果有比此层更深的层次则不展开，
+			而zR为尽可能的展开更多的层次，即将所有折叠的地方都展开。
+		zM	：全文折叠。
+			与zm命令所不同的是，zm每次仅增加一层的折叠层次，此层的上一层并不折叠，
+			而zM则尽可能的折叠更多的层次，即将所有能够折叠的地方都折叠起来，这时可以比较清楚的看到文档的大纲。
 		相关命令：
 		:set foldmethod[=xx]	设置折叠方法，xx可以是manual，indent，marker，expr。
 			manual是手动设置折行标记，用zf命令，在其他方式下zf命令无效。
 			indent是根据缩进设置折行标记。自动进行。
-			marker是根据文本中的{{{[x]来设置折行标记，x是表示折行深度的数字（1,2,3..).如果不带数字在折行结束的地方需要写上}}}，如果带数字则vim会自动认为前面的折行结束。这种方法的缺点是在文本中需要手动加上折行标记。
+			marker是根据文本中的{{{[x]来设置折行标记，x是表示折行深度的数字（1,2,3..)。
+				如果不带数字在折行结束的地方需要写上}}}，如果带数字则vim会自动认为前面的折行结束。
+				这种方法的缺点是在文本中需要手动加上折行标记。
 			expr是通过编辑的一个表达式来计算折行标记。用:set foldexpr=xxx来设置。比较麻烦，就不写了。
 			比较常用的是manual和indent方式。
 		:set foldlevel	设置折叠深度。
-		set foldlevel=0表示尽可能折叠。zr，zm,zR,zM命令实际上是改变foldlevel数字来实现的。数字越大，表示需要折叠层次越高，即只有达到这个层次的地方才折叠，也就是展开。数字越小，表示需要折叠的层次越低，即只要达到这个层次的地方就折叠，也就是折叠。所以zR命令会在全文查找折叠层次，取最大值作为foldlevel。zM命令将foldlevel设置成0。
+			set foldlevel=0表示尽可能折叠。zr，zm,zR,zM命令实际上是改变foldlevel数字来实现的。
+			数字越大，表示需要折叠层次越高，即只有达到这个层次的地方才折叠，也就是展开。
+			数字越小，表示需要折叠的层次越低，即只要达到这个层次的地方就折叠，也就是折叠。
+			所以zR命令会在全文查找折叠层次，取最大值作为foldlevel。zM命令将foldlevel设置成0。
 	2) 自动折行
 		:se foldmethod=indent 或marker，expr 
 		:se foldlevel=0.可以根据情况来设置。如果在编辑的时候折行乱了，可以用此命令，重新折行。
@@ -693,7 +716,8 @@
 第十九章 之于程序
 	tag
 		利用tag可以对文本做标记，这样就可以快速到找到想要的地方。mark也相当于是tag，但是需要手动标记。
-		ctags是一个生成标记的程序，在shell中执行ctags -R，-R表示递归。默认是为当前目录下所有文件生成名为tags的tag文件。-f 可以指定输出文件名。
+		ctags是一个生成标记的程序，在shell中执行ctags -R，-R表示递归。
+		默认是为当前目录下所有文件生成名为tags的tag文件。-f 可以指定输出文件名。
 		然后在vim中执行
 		:se tag+=tags
 		:tag(ta) xx	:查找名为xx的tag，如果找到将直接跳到该tag处。命令方式
@@ -743,9 +767,6 @@
 		需要：
 		:filetype		检查当前文件检测相关的设置
 		一般有:filetype detection:on indent:on plugin:on 
-	fdsafdplugin
-	ma
-
 		:filetype on	打开文件类型检测
 		:filetype indent on	根据文件类型选择缩进方式
 		:se filetype	:检查当前文件类型
@@ -794,33 +815,38 @@
 			:abb ii /*<cr>author:xxx<cr>*/
 
 第二十一章 定义新命令
+	除了vim自带的功能外，用户可以定义自己的命令，以方便自己使用（定制化）。这些命令包括：键映射，冒号命令，自动命令。
 	键映射
+		键映射可以新建或改变快捷键，以加速动作。
 		定义map
-			:map key command
-				map可以有多种模式
-				关键字	模式
-				map		normal visual operator-pending
-				nmap	normal
-				imap	insert
-				vmap	visual
-				cmap	command
-				omap	operate pending
-				map!	insert and command
+			:map mapto command
+				map 是建立键映射的命令
+				mapto 是将要新建的映射动作的名字
+				command 是该映射所要执行的动作。
+			map可以有多种模式
+				映射命令	模式
+				map			normal visual operator-pending
+				nmap		normal
+				imap		insert
+				vmap		visual
+				cmap		command
+				omap		operate pending
+				map!		insert and command
 				operate pending是等待动作的模式比如按下d后，vim等待继续的motion操作。
 				举例：比如要定义F7来删除后面一段文本
 				omap <F7> a{
-					a{	就是一个motion a代表1个，{代表向后匹配段
+					a{	就是一个motion。 a代表1个，{代表向后匹配段
 					这样当键入d<F7>就可以删除后面一段内容。
 				关于motion可以参见:h motion.txt
-				为了防止在映射中再次映射，可以定义noremap
-				关键字		模式
-				noremap		normal,visual,operate pending
-				nnoremap	normal
-				inoremap	insert
-				vnoremap	visual
-				cnoremap	command
-				onoremap	operator pending
-				noremap!	insert and command
+			为了防止在映射中再次映射，可以定义noremap
+				映射命令		模式
+				noremap			normal,visual,operate pending
+				nnoremap		normal
+				inoremap		insert
+				vnoremap		visual
+				cnoremap		command
+				onoremap		operator pending
+				noremap!		insert and command
 		显示map
 			:map 
 			:nmap
@@ -838,28 +864,31 @@
 			|	表示执行多个命令	如：map <F2> write <Bar> | ls
 				如果命令中出现|,则用<bar>代替命令中的|
 			<space>	空格
-		特别的，在事件前加上：
+		特别的，在mapto前加上：
 			<buffer>	表示针对当前缓冲区
 			<unique>	表示唯一
 			<script>	表示针对该脚本
 			<nop>		表示该映射不做任何事，nop后面必须没有空格
 	自定义冒号命令：
+		自定义冒号命令是建立新的命令模式下的新命令。目的是简化手动敲许多命令以完成某项功能。
 		建立命令：
-			:command def command
-				用户可以自定义命令，注意def的名字第一个字母需要大写
+			:command newcommand command
+				用户可以自定义命令，注意newcomman的名字第一个字母需要大写
 				command就是用户在命令模式下所能输入的命令。
-				其实就是将繁琐的命令输入，简化了。比如：
-				:command Da :echo "hello"
-				:Da		执行
-				:hello	结果
-			:command -nargs=xx command	设置参数数量
-				xx		代表参数数量
-				?		0,1
-				*		>=0
-				+		>=1
-				举例：
-					:command -nargs=+ Say :echo "<args>"
-					echo 在当前命令行窗口显示
+				其实就是将繁琐的命令输入，简化了。
+				比如：
+					:command Da :echo "hello"
+					:Da		执行
+					:hello	结果
+			设置参数数量
+				:command -nargs=xx command	
+					xx		代表参数数量
+					?		0,1
+					*		>=0
+					+		>=1
+					举例：
+						:command -nargs=+ Say :echo "<args>"
+						echo 在当前命令行窗口显示
 			使用参数
 				<args>		定义的时候要加" ",否则出错
 					:command -nargs=+ Say :echo "<args>"
@@ -873,6 +902,8 @@
 					:Say a b c
 					等同于：
 					:call Afun("a","b","c")
+			其他选项
+				-buffer	只对当前缓冲区有效
 		查看命令：
 			:command	列出当前用户自定义命令
 		重定义命令：
@@ -880,6 +911,7 @@
 		删除命令:
 			:delcommand xx
 	自动命令：
+		自动命令是在某种事件触发时所要自动执行的命令，可以完成某些自动化功能。
 		建立命令
 			:autocmd [group] events	{pattern_files} [nested] command
 				group	用来分组
@@ -904,10 +936,10 @@
 					:h autocmd 
 				gourp的用法：
 					定义命令的时候可以：
-						:au xxgroup
-						:au events pattern_files command
+						:au xxgroup		：xxgroup是组名，表示定义该组命令的开始
+						:au events pattern_files command	：定义该组的自动命令
 						...
-						:augroup end 
+						:augroup end ：结束该组命令定义
 					it same as
 						:au xxgroup events pattern_files command 
 						:...
@@ -923,6 +955,8 @@
 			:autocmd! events * ,这将删除该事件的所有动作
 
 第二十二章 vim脚本
+	前面自定义键，命令是应用于比较简单功能的场合。对于比较复杂的功能就需要将多条语句进行组合，这就是脚本的应用场合。
+	脚本中的元素包括：变量，数组（链表，字典），表达式，程序控制语句，函数。
 	变量
 		定义变量：
 			变量名符合大多数变量名定义规则，变量名开头不能是数字，内部不能包括+。
@@ -946,7 +980,7 @@
 				let var='...'	不扩展
 				var1 . var2 字符串连接
 				举例：let a="\naaa",echo a，会打印换行，而let a='\naaa'则不会换行，直接打印\naaa
-			数组：
+			列表：list
 				定义
 					:let var=[...]	,数组下标从0开始
 					:let var=[...]+[...]
@@ -957,8 +991,13 @@
 					比如：
 					let a=var[index]
 					let a=var[from:to]
-
-
+			字典：dictionary
+				定义 
+					:let var={}
+					:let var[expr1]=expr2 
+						let var["hello"]="world"
+				引用：
+					echo var["hello"]
 		变量引用：
 			在vim中定义的用户变量直接引用
 				举例：
@@ -968,7 +1007,8 @@
 				$var	shell环境变量 如$VIMRUNTIME
 				&var	选项 如&tw
 				@r		寄存器 如@1
-				
+		变量删除
+			unlet xx 
 	表达式
 		运算符:
 			+,-,*,/,%,(,),{,},=,a?b:c
@@ -1012,7 +1052,7 @@
 		endtry
 	函数
 		函数定义
-			function [def]name(argument)[range]
+			function [def] name (argument) [range]
 			函数名第一个字母需要大写
 				def	表示函数范围
 					s，g，v，w
@@ -1028,6 +1068,13 @@
 								return a:num2
 							endif
 						endfunction
+					未知个数的参数
+						function fun(arg1,...)
+							a:0	表示参数个数
+							a:1	第一个参数
+							...
+						endfunction
+
 				range	表示使用行号范围
 					vim的命令前面一般可以加范围，函数可以使用这个范围
 					用a:firstline,a:lastline来引用变量
@@ -1061,6 +1108,23 @@
 			vim内置函数
 				:h function-list
 				ctrl-]	跳转到定义
+				map		：map(expr1,expr2)
+					expr1是list或dict
+					expr2是针对expr1中的每个元素的操作
+						v:key is key 
+						v:val is value
+						if expr1 is list key is index from 0
+						if expr1 is dic  key is key 
+					结果是将expr1中的值替换成expr2中的计算结果。
+					example:		
+						:let a={"a":"zzaa","b":"zzbb"}
+						:let geta=map(copy(a),'v:key . " is " . v:val')
+						:echo geta
+						result is 
+						:{'a':'a is zzaa','b':'b is zzbb'}
+						expr1中用copy是防止修改原字串。
+						expr2中用''表示不展开，.表示连接字串。
+
 		执行函数：
 			:call fun 
 		显示函数
@@ -1069,12 +1133,14 @@
 		删除函数：
 			:delfunction(delfun) fun 
 	用户plugin:
-		用户plugin是用户编写的实现某种功能的脚本，一种是全局的，一种是与文件类型相关的。
+		通过以上元素的组合就构成了能完成某些功能的脚本，这些脚本作为插件（plugin）被vim启动时自动装入。
+		用户plugin有两种，一种是全局的，一种是与文件类型相关的。
 		全局的放在$VIMRUNTIME/plugin目录下。
 		文件类型相关的放在$VIMRUNTIME/ftplugin目录下。(ft->filetype)
-		VIMRUNTIME代表vim的运行路径。系统的一般在/usr/share/vim/vimxx，xx是vim的版本号。
-		用户的一般在~/.vim 
-		比如上面写的关于统计单词数的脚本就可以保存到全局目录下。
+		$VIMRUNTIME代表vim的运行路径。
+			系统的一般是/usr/share/vim/vimxx，xx是vim的版本号。
+			用户的一般是~/.vim 
+		比如上面写的关于统计单词数的脚本就可以保存到~/.vim/plugin目录下。
 		vim启动时会自动加载该文件。
 		全局plugin
 			新建全局plugin
@@ -1086,7 +1152,10 @@
 				let loaded_a=1
 				相当于c语言中的头文件使用方法。
 				<SID>
-					SID用于map。将s标示的函数唯一编号，这样就与别人同名的函数不冲突。
+					SID用于将函数唯一编号，这样就与别人同名的函数不冲突。
+					functon <SID>Myfun()
+						Statement
+					endfunction
 					nmap <leader>s :call <SID>MyFun()
 			帮助文件
 					在首行用*...*包住
@@ -1101,7 +1170,8 @@
 					例如：
 						:au BufNewFile,BufReadPost *.h  setf h
 						将该句放在$VIMRUNTIME/filetype.vim中
-						其实系统的filetype.vim文件中有许多预定义的文件类型，一般不需要修改。但是我发现对于h文件并没有好的设置，所以我在~/.vim/目录下建立一个filetype.vim
+						其实系统的filetype.vim文件中有许多预定义的文件类型，一般不需要修改。
+						但是我发现对于h文件并没有好的设置，所以我在~/.vim/目录下建立一个filetype.vim
 						if did_filetype()
 							finish
 						endif
@@ -1109,6 +1179,7 @@
 						au BufNewFile,BufRead *.h setf h
 						augroup end 
 						"did_filetype"代表是否允许filetype检测，通过:filetype on来设置。
+					需要指出的是文件类型也可以不对应后缀名。比如.m文件在vim中的文件类型就是matlab。		
 
 				根据文件内容设置
 					一些脚本一般在文件开头有一些信息，可以用来确定文件类型。比如：
@@ -1123,8 +1194,8 @@
 						endif
 				在设置了一个文件类型后，如果后面脚本继续设定将被忽略。		
 			新建fileplugin：
-				文件plugin放在$VIMRUNTIME/ftplugin 目录下。名字以新建文件类型命名。比如建立一个h类型文件，命名为h.vim。这里放针对h类型文件的动作。
-
+				文件plugin放在$VIMRUNTIME/ftplugin 目录下。名字以新建文件类型命名。
+				比如建立一个h类型文件，命名为h.vim。这里放针对h类型文件的动作。
 	vim脚本的执行顺序：
 		通过:se runtimepath可以看到vim脚本的搜索路径：
 		runtimepath=~/.vim,/var/lib/vim/addons,/usr/share/vim/vimfiles,/usr/vim/vimxx,usr/share/vim/vimfiles/after,/var/lib/vim/addons/after,~/.vim/after
@@ -1217,6 +1288,793 @@
 	输入：
 		digraph 
 		或输入法
+======================================================================
+附录1：关于motion 
+	motion是移动命令，比如hljk。但是vim中的motion比这丰富的多。
+	see also by	:h motion.txt 
+	将motion命令与编辑命令结合，可以加快编辑的速度。
+	可以与motion结合的编辑命令：
+		c	change
+		d	delete
+		y	yank into register (does not change the text)
+		~	swap case (only if 'tildeop' is set)
+		g~	swap case
+		gu	make lowercase
+		gU	make uppercase
+		!	filter through an external program
+		=	filter through 'equalprg' or C-indenting if empty
+		gq	text formatting
+		g?	ROT13 encoding
+		>	shift right
+		<	shift left
+		zf	define a fold
+		g@	call function set with the 'operatorfunc' option
+		比如d4j，删除向下四行
+	motion
+		direction
+			left right
+				h		[count] characters to the left
+				l		[count] characters to the left
+				0		To the first character of the line. 
+				^		To the first non-blank character of the line.
+				$  		To the end of the line.
+				g_		To the last non-blank character of the line and
+				g0 		When lines wrap ('wrap' on): To the first character of the	screen line.
+				g^		When lines wrap ('wrap' on): To the first non-blank	character of the screen line.
+				g$		When lines wrap ('wrap' on): To the last character of the screen line and [count - 1] screen lines downward
+				|		To screen column [count] in the current line.
+				f{char}	To [count]'th occurrence of {char} to the right.  
+				F{char}	To the [count]'th occurrence of {char} to the left.
+				t{char}	Till before [count]'th occurrence of {char} to the right. 
+				T{char}	Till after [count]'th occurrence of {char} to the left.
+				;		Repeat latest f, t, F or T [count] times. 
+				,		Repeat latest f, t, F or T in opposite direction[count] times.
+			up down 
+				k			[count] lines upward.  
+				j			[count] lines downward.  
+				gk			[count] display lines upward.  
+				gj			[count] display lines downward.  
+				-			[count] lines upward
+				+			[count] lines downward
+				_  			[count] - 1 lines downward
+				G			Goto line [count], default last line
+				gg			Goto line [count]
+				:[range]	Set the cursor on the last line number in [range].
+				{count}%	Go to {count} percentage in the file
+				[count]go	Go to [count] byte in the buffer.
+				:[range]go[to] [count] like go 
 
+			count是移动命令前的数字，表示重复次数，以下同。
+			比如4j，表示向下4行。
+		Word motions
+			w	[count] words forward.  |exclusive| motion.
+			W	[count] WORDS forward.  |exclusive| motion.
+			e	Forward to the end of word [count] |inclusive|.
+			E	Forward to the end of WORD [count] |inclusive|.
+			b	[count] words backward.  |exclusive| motion.
+			B	[count] WORDS backward.  |exclusive| motion.
+			ge	Backward to the end of word [count] |inclusive|.
+			gE	Backward to the end of WORD [count] |inclusive|.
+		Text object motions
+			(	[count] sentences backward.  |exclusive| motion.
+			)	[count] sentences forward.  |exclusive| motion.
+			{	[count] paragraphs backward.  |exclusive| motion.
+			}	[count] paragraphs forward.  |exclusive| motion.
+			]]	[count] sections forward or to the next '{' in the
+				first column.  When used after an operator, then also
+				stops below a '}' in the first column.  |exclusive|
+				Note that |exclusive-linewise| often applies.
+			][	[count] sections forward or to the next '}' in the
+				first column.  |exclusive|
+				Note that |exclusive-linewise| often applies.
+			[[	[count] sections backward or to the previous '{' in
+				the first column.  |exclusive|
+				Note that |exclusive-linewise| often applies.
+			[]	[count] sections backward or to the previous '}' in
+				the first column.  |exclusive|
+				Note that |exclusive-linewise| often applies.
+		 Text object selection
+			This is a series of commands that can only be used while in
+			Visual mode or after an operator.  The commands that start
+			with "a" select "a"n object including white space, the
+			commands starting with "i" select an "inner" object without
+			white space, or just the white space.  Thus the "inner"
+			commands always select less text than the "a" commands.
+
+			aw		"a word", select [count] words (see |word|).
+					Leading or trailing white space is included, but not
+					counted.
+					When used in Visual linewise mode "aw" switches to
+					Visual characterwise mode.
+			iw		"inner word", select [count] words (see |word|).
+					White space between words is counted too.
+					When used in Visual linewise mode "iw" switches to
+					Visual characterwise mode.
+			aW		"a WORD", select [count] WORDs (see |WORD|).
+					Leading or trailing white space is included, but not
+					counted.
+					When used in Visual linewise mode "aW" switches to
+					Visual characterwise mode.
+			iW		"inner WORD", select [count] WORDs (see |WORD|).
+					White space between words is counted too.
+					When used in Visual linewise mode "iW" switches to
+					Visual characterwise mode.
+			as		"a sentence", select [count] sentences (see
+					|sentence|).
+					When used in Visual mode it is made characterwise.
+			is		"inner sentence", select [count] sentences (see
+					|sentence|).
+					When used in Visual mode it is made characterwise.
+			ap		"a paragraph", select [count] paragraphs (see
+					|paragraph|).
+					Exception: a blank line (only containing white space)
+					is also a paragraph boundary.
+					When used in Visual mode it is made linewise.
+			ip		"inner paragraph", select [count] paragraphs (see
+					|paragraph|).
+					Exception: a blank line (only containing white space)
+					is also a paragraph boundary.
+					When used in Visual mode it is made linewise.
+			a]					*v_a]* *v_a[* *a]* *a[*
+			a[		"a [] block", select [count] '[' ']' blocks.  This
+					goes backwards to the [count] unclosed '[', and finds
+					the matching ']'.  The enclosed text is selected,
+					including the '[' and ']'.
+					When used in Visual mode it is made characterwise.
+			i[		"inner [] block", select [count] '[' ']' blocks.  This
+					goes backwards to the [count] unclosed '[', and finds
+					the matching ']'.  The enclosed text is selected,
+					excluding the '[' and ']'.
+					When used in Visual mode it is made characterwise.
+			a)
+			a(
+			ab		"a block", select [count] blocks, from "[count] [(" to
+					the matching ')', including the '(' and ')' (see
+					|[(|).  Does not include white space outside of the
+					parenthesis.
+					When used in Visual mode it is made characterwise.
+			i)
+			i(
+			ib		"inner block", select [count] blocks, from "[count] [("
+					to the matching ')', excluding the '(' and ')' (see
+					|[(|).
+					When used in Visual mode it is made characterwise.
+			a>
+			a<
+					[count]'th unmatched '<' backwards to the matching
+					'>', including the '<' and '>'.
+					When used in Visual mode it is made characterwise.
+
+			i>
+			i<		"inner <> block", select [count] <> blocks, from
+					the [count]'th unmatched '<' backwards to the matching
+					'>', excluding the '<' and '>'.
+					When used in Visual mode it is made characterwise.
+			at		"a tag block", select [count] tag blocks, from the
+					[count]'th unmatched "<aaa>" backwards to the matching
+					"</aaa>", including the "<aaa>" and "</aaa>".
+					See |tag-blocks| about the details.
+					When used in Visual mode it is made characterwise.
+			it		"inner tag block", select [count] tag blocks, from the
+					[count]'th unmatched "<aaa>" backwards to the matching
+					"</aaa>", excluding the "<aaa>" and "</aaa>".
+					See |tag-blocks| about the details.
+					When used in Visual mode it is made characterwise.
+			a}
+			a{
+			aB		"a Block", select [count] Blocks, from "[count] [{" to
+					the matching '}', including the '{' and '}' (see
+					|[{|).
+					When used in Visual mode it is made characterwise.
+			i}
+			i{
+			iB		"inner Block", select [count] Blocks, from "[count] [{"
+					to the matching '}', excluding the '{' and '}' (see
+					|[{|).
+					When used in Visual mode it is made characterwise.
+			a"
+			a'
+			a`
+					"a quoted string".  Selects the text from the previous
+					quote until the next quote.  The 'quoteescape' option
+					is used to skip escaped quotes.
+					Only works within one line.
+					When the cursor starts on a quote, Vim will figure out
+					which quote pairs form a string by searching from the
+					start of the line.
+					Any trailing white space is included, unless there is
+					none, then leading white space is included.
+					When used in Visual mode it is made characterwise.
+					Repeating this object in Visual mode another string is
+					included.  A count is currently not used.
+			i"
+			i'
+			i`
+					Like a", a' and a`, but exclude the quotes and
+					repeating won't extend the Visual selection.
+					Special case: With a count of 2 the quotes are
+					included, but no extra white space as with a"/a'/a`.
+附录2 autocmd的事件
+	see also by :h autocmd 
+
+	Name			triggered by ~
+		Reading
+	*BufNewFile*		starting to edit a file that doesn't exist
+	*BufReadPre*		starting to edit a new buffer, before reading the file
+	*BufRead*			starting to edit a new buffer, after reading the file
+	*BufReadPost*		starting to edit a new buffer, after reading the file
+	*BufReadCmd|		before starting to edit a new buffer |Cmd-event*
+
+	*FileReadPre*		before reading a file with a ":read" command
+	*FileReadPost*		after reading a file with a ":read" command
+	*FileReadCmd|		before reading a file with a ":read" command |Cmd-event*
+
+	*FilterReadPre*		before reading a file from a filter command
+	*FilterReadPost*	after reading a file from a filter command
+
+	*StdinReadPre*		before reading from stdin into the buffer
+	*StdinReadPost*		After reading from the stdin into the buffer
+		Writing
+	*BufWrite*			starting to write the whole buffer to a file
+	*BufWritePre*		starting to write the whole buffer to a file
+	*BufWritePost*		after writing the whole buffer to a file
+	*BufWriteCmd|		before writing the whole buffer to a file |Cmd-event*
+
+	*FileWritePre*		starting to write part of a buffer to a file
+	*FileWritePost*		after writing part of a buffer to a file
+	*FileWriteCmd|		before writing part of a buffer to a file |Cmd-event*
+
+	*FileAppendPre*		starting to append to a file
+	*FileAppendPost*	after appending to a file
+	*FileAppendCmd|		before appending to a file |Cmd-event*
+
+	*FilterWritePre*	starting to write a file for a filter command or diff
+	*FilterWritePost*	after writing a file for a filter command or diff
+
+		Buffers
+	*BufAdd*		just after adding a buffer to the buffer list
+	*BufCreate*		just after adding a buffer to the buffer list
+	*BufDelete*		before deleting a buffer from the buffer list
+	*BufWipeout*		before completely deleting a buffer
+
+	*BufFilePre*		before changing the name of the current buffer
+	*BufFilePost*		after changing the name of the current buffer
+
+	*BufEnter*		after entering a buffer
+	*BufLeave*		before leaving to another buffer
+	*BufWinEnter*		after a buffer is displayed in a window
+	*BufWinLeave*		before a buffer is removed from a window
+
+	*BufUnload*		before unloading a buffer
+	*BufHidden*		just after a buffer has become hidden
+	*BufNew*		just after creating a new buffer
+
+	*SwapExists*		detected an existing swap file
+		Options
+	*FileType*		when the 'filetype' option has been set
+	*Syntax*		when the 'syntax' option has been set
+	*EncodingChanged*	after the 'encoding' option has been changed
+	*TermChanged*		after the value of 'term' has changed
+	*OptionSet*		after setting any option
+
+		Startup and exit
+	*VimEnter*		after doing all the startup stuff
+	*GUIEnter*		after starting the GUI successfully
+	*GUIFailed*		after starting the GUI failed
+	*TermResponse|		after the terminal response to |t_RV* is received
+
+	*QuitPre*		when using `:quit`, before deciding whether to quit
+	*VimLeavePre*		before exiting Vim, before writing the viminfo file
+	*VimLeave*		before exiting Vim, after writing the viminfo file
+
+		Various
+	*FileChangedShell*	Vim notices that a file changed since editing started
+	*FileChangedShellPost*	After handling a file changed since editing started
+	*FileChangedRO*		before making the first change to a read-only file
+
+	*ShellCmdPost*		after executing a shell command
+	*ShellFilterPost*	after filtering with a shell command
+
+	*CmdUndefined*		a user command is used but it isn't defined
+	*FuncUndefined*		a user function is used but it isn't defined
+	*SpellFileMissing*	a spell file is used but it can't be found
+	*SourcePre*		before sourcing a Vim script
+	*SourceCmd|		before sourcing a Vim script |Cmd-event*
+
+	*VimResized*		after the Vim window size changed
+	*FocusGained*		Vim got input focus
+	*FocusLost*		Vim lost input focus
+	*CursorHold*		the user doesn't press a key for a while
+	*CursorHoldI*		the user doesn't press a key for a while in Insert mode
+	*CursorMoved*		the cursor was moved in Normal mode
+	*CursorMovedI*		the cursor was moved in Insert mode
+
+	*WinNew*		after creating a new window
+	*TabNew*		after creating a new tab page
+	*TabClosed*		after closing a tab page
+	*WinEnter*		after entering another window
+	*WinLeave*		before leaving a window
+	*TabEnter*		after entering another tab page
+	*TabLeave*		before leaving a tab page
+	*CmdwinEnter*		after entering the command-line window
+	*CmdwinLeave*		before leaving the command-line window
+
+	*InsertEnter*		starting Insert mode
+	*InsertChange*		when typing <Insert> while in Insert or Replace mode
+	*InsertLeave*		when leaving Insert mode
+	*InsertCharPre*		when a character was typed in Insert mode, before
+				inserting it
+	*TextChanged*		after a change was made to the text in Normal mode
+	*TextChangedI*		after a change was made to the text in Insert mode
+	*TextYankPost*		after text is yanked or deleted
+
+	*ColorScheme*		after loading a color scheme
+
+	*RemoteReply*		a reply from a server Vim was received
+
+	*QuickFixCmdPre*	before a quickfix command is run
+	*QuickFixCmdPost*	after a quickfix command is run
+
+	*SessionLoadPost*	after loading a session file
+
+	*MenuPopup*		just before showing the popup menu
+	*CompleteDone*		after Insert mode completion is done
+
+	*User*			to be used in combination with ":doautocmd"
+
+附录3 vim的函数
+	see also by :h functon-list
+	detail of function by :h eval.txt
+
+String manipulation:					*string-functions*
+	nr2char()		get a character by its ASCII value
+	char2nr()		get ASCII value of a character
+	str2nr()		convert a string to a Number
+	str2float()		convert a string to a Float
+	printf()		format a string according to % items
+	escape()		escape characters in a string with a '\'
+	shellescape()	escape a string for use with a shell command
+	fnameescape()	escape a file name for use with a Vim command
+	tr()			translate characters from one set to another
+	strtrans()		translate a string to make it printable
+	tolower()		turn a string to lowercase
+	toupper()		turn a string to uppercase
+	match()			position where a pattern matches in a string
+	matchend()		position where a pattern match ends in a string
+	matchstr()		match of a pattern in a string
+	matchstrpos()	match and positions of a pattern in a string
+	matchlist()		like matchstr() and also return submatches
+	stridx()		first index of a short string in a long string
+	strridx()		last index of a short string in a long string
+	strlen()		length of a string in bytes
+	strchars()		length of a string in characters
+	strwidth()		size of string when displayed
+	strdisplaywidth()	size of string when displayed, deals with tabs
+	substitute()		substitute a pattern match with a string
+	submatch()		get a specific match in ":s" and substitute()
+	strpart()		get part of a string using byte index
+	strcharpart()	get part of a string using char index
+	strgetchar()	get character from a string using char index
+	expand()		expand special keywords
+	iconv()			convert text from one encoding to another
+	byteidx()		byte index of a character in a string
+	byteidxcomp()	like byteidx() but count composing characters
+	repeat()		repeat a string multiple times
+	eval()			evaluate a string expression
+	execute()		execute an Ex command and get the output
+
+List manipulation:					*list-functions*
+	get()			get an item without error for wrong index
+	len()			number of items in a List
+	empty()			check if List is empty
+	insert()		insert an item somewhere in a List
+	add()			append an item to a List
+	extend()		append a List to a List
+	remove()		remove one or more items from a List
+	copy()			make a shallow copy of a List
+	deepcopy()		make a full copy of a List
+	filter()		remove selected items from a List
+	map()			change each List item
+	sort()			sort a List
+	reverse()		reverse the order of a List
+	uniq()			remove copies of repeated adjacent items
+	split()			split a String into a List
+	join()			join List items into a String
+	range()			return a List with a sequence of numbers
+	string()		String representation of a List
+	call()			call a function with List as arguments
+	index()			index of a value in a List
+	max()			maximum value in a List
+	min()			minimum value in a List
+	count()			count number of times a value appears in a List
+	repeat()		repeat a List multiple times
+
+Dictionary manipulation:				*dict-functions*
+	get()			get an entry without an error for a wrong key
+	len()			number of entries in a Dictionary
+	has_key()		check whether a key appears in a Dictionary
+	empty()			check if Dictionary is empty
+	remove()		remove an entry from a Dictionary
+	extend()		add entries from one Dictionary to another
+	filter()		remove selected entries from a Dictionary
+	map()			change each Dictionary entry
+	keys()			get List of Dictionary keys
+	values()		get List of Dictionary values
+	items()			get List of Dictionary key-value pairs
+	copy()			make a shallow copy of a Dictionary
+	deepcopy()		make a full copy of a Dictionary
+	string()		String representation of a Dictionary
+	max()			maximum value in a Dictionary
+	min()			minimum value in a Dictionary
+	count()			count number of times a value appears
+
+Floating point computation:				*float-functions*
+	float2nr()		convert Float to Number
+	abs()			absolute value (also works for Number)
+	round()			round off
+	ceil()			round up
+	floor()			round down
+	trunc()			remove value after decimal point
+	fmod()			remainder of division
+	exp()			exponential
+	log()			natural logarithm (logarithm to base e)
+	log10()			logarithm to base 10
+	pow()			value of x to the exponent y
+	sqrt()			square root
+	sin()			sine
+	cos()			cosine
+	tan()			tangent
+	asin()			arc sine
+	acos()			arc cosine
+	atan()			arc tangent
+	atan2()			arc tangent
+	sinh()			hyperbolic sine
+	cosh()			hyperbolic cosine
+	tanh()			hyperbolic tangent
+	isnan()			check for not a number
+
+Other computation:					*bitwise-function*
+	and()			bitwise AND
+	invert()		bitwise invert
+	or()			bitwise OR
+	xor()			bitwise XOR
+	sha256()		SHA-256 hash
+
+Variables:						*var-functions*
+	type()			type of a variable
+	islocked()		check if a variable is locked
+	funcref()		get a Funcref for a function reference
+	function()		get a Funcref for a function name
+	getbufvar()		get a variable value from a specific buffer
+	setbufvar()		set a variable in a specific buffer
+	getwinvar()		get a variable from specific window
+	gettabvar()		get a variable from specific tab page
+	gettabwinvar()	get a variable from specific window & tab page
+	setwinvar()		set a variable in a specific window
+	settabvar()		set a variable in a specific tab page
+	settabwinvar()	set a variable in a specific window & tab page
+	garbagecollect()	possibly free memory
+
+Cursor and mark position:		*cursor-functions* *mark-functions*
+	col()			column number of the cursor or a mark
+	virtcol()		screen column of the cursor or a mark
+	line()			line number of the cursor or mark
+	wincol()		window column number of the cursor
+	winline()		window line number of the cursor
+	cursor()		position the cursor at a line/column
+	screencol()		get screen column of the cursor
+	screenrow()		get screen row of the cursor
+	getcurpos()		get position of the cursor
+	getpos()		get position of cursor, mark, etc.
+	setpos()		set position of cursor, mark, etc.
+	byte2line()		get line number at a specific byte count
+	line2byte()		byte count at a specific line
+	diff_filler()	get the number of filler lines above a line
+	screenattr()	get attribute at a screen line/row
+	screenchar()	get character code at a screen line/row
+
+Working with text in the current buffer:		*text-functions*
+	getline()		get a line or list of lines from the buffer
+	setline()		replace a line in the buffer
+	append()		append line or list of lines in the buffer
+	indent()		indent of a specific line
+	cindent()		indent according to C indenting
+	lispindent()	indent according to Lisp indenting
+	nextnonblank()	find next non-blank line
+	prevnonblank()	find previous non-blank line
+	search()		find a match for a pattern
+	searchpos()		find a match for a pattern
+	searchpair()	find the other end of a start/skip/end
+	searchpairpos()	find the other end of a start/skip/end
+	searchdecl()	search for the declaration of a name
+	getcharsearch()	return character search information
+	setcharsearch()	set character search information
+
+					*system-functions* *file-functions*
+System functions and manipulation of files:
+	glob()			expand wildcards
+	globpath()		expand wildcards in a number of directories
+	glob2regpat()	convert a glob pattern into a search pattern
+	findfile()		find a file in a list of directories
+	finddir()		find a directory in a list of directories
+	resolve()		find out where a shortcut points to
+	fnamemodify()	modify a file name
+	pathshorten()	shorten directory names in a path
+	simplify()		simplify a path without changing its meaning
+	executable()	check if an executable program exists
+	exepath()		full path of an executable program
+	filereadable()	check if a file can be read
+	filewritable()	check if a file can be written to
+	getfperm()		get the permissions of a file
+	setfperm()		set the permissions of a file
+	getftype()		get the kind of a file
+	isdirectory()	check if a directory exists
+	getfsize()		get the size of a file
+	getcwd()		get the current working directory
+	haslocaldir()	check if current window used |:lcd|
+	tempname()		get the name of a temporary file
+	mkdir()			create a new directory
+	delete()		delete a file
+	rename()		rename a file
+	system()		get the result of a shell command as a string
+	systemlist()	get the result of a shell command as a list
+	hostname()		name of the system
+	readfile()		read a file into a List of lines
+	writefile()		write a List of lines into a file
+
+Date and Time:				*date-functions* *time-functions*
+	getftime()		get last modification time of a file
+	localtime()		get current time in seconds
+	strftime()		convert time to a string
+	reltime()		get the current or elapsed time accurately
+	reltimestr()	convert reltime() result to a string
+	reltimefloat()	convert reltime() result to a Float
+
+			*buffer-functions* *window-functions* *arg-functions*
+Buffers, windows and the argument list:
+	argc()			number of entries in the argument list
+	argidx()		current position in the argument list
+	arglistid()		get id of the argument list
+	argv()			get one entry from the argument list
+	bufexists()		check if a buffer exists
+	buflisted()		check if a buffer exists and is listed
+	bufloaded()		check if a buffer exists and is loaded
+	bufname()		get the name of a specific buffer
+	bufnr()			get the buffer number of a specific buffer
+	tabpagebuflist()	return List of buffers in a tab page
+	tabpagenr()		get the number of a tab page
+	tabpagewinnr()	like winnr() for a specified tab page
+	winnr()			get the window number for the current window
+	bufwinid()		get the window ID of a specific buffer
+	bufwinnr()		get the window number of a specific buffer
+	winbufnr()		get the buffer number of a specific window
+	getbufline()	get a list of lines from the specified buffer
+	win_findbuf()	find windows containing a buffer
+	win_getid()		get window ID of a window
+	win_gotoid()	go to window with ID
+	win_id2tabwin()	get tab and window nr from window ID
+	win_id2win()	get window nr from window ID
+	getbufinfo()	get a list with buffer information
+	gettabinfo()	get a list with tab page information
+	getwininfo()	get a list with window information
+
+Command line:					*command-line-functions*
+	getcmdline()	get the current command line
+	getcmdpos()		get position of the cursor in the command line
+	setcmdpos()		set position of the cursor in the command line
+	getcmdtype()	return the current command-line type
+	getcmdwintype()	return the current command-line window type
+	getcompletion()	list of command-line completion matches
+
+Quickfix and location lists:			*quickfix-functions*
+	getqflist()		list of quickfix errors
+	setqflist()		modify a quickfix list
+	getloclist()	list of location list items
+	setloclist()	modify a location list
+
+Insert mode completion:				*completion-functions*
+	complete()		set found matches
+	complete_add()		add to found matches
+	complete_check()	check if completion should be aborted
+	pumvisible()		check if the popup menu is displayed
+
+Folding:					*folding-functions*
+	foldclosed()	check for a closed fold at a specific line
+	foldclosedend()	like foldclosed() but return the last line
+	foldlevel()		check for the fold level at a specific line
+	foldtext()		generate the line displayed for a closed fold
+	foldtextresult()	get the text displayed for a closed fold
+
+Syntax and highlighting:	  *syntax-functions* *highlighting-functions*
+	clearmatches()		clear all matches defined by |matchadd()| and
+				the |:match| commands
+	getmatches()	get all matches defined by |matchadd()| and
+				the |:match| commands
+	hlexists()		check if a highlight group exists
+	hlID()			get ID of a highlight group
+	synID()			get syntax ID at a specific position
+	synIDattr()		get a specific attribute of a syntax ID
+	synIDtrans()	get translated syntax ID
+	synstack()		get list of syntax IDs at a specific position
+	synconcealed()	get info about concealing
+	diff_hlID()		get highlight ID for diff mode at a position
+	matchadd()		define a pattern to highlight (a "match")
+	matchaddpos()	define a list of positions to highlight
+	matcharg()		get info about |:match| arguments
+	matchdelete()	delete a match defined by |matchadd()| or a
+				|:match| command
+	setmatches()		restore a list of matches saved by
+				|getmatches()|
+
+Spelling:					*spell-functions*
+	spellbadword()	locate badly spelled word at or after cursor
+	spellsuggest()	return suggested spelling corrections
+	soundfold()		return the sound-a-like equivalent of a word
+
+History:					*history-functions*
+	histadd()		add an item to a history
+	histdel()		delete an item from a history
+	histget()		get an item from a history
+	histnr()		get highest index of a history list
+
+Interactive:					*interactive-functions*
+	browse()		put up a file requester
+	browsedir()		put up a directory requester
+	confirm()		let the user make a choice
+	getchar()		get a character from the user
+	getcharmod()	get modifiers for the last typed character
+	feedkeys()		put characters in the typeahead queue
+	input()			get a line from the user
+	inputlist()		let the user pick an entry from a list
+	inputsecret()	get a line from the user without showing it
+	inputdialog()	get a line from the user in a dialog
+	inputsave()		save and clear typeahead
+	inputrestore()		restore typeahead
+
+GUI:						*gui-functions*
+	getfontname()	get name of current font being used
+	getwinposx()	X position of the GUI Vim window
+	getwinposy()	Y position of the GUI Vim window
+	balloon_show()	set the balloon content
+	balloon_split()	split a message for a balloon
+
+Vim server:					*server-functions*
+	serverlist()	return the list of server names
+	remote_startserver()	run a server
+	remote_send()	send command characters to a Vim server
+	remote_expr()	evaluate an expression in a Vim server
+	server2client()	send a reply to a client of a Vim server
+	remote_peek()	check if there is a reply from a Vim server
+	remote_read()	read a reply from a Vim server
+	foreground()	move the Vim window to the foreground
+	remote_foreground()	move the Vim server window to the foreground
+
+Window size and position:			*window-size-functions*
+	winheight()		get height of a specific window
+	winwidth()		get width of a specific window
+	win_screenpos()	get screen position of a window
+	winrestcmd()	return command to restore window sizes
+	winsaveview()	get view of current window
+	winrestview()	restore saved view of current window
+
+Mappings:				    *mapping-functions*
+	hasmapto()		check if a mapping exists
+	mapcheck()		check if a matching mapping exists
+	maparg()		get rhs of a mapping
+	wildmenumode()	check if the wildmode is active
+
+Testing:				    *test-functions*
+	assert_equal()		assert that two expressions values are equal
+	assert_notequal()	assert that two expressions values are not equal
+	assert_inrange()	assert that an expression is inside a range
+	assert_match()		assert that a pattern matches the value
+	assert_notmatch()	assert that a pattern does not match the value
+	assert_false()		assert that an expression is false
+	assert_true()		assert that an expression is true
+	assert_exception()	assert that a command throws an exception
+	assert_fails()		assert that a function call fails
+	assert_report()		report a test failure
+	test_alloc_fail()	make memory allocation fail
+	test_autochdir()	enable 'autochdir' during startup
+	test_override()		test with Vim internal overrides
+	test_garbagecollect_now()   free memory right now
+	test_ignore_error()	ignore a specific error message
+	test_null_channel()	return a null Channel
+	test_null_dict()	return a null Dict
+	test_null_job()		return a null Job
+	test_null_list()	return a null List
+	test_null_partial()	return a null Partial function
+	test_null_string()	return a null String
+	test_settime()		set the time Vim uses internally
+
+Inter-process communication:		    *channel-functions*
+	ch_canread()		check if there is something to read
+	ch_open()		open a channel
+	ch_close()		close a channel
+	ch_close_in()	close the in part of a channel
+	ch_read()		read a message from a channel
+	ch_readraw()	read a raw message from a channel
+	ch_sendexpr()	send a JSON message over a channel
+	ch_sendraw()	send a raw message over a channel
+	ch_evalexpr()	evaluates an expression over channel
+	ch_evalraw()	evaluates a raw string over channel
+	ch_status()		get status of a channel
+	ch_getbufnr()	get the buffer number of a channel
+	ch_getjob()		get the job associated with a channel
+	ch_info()		get channel information
+	ch_log()		write a message in the channel log file
+	ch_logfile()	set the channel log file
+	ch_setoptions()	set the options for a channel
+	json_encode()	encode an expression to a JSON string
+	json_decode()	decode a JSON string to Vim types
+	js_encode()		encode an expression to a JSON string
+	js_decode()		decode a JSON string to Vim types
+
+Jobs:		    			        *job-functions*
+	job_start()		start a job
+	job_stop()		stop a job
+	job_status()		get the status of a job
+	job_getchannel()	get the channel used by a job
+	job_info()		get information about a job
+	job_setoptions()	set options for a job
+
+Terminal window:				*terminal-functions*
+	term_start()	open a terminal window and run a job
+	term_list()		get the list of terminal buffers
+	term_sendkeys()	send keystrokes to a terminal
+	term_wait()		wait for screen to be updated
+	term_getjob()		get the job associated with a terminal
+	term_scrape()		get row of a terminal screen
+	term_getline()		get a line of text from a terminal
+	term_getattr()		get the value of attribute {what}
+	term_getcursor()	get the cursor position of a terminal
+	term_getscrolled()	get the scroll count of a terminal
+	term_getaltscreen()	get the alternate screen flag
+	term_getsize()		get the size of a terminal
+	term_getstatus()	get the status of a terminal
+	term_gettitle()		get the title of a terminal
+	term_gettty()		get the tty name of a terminal
+
+Timers:						*timer-functions*
+	timer_start()		create a timer
+	timer_pause()		pause or unpause a timer
+	timer_stop()		stop a timer
+	timer_stopall()		stop all timers
+	timer_info()		get information about timers
+
+Various:					*various-functions*
+	mode()			get current editing mode
+	visualmode()	last visual mode used
+	exists()		check if a variable, function, etc. exists
+	has()			check if a feature is supported in Vim
+	changenr()		return number of most recent change
+	cscope_connection()	check if a cscope connection exists
+	did_filetype()	check if a FileType autocommand was used
+	eventhandler()	check if invoked by an event handler
+	getpid()		get process ID of Vim
+
+	libcall()		call a function in an external library
+	libcallnr()		idem, returning a number
+
+	undofile()		get the name of the undo file
+	undotree()		return the state of the undo tree
+
+	getreg()		get contents of a register
+	getregtype()	get type of a register
+	setreg()		set contents and type of a register
+
+	shiftwidth()	effective value of 'shiftwidth'
+
+	wordcount()		get byte/word/char count of buffer
+
+	taglist()		get list of matching tags
+	tagfiles()		get a list of tags files
+
+	luaeval()		evaluate Lua expression
+	mzeval()		evaluate |MzScheme| expression
+	perleval()		evaluate Perl expression (|+perl|)
+	py3eval()		evaluate Python expression (|+python3|)
+	pyeval()		evaluate Python expression (|+python|)
+	pyxeval()		evaluate |python_x| expression
 
 // vim:tw=72

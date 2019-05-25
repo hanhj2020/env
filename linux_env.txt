@@ -961,15 +961,24 @@
 			<>	表示精确匹配	
 			以上控制字符如果在基本regex中使用时，需要在前面加上转义符\，即将普通字符转义成控制字符。例如grep 'a\+' ,grep 'a\{3\}' 。在扩展grep中转义符可以加也可以不加(grep -e,or egrep)。
 	预定义的字符集合
-		例如：
-		[:xdigit:],表示十六进制的数字0-9,a-f，A-F 
-		[:alnum:],表示字母和数字
-		[:alpha:],表示字母 
-		[:digit:],表示数字 0-9
-		在grep中使用这些预定义字符集合需要在前面加上[],比如
-			grep [[:alpha:]] xx 
-
-
+		[: ... :]形式的预定义字符集合
+			[:alnum:],表示字母和数字
+			[:alpha:],表示字母 
+			[:digit:],表示数字 0-9
+			[:xdigit:],表示十六进制的数字0-9,a-f，A-F 
+			...
+				更多参见man awk 
+			在grep中使用这些预定义字符集合需要在前面加上[],比如
+				grep [[:alpha:]] xx 
+		以\开头的预定义字符：
+			\w	a word 
+			\W	non word 
+			\s	blank
+			\S	non blank
+			...
+			不同的程序对此定义不同，上面几个比较通用。
+			具体程序参见其man手册。
+			vim的参见:h regular 
 ##sed  流编辑器 stream edit for filtering and transform text
 　　概述：
 		sed用于对输入的文本逐行处理。sed不会改变源内容，除非特地指定。sed输出到标准输出。
@@ -998,7 +1007,6 @@
 				s/pattern/repleace/	将匹配的部分替换成replace
 				y/source/dest/		将source中出现的字符，替换成dest中的对应字符。要求source和dest必须等长。
 				w file	将选定部分写到文件中。
-			
 			地址：地址可以是用数字，也可用匹配来产生。	
 				$	表示最后一行。（正则表达式中的$表示一行的行尾位置）
 				n1,n2	范围从n1行到n2行
@@ -1006,7 +1014,6 @@
 				n1,~N	范围从n1间隔N行
 					举例sed '1,~2p',则打印奇数行
 				/pattern/ 匹配字串地址
-
 				如果地址后跟!则表示地址范围是以上地址取反。
 	举例：
 	　　 删除空行：`sed '/^$/d' demo.txt` 
@@ -1076,27 +1083,25 @@
 				ORS 表示输出记录分隔符，默认是换行符
 				...
 				注意：如果修改了输入分隔符，则相应的输出分隔符也要修改，否则分隔符就是默认的。
-
 		匹配与动作：pattern{command}
 			如果没有匹配，则默认是匹配每一行
 			如果没有动作，则默认动作是print
 			不能既没有匹配也没有动作。
 			匹配：
-				BEGIN：	表示在读取文件前的动作
-				END：	表示在读取文件后的动作
-				/regular/正则表达式
-				relation expression
+				BEGIN		：表示在读取文件前的动作
+				END			：表示在读取文件后的动作
+				/regular/	：正则表达式
+					正则表达式与一般的正则表达式使用方法一致。需要说明的是awk支持扩展正则表达式。举例:[:alnum:],[:alpha:],等
+				relation expression	：关系表达式
 					关系表达式可以用在下面动作一节中所有定义的操作。通常用作测试特定字段与特定正则表达式是否匹配。
-				pattern && pattern：	逻辑与
-				pattern || pattern：	逻辑或
-				pattern?pattern:pattern
-				正则表达式与一般的正则表达式使用方法一致。需要说明的是awk支持扩展正则表达式。举例:[:alnum:],[:alpha:],等
+					pattern && pattern：	逻辑与
+					pattern || pattern：	逻辑或
+					pattern?pattern:pattern
 			动作：
 				在awk中命令需要用'{}'来包括。
 				如果{}中的操作含有更多的操作，可以再次嵌套。
 				动作之间用;分隔。
-				关于动作的操作：
-					表达式
+				动作包括：
 					(...)	：分组
 					+-×/%
 					++，-- 
@@ -1106,32 +1111,29 @@
 					&&，||
 					|		：管道
 					in		:array的操作
-
 					print exp
 					printf format,expr..
 					...other fun 
-
 					special filenames
 					/dev/stdin or 1
 					/dev/stdout or 2	
 						print "something" > /dev/stderr 
-						or you can do link this:
+						or
 						print "something" | "cat 1>&2""
 					/dev/fd/n
-
 					awk中的函数：
 						split(r,s,t):将r字串按照t分割符分成s字串
 							awk 'BEGIN{r="a/b/c";split(r,s,'/');OFS="-";print s[1],s[2],s[3];}'
 							结果是：a-b-c
-						sub(r,s,t):将t中第一次出现的r用s替换
+						gsub(r,s,[t]):将t中的字符串，匹配r后用s替换，结果为t;如果t没有提供，默认是$0.
+						sub(r,s,t):类似与sub，只是将t中第一次出现的r用s替换
 							awk 'BEGIN{t="abc";sub("a","s",t);print t}'
-						gsub(r,s):将全局范围内的r用s替换;
-						gsub(r,s,t):在t中将r用s替换，相当于sub
 						inedx(t,s):返回t中s所处的位置
 						length(s):返回s的长度
 						substr(t,pos):返回t中从pos之后的字串
 						substr(t,pos,len):返回t中从pos之后长度为len的字串。
 							pos,len是数字,与index正好相反。	
+						更多函数参见man awk 
 
 #关于条件组合的总结：
 	逻辑与逻辑或的关系在多个地方都会用到，但是有些区别。
