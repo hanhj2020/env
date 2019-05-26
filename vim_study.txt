@@ -68,6 +68,32 @@
 	4) 搜索字符串
 		/str 搜索str，如果找到，会将str反显。此时按n将跳转到下一个，shift-n跳转的前一个。
 			/str实际上是字符串匹配，可以用正则表达式中的符号。
+			关于正则表达式，可以参见正则表达式的相关描述（:h
+			pattern)，使用方法同其他程序中的方法是一样的。这里提几个vim中常用的转义符：
+			\s	whitespace character: <Space> and <Tab>		
+			\S	non-whitespace character; opposite of \s	
+			\d	digit:				[0-9]		
+			\D	non-digit:			[^0-9]		
+			\x	hex digit:			[0-9A-Fa-f]	
+			\X	non-hex digit:			[^0-9A-Fa-f]	
+			\o	octal digit:			[0-7]		
+			\O	non-octal digit:		[^0-7]		
+			\w	word character:			[0-9A-Za-z_]	
+			\W	non-word character:		[^0-9A-Za-z_]	
+			\h	head of word character:		[A-Za-z_]	
+			\H	non-head of word character:	[^A-Za-z_]	
+			\a	alphabetic character:		[A-Za-z]	
+			\A	non-alphabetic character:	[^A-Za-z]	
+			\l	lowercase character:		[a-z]		
+			\L	non-lowercase character:	[^a-z]		
+			\u	uppercase character:		[A-Z]		
+			\U	non-uppercase character:	[^A-Z]		
+			\e	matches <Esc>					
+			\t	matches <Tab>					
+			\r	matches <CR>					
+			\b	matches <BS>					
+			\n	matches an end-of-line				
+			注意：这里是vim的转义符，不同的程序转义符并不一样。比如在grep中\d就没有定义。
 		:set ignorecase		(ic)	搜索时忽略大小写，这是默认的。
 		:set noignorecase	(noic)	不忽略大小写，即大小写敏感。
 		如果不想输入太多的字符，可以将光标定位到某个单词，然后输入*，
@@ -443,9 +469,21 @@
 第十三章 编辑非文本文件
 	关于文本格式
 		在unix系统，文本以LF作为行尾，在Windows系统已CR,LF作为行尾，Mac系统以CR作为行尾。
-		CR	carrier return	：回车 13 \r
-		LR	line feed		: 换行 10 \n
+		CR	carrier return	：ascii码为13
+		LF	line feed		：ascii码为10
 		vim可以自动识别以上格式。但是对于Mac可能会出错。
+			在vim中用<CR>代表回车键，导致建立新行，实际上在行结尾加上LF，不要搞混了。
+			在vim中用
+				\r	代表<CR>，结果是在行尾加上LF（10），并进一行。
+				\n	代表行尾。
+				比如：
+				nmap aa iabc\r
+				意思是在normal模式下将aa映射为在当前光标处插入abc并回车换行。
+				而nmap aa iabc\n并不能换行，只能在行尾加上一个00字符。
+			而在printf函数中
+				\r	代表回车，回到行首
+				\n	代表另起一行
+			所以转义字符在不同程序中所代表的意义并不相同。
 		:set fileformats	查看vim识别的文本类型。默认是unix，dos。可以加上mac	:set fileformats+=mac
 		:set fileformat	查看当前文本类型。
 	因特网文件：
@@ -751,6 +789,19 @@
 				<cr>	回车
 			以上命令也可以用：
 			:nmap <buffer><cr> "aye<c-w>:tag <c-r>"a<cr>,意思是将光标下的单词放到寄存器a中，然后用tag跳到a寄存器中的内容处。
+	cscope 
+		cscope是另一个tag程序 
+		建立tag
+			cscope -bR
+		vim链接cscope
+			:cs add cscope.out 
+		使用：
+			在光标所在单词处按  
+			ctrl-\s	:search c synbol
+			ctrl-\g	:search define
+			ctrl-\d	:search functions called by this function 
+			ctrl-\c	:search functions call this function 
+			ctrl-\t	:same as c
 
 第二十章 程序的编辑
 	编译程序：
@@ -2076,5 +2127,44 @@ Various:					*various-functions*
 	py3eval()		evaluate Python expression (|+python3|)
 	pyeval()		evaluate Python expression (|+python|)
 	pyxeval()		evaluate |python_x| expression
+
+附录 4 pattern 
+	\s	whitespace character: <Space> and <Tab>		*/\s*
+	\S	non-whitespace character; opposite of \s	*/\S*
+	\d	digit:				[0-9]		*/\d*
+	\D	non-digit:			[^0-9]		*/\D*
+	\x	hex digit:			[0-9A-Fa-f]	*/\x*
+	\X	non-hex digit:			[^0-9A-Fa-f]	*/\X*
+	\o	octal digit:			[0-7]		*/\o*
+	\O	non-octal digit:		[^0-7]		*/\O*
+	\w	word character:			[0-9A-Za-z_]	*/\w*
+	\W	non-word character:		[^0-9A-Za-z_]	*/\W*
+	\h	head of word character:		[A-Za-z_]	*/\h*
+	\H	non-head of word character:	[^A-Za-z_]	*/\H*
+	\a	alphabetic character:		[A-Za-z]	*/\a*
+	\A	non-alphabetic character:	[^A-Za-z]	*/\A*
+	\l	lowercase character:		[a-z]		*/\l*
+	\L	non-lowercase character:	[^a-z]		*/\L*
+	\u	uppercase character:		[A-Z]		*/\u*
+	\U	non-uppercase character:	[^A-Z]		*/\U*
+
+		NOTE: Using the atom is faster than the [] form.
+
+		NOTE: 'ignorecase', "\c" and "\C" are not used by character classes.
+
+				*/\_* *E63* */\_i* */\_I* */\_k* */\_K* */\_f* */\_F*
+				*/\_p* */\_P* */\_s* */\_S* */\_d* */\_D* */\_x* */\_X*
+				*/\_o* */\_O* */\_w* */\_W* */\_h* */\_H* */\_a* */\_A*
+				*/\_l* */\_L* */\_u* */\_U*
+	\_x	Where "x" is any of the characters above: The character class with
+		end-of-line added
+	(end of character classes)
+	\e	matches <Esc>					*/\e*
+	\t	matches <Tab>					*/\t*
+	\r	matches <CR>					*/\r*
+	\b	matches <BS>					*/\b*
+	\n	matches an end-of-line				*/\n*
+		When matching in a string instead of buffer text a literal newline
+		character is matched.
 
 // vim:tw=72
