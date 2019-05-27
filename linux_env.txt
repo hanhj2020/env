@@ -667,14 +667,6 @@
 		-a/c/mnewer file 时间与file比较 
 		-size 按照size比较 
 		-maxdepth 查找深度
-	action:
-		-print	默认动作，打印查找出来的文件。
-		-exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`.在;前面加上转义符\的意思是由于;在bash中解释成命令的结尾，如果不加转义符，该find命令就将结束。而在find命令中可以有多个执行语句，所以要避免解释成find命令结尾。
-	　　  举例：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`
-	　　	注意要加上print选项，否则不显示文件名，不好区分。
-			多个执行语句：	find / -ctime +30 -a \( -name '.vimrc' -o -name 'vimrc' \) -exec grep -n 'mmap' {} \; -exec echo {} \;
-				在根目录下查找30天前修改.vimrc或vimrc文件，然后查找其中包括nmap的行，同时打印该文件名。
-	　　-ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示.
 	logic of expression:
 		expr1 -o expr2	:or logic
 		expr1 -or expr2	:or logic
@@ -683,6 +675,14 @@
 		! expr			:not logic
 		-nor expr		:not logic 
 		\( exp1 \) , \( exp2 \) 执行exp1 和 exp2 
+	action:
+		-print	默认动作，打印查找出来的文件。
+		-exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`.在;前面加上转义符\的意思是由于;在bash中解释成命令的结尾，如果不加转义符，该find命令就将结束。而在find命令中可以有多个执行语句，所以要避免解释成find命令结尾。
+	　　  举例：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`
+	　　	注意要加上print选项，否则不显示文件名，不好区分。
+			多个执行语句：	find / -ctime +30 -a \( -name '.vimrc' -o -name 'vimrc' \) -exec grep -n 'mmap' {} \; -exec echo {} \;
+				在根目录下查找30天前修改.vimrc或vimrc文件，然后查找其中包括nmap的行，同时打印该文件名。
+	　　-ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示.
 　　 扩展:
 	　　 查找除某个目录下的文件
 		　　 find . -path xx -prune -o -print
@@ -1949,7 +1949,7 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 　　7,memcpy()相关函数中的dst和src指针重叠。 
 　　这些问题往往是C/C++程序员最头疼的问题，Memcheck在这里帮上了大忙。 
 　　用法：valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  your program
-　　然后会在当前目录看到一个ｌｏｇｆｉｌｅ文件，然后就可以查看这个文件检查问题了。
+　　然后会在当前目录看到一个logfile文件，然后就可以查看这个文件检查问题了。
 　　2.Callgrind 
 　　和gprof类似的分析工具，但它对程序的运行观察更是入微，能给我们提供更多的信息。和gprof不同，它不需要在编译源代码时附加特殊选项，但加上调试选项是推荐的。Callgrind收集程序运行时的一些数据，建立函数调用关系图，还可以有选择地进行cache模拟。在运行结束时，它会把分析数据写入一个文件。callgrind_annotate可以把这个文件的内容转化成可读的形式。 
 　　用法：valgrind --tool=callgrind  your program,然后可以发现在当前目录中有一个callgrind.out.xxxx的文件，可以直接查看这个文件看调用关系，但是很复杂，可以用kcachegrind callgrind.out.xxxx来查看，这是个图形化程序。左边窗口是所有调用的函数及其调用次数，运行时间所占比例等，右边窗口上半部是左边窗口所选择函数的调用者信息，下半部是该函数调用的函数信息。
