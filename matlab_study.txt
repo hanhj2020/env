@@ -144,7 +144,7 @@
 				sin，cos，tan，atan等
 			取整函数：
 				floor	对下取整
-				ceil		对上取整
+				ceil	对上取整
 				mod		求模		mod(x,y)=x-floor(x./y).*y，当x，y同符号时，mod(x,y)=rem(x,y)。当x，y不同符号时mod(-x,y)=rem(-x./y)+y
 				rem		求余		rem(x,y)=x-fix(x./y)*y。
 				fix		对0取整
@@ -152,20 +152,20 @@
 			对数函数，指数函数，幂函数		y=a^x指数函数，y=x^a幂函数
 				log		以e为底
 				log10	以10为底
-				log2		以2为底
+				log2	以2为底
 				exp		以e为底的幂，等同e^
 				pow2	以2为底的幂，等同2^
-				sqrt		开方
-				nthroot	求根	,nthroot(x,n)	这里x必须是实数
+				sqrt	开方
+				nthroot	求根,nthroot(x,n)	这里x必须是实数
 			复数函数：
-				abs	求模
+				abs		求模
 				angle	求角度
 				complex	构造复数
-				conj		求共轭
-				real		求实部
+				conj	求共轭
+				real	求实部
 				imag	求虚部
 			微分，积分函数
-				airy		解d^2(w)/dz^2-zw=0二次微分方程
+				airy	解d^2(w)/dz^2-zw=0二次微分方程
 				bassel	解z^2*d^2(y)/dz^2+zdy/dz+(z^2-v^2)y=0
 			数论函数：
 				factor	分解质因子

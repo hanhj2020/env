@@ -879,8 +879,8 @@
 		-R 在路径中递归查找，包括链接
 		-n 显示行号
 		-v 反向匹配
-		--include pattern 包括展开的文件名
-		--exclude pattern 不包括展开的文件名
+		--include=pattern 包括展开的文件名
+		--exclude=pattern 不包括展开的文件名
 		--exclude-dir=dir 不包括路径
 		-A num ,显示匹配行前面的num行
 		-B num ,显示匹配行之后的num行
@@ -1759,7 +1759,7 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 				args		显示参数
 				...
 	　　显示数据：
-			显示变量：print，简写p
+			显示变量：print，		简写p
 	　　　　	print/format  var
 				format表示显示格式。包括：
 		　　　　　　x 按十六进制格式显示变量。 
@@ -1807,10 +1807,10 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 			set 变量=value
 			举例：set args 1 2 3
 	　　执行：
-			run 全速运行，简写r；
-			next 不进入的单步执行，简写n；
-			step 进入的单步执行，简写s。
-			continue 继续执行，简写c。
+			run 全速运行，			简写r
+			next 不进入的单步执行，	简写n
+			step 进入的单步执行，	简写s
+			continue 继续执行，		简写c
 
 	　　函数调用：
 			call function-name
@@ -1879,8 +1879,8 @@ integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(si
 		　　　　	 	vfork
 	　　	　　	 	load/unload
 	　　　　	 	
-	　　栈：frame
-	　　　　bt：显示当前调用栈
+	　　栈：frame 简写f
+	　　　　bt	显示当前调用栈
 	　　　　f	显示当前代码
 	　　　　info f 显示栈信息,寄存器信息		
 	　　[gdb help](gdb_help.html)

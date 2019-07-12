@@ -24,7 +24,7 @@ set go=             " 不要图形按钮
 syntax on           " 语法高亮  
 "autocmd InsertLeave * se nocul  " 用浅色高亮当前行  
 "autocmd InsertEnter * se cul    " 用浅色高亮当前行  
-"set ruler           " 显示标尺  
+set ruler           " 显示标尺  
 set showcmd         " 输入的命令显示出来，看的清楚些  
 "set cmdheight=1     " 命令行（在状态行下）的高度，设置为1  
 "set whichwrap+=<,>,h,l   " 允许backspace和光标键跨越行边界(不建议)  
@@ -33,7 +33,6 @@ set novisualbell    " 不要闪烁(不明白)
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}   "状态行显示的内容  
 set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)  
 "set background=dark "背景使用黑色 
-set nocompatible  "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限  
 
 " 设置配色方案
 "colorscheme murphy
@@ -100,13 +99,14 @@ func SetTitle_tex()
 	call append(line(".")+1, "%Author: hanhj") 
 	call append(line(".")+2, "%Mail: hanhj@zx-jy.com ") 
 	call append(line(".")+3, "\\documentclass{article}") 
-	call append(line(".")+4, "\\usepackage{CJK}") 
+	call append(line(".")+4, "\\usepackage{xeCJK}") 
 	call append(line(".")+5, "\\usepackage{graphicx}") 
-	call append(line(".")+6, "\\begin{document}") 
-	call append(line(".")+7, "\\begin{CJK}{UTF8}{gbsn}") 
-	call append(line(".")+8, "\\end{CJK}")
-	call append(line(".")+9, "\\end{document}")
-	normal G1kO
+	call append (line(".")+6, "\\usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}")
+	call append(line(".")+7, "\\usepackage{indentfirst}") 
+	call append(line(".")+8, "\\setCJKmainfont{AR PL UMing CN}") 
+	call append(line(".")+9, "\\begin{document}") 
+	call append(line(".")+10, "\\end{document}")
+	normal GO
 endfunc
 "新建.c,.h,.sh,.java文件，自动插入文件头 
 autocmd BufNewFile *  exec ":call SetTitle()" 
@@ -208,10 +208,9 @@ set clipboard+=unnamed
 "从不备份  
 set nobackup
 "make 运行
-":set makeprg=g++\ -Wall\ \ %
+"set makeprg=g++\ -Wall\ \ %
 "自动保存
 set autowrite
-set ruler                   " 打开状态栏标尺
 "set cursorline              " 突出显示当前行
 set magic                   " 设置魔术
 set guioptions-=T           " 隐藏工具栏
@@ -223,7 +222,7 @@ set foldmethod=indent
 set foldlevel=20 
 "set foldenable              " 开始折叠
 " 不要使用vi的键盘模式，而是vim自己的
-set nocompatible
+set nocompatible  "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限  
 " 语法高亮
 set syntax=on
 " 去掉输入错误的提示声音
