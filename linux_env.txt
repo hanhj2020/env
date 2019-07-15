@@ -864,9 +864,6 @@
 			%a	周几，用缩写的英文表示
 			%A	周几，用全写的英文表示
 	
-##apt-key :获取公鈅
-　　 sudo apt-key --keyserver keyserver.ubuntu.com --recv-keys 需要的公鈅id
-　　 或者gpg --keyserver subkeys.pgp.net --recv 需要的公鈅id
 
 ##grep:查找字串
 	调用格式：
@@ -1436,7 +1433,33 @@
 			list-dependencies ：列出依赖关系
 
 			who -r ，runlevel，systemctl get-default,显示当前运行等级
-			
+
+##apt-key :获取公鈅
+	调用格式：
+		apt-key [--keyring filename] command parameter
+			command:
+				add filename :add a new key to the list of trusted keys.
+				the key is read from filename. - is stdin.
+				del keyid 
+				export keyid	:export key keyid to stdou 
+				exportall
+				list	:list trusted keys 
+			--keyring filename :special keyring file the command should operate.default is trusted.gpg.
+			files:
+				/etc/apt/trusted.gpg 
+
+## gpg 是PGP协议的工具（pgp->pretty good privacy）
+	调用格式：
+	　	gpg --keyserver URL --recv keyid
+			URL是公钥服务器地址，比如：
+				keyserver.ubuntu.com
+				subkeys.pgp.net
+				pgpkeys.mit.edu 
+			keyid是需要获得的公钥id
+	例子：获得一个公钥，并添加到本地
+		gpg --keyserver keyserver.ubuntu.com --recv keyid 
+		apt-key export keyid|sudo apt-key all -
+
 ##apt 软件包管理
 	调用格式：
 		apt [opions] <action> [pkg]
@@ -1462,12 +1485,28 @@
 		安装软件时，如果不太记得名字，可以先用search 来找一下是否有类似名字的软件，找到后再用install来安装。
 		如果需要软件包，可以用download来下载。
 		如果下载源程序包，可以用build-dep解决依赖性问题。
+	
+	使用中的几个问题：
+		1）源的问题
+			apt使用的源位于 /etc/apt/sources.list 中，可以手工修改。
+				deb http://packages.linuxdeepin.com/ubuntu precise main restricted universe multiverse
+				deb-src http://packages.linuxdeepin.com/ubuntu precise main restricted universe multiverse
+				deb是包，deb-src是包的源程序
+				后面是源地址
+				precise表示版本，不同版本名称不同。如果仅仅是更换源地址，版本不要变。网上的各种源后面所跟的版本号不要照抄。
+				后面表示内容
+			如果需要更改源地址，可以直接修改其中的源地址。
+		2)	源认证
+			有些源需要公钥认证，此时需要将该源的公钥导入到本地。
+			需要用上面gpg命令中的方法导入公钥。
+
 		
 #apt-cache  
 		apt-cache pkgnames	:print all installed package
 		apt-cache dumpavail	:print all available package
 		apt-cache showpkg pkgs	:print infomation of pkgs
 		apt-cache search regex:查找软件包.apt search 可能找到一些不是精确匹配的软件。
+		
 
 #dpkg
 	调用格式：
