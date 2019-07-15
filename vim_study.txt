@@ -1307,6 +1307,10 @@
 			minline=xx	从前面多少行开始解析
 	包括另外的高亮文件
 		:rutime! other_syntax.vim 
+		:runtime(ru)! [where] {file}
+		runtime命令从runtimepath路径中查找扩展脚本文件并执行。!表示所有找到的文件。
+		另外一个装载脚本文件的命令：
+		source(so)[!] file 
 	可移植的高亮文件
 		文件头
 		" Vim syntax file

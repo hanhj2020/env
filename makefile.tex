@@ -197,7 +197,7 @@
 		%.o:%.c
 		    $(CC) -c -g $< -o $@
 		target:$(objs)
-		    gcc $< -o $@ 
+			gcc $^ -o $@ 
 	\end{verbatim}
 		这里，我们建立了一个从.c文件到.o文件的显式依赖。
 	\subsubsection{隐式依赖规则}
@@ -206,7 +206,7 @@
 		target=test
 		objs=fun.o main.o
 		target:$(objs)
-		    gcc $< -o $@
+			gcc $^ -o $@
 	\end{verbatim}
 
 
