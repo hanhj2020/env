@@ -447,20 +447,20 @@
 		　	-A  :显示除. .. 隐含文件外的文件,同ls 
 		　　-d  :仅显示目录
 		　　-F  :文件后追加标识符 /表示目录,@表示符号链接,|表示管道符,=表示socket套接字,* 表示可执行文件.
-			关于文件大小的输出
-				-s	：输出文件占磁盘大小（块数）。默认的-l选项输出文件本身大小信息。
-				-h	：文件大小的单位可以自动调整成k，m，g等。human
+			-s	:关于文件大小的输出
+				-s	：输出文件占磁盘大小（块数）。
+				-sh	：文件大小的单位可以自动调整成k，m，g等。human
 					文件大小单位：默认按照1k=1024.
 				-si	：按照1k=1000 
 			关于时间的输出：
-				--time=word，与-l选项连用
-					word=
-					atime：	accesstime;
-					ctime：	changtime
+			--time=word，与-l选项连用
+					word:
+						atime：	accesstime;
+						ctime：	changtime
 					默认的是modifytime
-				-u	：显示accesstime，并且按照最新时间排序
-				-c	：显示changetime，并且按照最新时间排序
-		排序选项：
+			-u	：显示accesstime，并且按照最新时间排序
+			-c	：显示changetime，并且按照最新时间排序
+			排序选项：
 			-t	:按照修改时间输出并排序，最新时间在前。
 				如果与-u选项连用，按照accesstime输出并排序。
 				如果与-c选项连用，按照changetime输出并排序。
@@ -988,6 +988,14 @@
 	　　-n quiet 不显示自动匹配的字串
 　　	脚本命令：[地址]动作
 			动作分为无地址动作，无地址或只有1个地址的动作，有地址范围的动作。
+			地址：地址可以是用数字，也可用匹配来产生。	
+				$	表示最后一行。（正则表达式中的$表示一行的行尾位置）
+				n1,n2	范围从n1行到n2行
+				n1,+N	范围从n1到后面N行
+				n1,~N	范围从n1间隔N行
+					举例sed '1,~2p',则打印奇数行
+				/pattern/ 匹配字串地址
+				如果地址后跟!则表示地址范围是以上地址取反。
 			无地址动作：
 				: label 做标记?
 				#comment 注释
@@ -1004,14 +1012,6 @@
 				s/pattern/repleace/	将匹配的部分替换成replace
 				y/source/dest/		将source中出现的字符，替换成dest中的对应字符。要求source和dest必须等长。
 				w file	将选定部分写到文件中。
-			地址：地址可以是用数字，也可用匹配来产生。	
-				$	表示最后一行。（正则表达式中的$表示一行的行尾位置）
-				n1,n2	范围从n1行到n2行
-				n1,+N	范围从n1到后面N行
-				n1,~N	范围从n1间隔N行
-					举例sed '1,~2p',则打印奇数行
-				/pattern/ 匹配字串地址
-				如果地址后跟!则表示地址范围是以上地址取反。
 	举例：
 	　　 删除空行：`sed '/^$/d' demo.txt` 
 	　　 行尾添加内容：`sed 's/$/append/' demo.txt`
@@ -1024,78 +1024,34 @@
 		awk是另一个类似于sed的行文本处理程序，awk的原理是逐行读入文本，按照定义好的分割符将文本切割成多列，然后通过类似于c的脚本进行处理。awk认为输入的文本是结构的，可以分割成多列。sed只能提供内定的一些处理命令，而awk可以通过编程来实现比较复杂的处理。
 		awk是符合PROSIX 1003.1标准的语言。gawk程序来自论文：AWK Programing Language，由Aho,Kemighan和Weinberger完成。
 	调用格式：
-		awk [option] 'pattern{command}' 输入文本。
-	选项：
-		-f(--file) program	：输入的awk脚本文件
-		-E(--exec) file		：类似于-f，必须放在最后。此方式中的文本首行必须是#!（就像bash一样），以避免分析参数或使用source code。在此方式下选型将失去作用。
-		-e(--source) program	：使用source code作为命令。使用该方式可以方便的在命令行方式下与-f选项共同使用。
+		awk [-v var=value] [-F value] [-f program-file] 'program text' [file ...]。
+		-f program-file	：输入的awk脚本文件
 		-F ：定义分隔符
-			默认的分割符是空格，每行的分割结果用$1,$2...来表示。
-			举例下面的文本：1 2 3 4 aaa bbb 
-			用awk来分割：awk '{for(i=0;i<NF;i++)print $(i+1)}',结果为：
-				1
-				2
-				3
-				4
-				aaa
-				bbb
-				分隔符也可以在BEGIN中来定义。举例{BEGIN{FS="/"}}
+			awk -F '/'
+			分隔符也可以在BEGIN中来定义。举例{BEGIN{FS="/"}}
 		-v val=value ：设置变量.可以被BEGIN所识别  
-		-i(--include) file	：include一个文件
-		-l(--load) file		：load一个so库文件
-
-	参数:
-		可以给awk输入参数，在awk中可以直接引用输入参数，
-		举例
+			可以给awk输入参数，在awk中可以直接引用输入参数，
+			举例
 			1)awk -v OFS="." 'BEGIN{print OFS}' test.txt
 			2)awk -v OFS="." -f test.awk test.txt
-			3)./test.awk OFS="." test.txt 
-			需要指出的是如果采用方法3,在begin的时候，变量是没有被赋值的，此时变量被当作是输入文件，所以是无效的，只有当执行读入文本操作的的时候才有效。
-	动作：
-		在脚本文件中，可以使用以下几种方式来执行动作：
-		@include file	同命令行中的--include
-		@load file		同--load
-		pattern{command}	最常用方式
-		function(args..){command}	函数方式
-		变量：
-			定义变量：
-				var=varl
-				变量不需要象c语言需要预先定义，也没有类型区分。
-				这个定义可以在命令行中，也可以在脚本中。如果在命令行中，则此变量只有在命令执行的时候才生效，而在BEGIN中不会生效，除非用-v var=varl来定义。	
-			引用变量：
-				就像c语言中一样，直接使用。不需要向shell中需要用$var来引用。
-			数组：
-				数组用[]来表示，awk可以自动扩展。举例：
-					a[1]=1;a[2]=2...
-			内部变量：
-				$0	代表整行
-				$1	代表分隔的第1列数据
-				$2	代表分隔的第2列数据
-				...
-				NF 表示每行的单元数
-				NR 表示文件的行数
-				FS 表示列分隔符，默认是空格
-				OFS 表示输出列分隔符，默认是空格
-				RS 表示记录分隔符，默认是换行符
-				ORS 表示输出记录分隔符，默认是换行符
-				...
-				注意：如果修改了输入分隔符，则相应的输出分隔符也要修改，否则分隔符就是默认的。
-		匹配与动作：pattern{command}
+	program text：pattern {action}
 			如果没有匹配，则默认是匹配每一行
 			如果没有动作，则默认动作是print
 			不能既没有匹配也没有动作。
-			匹配：
-				BEGIN		：表示在读取文件前的动作
-				END			：表示在读取文件后的动作
-				/regular/	：正则表达式
+
+			pattern可以是：
+				BEGIN	：表示在读取文件前的动作
+				END		：表示在读取文件后的动作
+				/regular/：正则表达式
 					正则表达式与一般的正则表达式使用方法一致。需要说明的是awk支持扩展正则表达式。举例:[:alnum:],[:alpha:],等
 				relation expression	：关系表达式
 					关系表达式可以用在下面动作一节中所有定义的操作。通常用作测试特定字段与特定正则表达式是否匹配。
 					pattern && pattern：	逻辑与
 					pattern || pattern：	逻辑或
 					pattern?pattern:pattern
-			动作：
-				在awk中命令需要用'{}'来包括。
+			action：
+				action就像c语言一样。
+				在awk中action需要用'{}'来包括。
 				如果{}中的操作含有更多的操作，可以再次嵌套。
 				动作之间用;分隔。
 				动作包括：
@@ -1118,17 +1074,47 @@
 						or
 						print "something" | "cat 1>&2""
 					/dev/fd/n
-					awk中的函数：
-						split(r,s,t):将r字串按照t分割符分成s字串
+				内部变量：
+					$0	代表整行
+					$1	代表分隔的第1列数据
+					$2	代表分隔的第2列数据
+					...
+					NF 表示每行的单元数
+					NR 表示文件的行数
+					FS 表示列分隔符，默认是空格
+					OFS 表示输出列分隔符，默认是空格
+					RS 表示记录分隔符，默认是换行符
+					ORS 表示输出记录分隔符，默认是换行符
+					...
+					注意：如果修改了输入分隔符，则相应的输出分隔符也要修改，否则分隔符就是默认的。
+				变量：
+					定义变量：
+						var=varl
+						变量不需要象c语言需要预先定义，也没有类型区分。
+						这个定义可以在命令行中，也可以在脚本中。如果在命令行中，则此变量只有在命令执行的时候才生效，而在BEGIN中不会生效，除非用-v var=varl来定义。	
+					引用变量：
+						就像c语言中一样，直接使用。不需要向shell中需要用$var来引用。
+					数组：
+						数组用[]来表示，awk可以自动扩展。举例：
+							a[1]=1;a[2]=2...
+				awk中的函数：
+						split(r,s,t):
+							将r字串按照t分割符分成s字串
 							awk 'BEGIN{r="a/b/c";split(r,s,'/');OFS="-";print s[1],s[2],s[3];}'
 							结果是：a-b-c
-						gsub(r,s,[t]):将t中的字符串，匹配r后用s替换，结果为t;如果t没有提供，默认是$0.
-						sub(r,s,t):类似与sub，只是将t中第一次出现的r用s替换
+						gsub(r,s,[t]):
+							将t中的字符串，匹配r后用s替换，结果为t;如果t没有提供，默认是$0.
+						sub(r,s,t):
+							类似与sub，只是将t中第一次出现的r用s替换
 							awk 'BEGIN{t="abc";sub("a","s",t);print t}'
-						inedx(t,s):返回t中s所处的位置
-						length(s):返回s的长度
-						substr(t,pos):返回t中从pos之后的字串
-						substr(t,pos,len):返回t中从pos之后长度为len的字串。
+						inedx(t,s):
+							返回t中s所处的位置
+						length(s):
+							返回s的长度
+						substr(t,pos):
+							返回t中从pos之后的字串
+						substr(t,pos,len):
+							返回t中从pos之后长度为len的字串。
 							pos,len是数字,与index正好相反。	
 						更多函数参见man awk 
 
