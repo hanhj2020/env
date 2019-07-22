@@ -12,4 +12,4 @@
 #3。用substr提取时间字串。
 #4。用split将时间字串分割，然后用sprintf重新组合，目的是符合touch命令的格式。
 #5。用system命令，调用touch命令来修改文件时间。
-ls -rt|awk '/[0-9]+-[0-9]+-[0-9]+/{i=match($0,/[0-9]+-[0-9]+-[0-9]+/);j=match($0,/\..*/);str=substr($0,i,j-i);split(str,A,"-");str=sprintf("%4d%02d%02d0000",A[1],A[2],A[3]);print str;system("touch "$0"  -t "str)}'
+ls -rt|awk '/[0-9]+-[0-9]+-[0-9]+/{i=match($0,/[0-9]+-[0-9]+-[0-9]+\./);j=match($0,/\..*/);str=substr($0,i,j-i);split(str,A,"-");str=sprintf("%4d%02d%02d0000",A[1],A[2],A[3]);print str;system("touch "$0"  -t "str)}'
