@@ -1104,12 +1104,13 @@
 						数组用[]来表示，awk可以自动扩展。举例：
 							a[1]=1;a[2]=2...
 				awk中的函数：
-						split(r,s,t):
-							将r字串按照t分割符分成s字串
-							awk 'BEGIN{r="a/b/c";split(r,s,'/');OFS="-";print s[1],s[2],s[3];}'
+						split(s,A,r):将字串分割。
+							s:源字串，r:正则分割符，A：分割后字串
+							awk 'BEGIN{s="a/b/c";split(s,A,'/');OFS="-";print A[1],A[2],A[3];}'
 							结果是：a-b-c
-						gsub(r,s,[t]):
-							将t中的字符串，匹配r后用s替换，结果为t;如果t没有提供，默认是$0.
+						gsub(r,t,[s]):全局替换
+							r：正则匹配字串，t：匹配后替换字串，s:源字串，如果没有，默认是$0
+							echo aaa2017|awk '{gsub(/[0-9]+/,"bbb")'
 						sub(r,s,t):
 							类似与sub，只是将t中第一次出现的r用s替换
 							awk 'BEGIN{t="abc";sub("a","s",t);print t}'
@@ -1122,6 +1123,9 @@
 						substr(t,pos,len):
 							返回t中从pos之后长度为len的字串。
 							pos,len是数字,与index正好相反。	
+						match(s,r):
+							返回r在s中的位置。r是正则表达式。失败返回0
+							如果返回匹配字串，可以用：substr(s,match(s,r))
 						更多函数参见man awk 
 
 #关于条件组合的总结：
