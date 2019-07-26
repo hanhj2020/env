@@ -1069,6 +1069,12 @@
 					print exp
 					printf format,expr..
 					...other fun 
+					在awk中执行shell命令：
+						1）awk '{print|"command"'
+							awk '{print|"ls"}'
+						2) awk '{system("command")}'
+							awk '{system("ls")}'
+							awk '{v1="echo";v2="abc";system(v1" "v2)}'
 					special filenames
 					/dev/stdin or 1
 					/dev/stdout or 2	
