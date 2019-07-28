@@ -1,0 +1,38 @@
+windows使用技巧
+
+1.xp中如何开启远程桌面
+
+	被访问机：
+		1）建立供外部访问的用户：
+			控制面板->用户账户。。。或者直接用当前登录的用户名。
+		2）配置远程访问：
+			我的电脑->右击鼠标->属性->远程->远程桌面，允许用户远程连接次计算机
+	访问机：开始->所有程序->附件->远程桌面连接，输入用户名，密码。
+2.xp中开启共享
+	1）修改本机名，所在工作组：
+		我的电脑->右键->属性->更改->修改计算机名，和隶属于域或工作组。
+		工作组一般名为workgroup。一般要求重启。重启后，查看：网上邻居->（左侧）查看工作组，看本机
+	是否在工作组中。
+	2）如果不在：
+		a。检查是否有防火墙，
+			关掉防火墙
+		b。是否安装了共享协议：
+			网上邻居->右键->属性->在右侧当前连接上，点右键->属性->在常规中，看是否有Microsoft网络的文件和打印机共享。如果没有添加该协议。
+		c。是否开启了workstation，server，tcp/ip服务：
+			我的电脑->右键->管理->选择服务和应用程序->选择服务->查看是否开启了以上服务
+		下面是一个批处理文件，可以一次执行，开启以上服务。
+		服务关掉的原因可能是由于杀毒软件优化的结果。
+		　　@echo off
+			net start “Workstation” >nulnet start “Server” >nul
+		　　net start “TCP/IP NetBIOS Helper” >nul
+		　　net start “DHCP Client” >nul
+		　　net start “DNS Client” >nul
+		　　net start “Windows Time” >nul
+		　　net start “Windows Audio” >nul
+		　　net start “Computer Browser” >nul
+		　　exit
+	3）查看网上邻居：
+		1)网上邻居->右键->资源管理器->网上邻居->整个网络->Microsoft Windows Network 可以看到工作组，以及工作组中的计算机。
+		2)可以在命令中输入计算机ip地址，或计算机名，直接查找。
+			开始->运行->输入\\ip
+			
