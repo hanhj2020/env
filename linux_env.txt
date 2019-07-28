@@ -867,7 +867,8 @@
 
 ##grep:查找字串
 	调用格式：
-	　　grep [options] pattern files
+	　　grep [options] pattern [dir] files
+		没有dir，默认是当前目录
 	选项：
 		-i 忽略大小写
 		-w 匹配整个单词
@@ -884,14 +885,15 @@
 		-C num,显示匹配行前后的num行 
 		-o pattern 仅显示匹配的字符
 	注意：
-		由于shell要先对通配符展开，所以需要留意。
 		比如想查找当前目录下包括子目录中的c，cpp文件中包括return 0;语句的部分。
-		grep -r "return 0" *.cpp *.c 不会在子目录中查找，即使加上了-r选项。
-		grep -r "return 0" * --include=*.c 也不行（应当是bug，在3.1版本中不存在）
-		因为shell首先会对*.cpp *.c进行展开，这样待找的文件就不包括了子目录
-		解决办法是：
-			find . -name '*.c' -o -name '*.cpp' |xargs grep 'return 0;' 
-			将find的结果作为grep的输入文件。
+		grep "return 0" . -r  *.cpp *.c 会在子目录中查找所有文件，而不是cpp，c文件。因为首先是shell展开当前目录的cpp，c文件，然后对当前目录进行递归查找，此时就不会仅仅包括cpp和c文件。
+		所以应当为：grep "return 0"	. -r --include=*.cpp --include=*.h
+		如果想以其他目录搜索，应当加上-r：
+		grep "return 0" dir -r --include=*.cpp --include=*.h
+		而不能
+		grep "return 0" dir --include=*.cpp --include=*.h
+		或
+		grep "return 0" dir/* --include=*.cpp --include=*.h
 	
 ##| 管道
 	将前一个程序的标准输出作为下一个程序的标准输入
