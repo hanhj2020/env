@@ -1,11 +1,12 @@
 \documentclass[fleqn]{article}
 \usepackage{xeCJK}
 \usepackage{graphicx}
-%\usepackage{indentfirst}%产生首行缩进
+\usepackage{indentfirst}%产生首行缩进
 \usepackage{listings}
 \usepackage{makeidx}
 \usepackage{mylatex}
-\usepackage{hyperref}
+\usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\setCJKmainfont{AR PL UMing TW MBE}
 \thispagestyle{headings}
 \lstset{language=C}
 \makeindex
@@ -25,8 +26,11 @@
 	texlive-xetex							：编译器
 	tex-cjk-chinese，texlive-lang-chinese	：中文支持
 	texmaker:latex							：latex编辑器，可选
+	帮助:
+		texdoc 包名，可以查看本地包的帮助信息。
+		本地的包放在两处，一处是发行的包放在 /usr/share/texlive/texmf-dist/tex/latex/。
+		一处是插件，放在 /usr/share/texmf/tex/latex/下面。
 	\end{verbatim}
-	
 \section {第一个latex文档}
 	\begin{verbatim}
 		\documentclass{article}
@@ -144,7 +148,6 @@
 				\backslash documentclass\{article\} & \textrm{这个是定义文档格式}\\
 				  \backslash usepackage\{graphicx\} & \textrm{这个是引用宏包}\\
 																		 ...& \textrm{其他一些宏包} \\
-				  \backslash maketitle & \textrm{其他一些命令}\\
 				... 
 			\end{array}
 			\right.
@@ -153,6 +156,8 @@
 	\textrm{正文部分}\left\{
 			\begin{array}{ll}
 				\backslash begin\{document\} & \textrm{表示正文开始}\\
+				\backslash title\{...\} & \textrm{标题}\\
+				\backslash maketitle & \textrm{生成标题}\\
 				...\\
 				\backslash end\{document\} & \textrm{表示正文结束}
 			\end{array}
@@ -559,9 +564,6 @@
 		执行mktexlsr,或texhash命令更新latex文件名数据库，就可以使用了。\\
 		\textbf{生成帮助：}\\
 			用latex来编译dtx文件，然后会生成dvi文件，再用dvips转成pdf文件，必要的话可能还需要makeindex来生成索引文件。以上是生成帮助的手动方法，有些包将以上过程封装在一个脚本中，也是一样的。
-	\subsection{帮助}
-		texdoc 包名，可以查看本地包的帮助信息。\\
-		本地的包放在两处，一处是发行的包放在 /usr/share/texlive/texmf-dist/tex/latex/。一处是插件，放在 /usr/share/texmf/tex/latex/下面。
 
 
 \newpage

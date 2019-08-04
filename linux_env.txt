@@ -2376,3 +2376,13 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 			svn add:添加文件
 			svn ci -m ""：提交修改
 			svn diff :比较修改等操作
+
+添加网络打印机：
+	添加smb，windows共享打印机：
+		sudo lpadmin -p name_of_printer -E -v url -m everywhere
+
+	此时会在系统设置的打印机中出现一个myprinter，然后双击其属性，配置远程打印机及驱动。
+
+计算器：
+	gnome-calculater
+
