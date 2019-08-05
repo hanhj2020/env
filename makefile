@@ -1,5 +1,7 @@
 target=makefile.pdf latex_study.pdf
 all:$(target)
+latex_study.pdf:latex_study.tex
+	xelatex $<
 %.pdf:%.dvi
 	dvipdf $< 
 %.dvi:%.tex
