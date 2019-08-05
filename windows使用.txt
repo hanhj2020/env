@@ -35,4 +35,11 @@ windows使用技巧
 		1)网上邻居->右键->资源管理器->网上邻居->整个网络->Microsoft Windows Network 可以看到工作组，以及工作组中的计算机。
 		2)可以在命令中输入计算机ip地址，或计算机名，直接查找。
 			开始->运行->输入\\ip
-			
+3.显示桌面
+	有时在最底下的快捷方式中，切换桌面的按钮没了，可以建立下面的文件a.scf
+	[shell]
+	command=2
+	IconFile=explorer.exe,3
+	[Taskbar]
+	Command=ToggleDesktop
+
