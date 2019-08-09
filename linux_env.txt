@@ -1505,6 +1505,8 @@
 		apt-cache showpkg pkgs	:print infomation of pkgs
 		apt-cache search regex:查找软件包.apt search 可能找到一些不是精确匹配的软件。
 		
+#aptitude
+		一种图形化的apt工具
 
 #dpkg
 	调用格式：
@@ -2395,4 +2397,15 @@ libreoffice:
 	lomath
 	loimpress	=powerpoint
 
+字号：
+9小五
+10.5五号
+12小四
+14四号
+15小三
+16三号
+18小二
+22二号
+24小一
+26一号
 
