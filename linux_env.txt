@@ -2386,3 +2386,13 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 计算器：
 	gnome-calculater
 
+libreoffice:
+	办公软件
+	localc	=excel
+	lowriter=word
+	lodraw
+	loweb
+	lomath
+	loimpress	=powerpoint
+
+
