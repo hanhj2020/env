@@ -1509,6 +1509,11 @@
 #aptitude
 		一种图形化的apt工具
 
+#界面软件管理程序
+	software-properties-gtk 更新设置程序
+	gnome-software 程序管理程序
+	update-manager 检查更新软件程序
+
 #dpkg
 	调用格式：
 		dpkg <action> [pkg]	:pkg 要求精确匹配
