@@ -7,8 +7,9 @@
 
 几个常用命令：
 	clear	清除当前工作区全局变量
-	clc	clear command	清除命令窗口
-	clf	clear figure	清除图形窗口
+	clc		清除命令窗口
+	clf		清除图形窗口
+	cla		清除当前坐标窗口.通常用于subplot命令中所开的串口
 	echo	命令区回显显示开关。此命令仅在m文件中使用，在命令行中无效。？？没有用
 	disp	显示文本或变量 disp(x)
 	path	显示当前搜索命令的路径。
@@ -278,8 +279,10 @@
 				axis equal
 				axis on/off
 				grid on/off
-				hold on/off
-				subplot(m,n,i)
+				hold on/off	是否保持当前绘图
+				subplot(m,n,i)	在当前绘图窗口中开几个绘图区,m行n列个,i表示当前在哪个区绘图.从1开始从左到右,从上到下。
+				axis是对当前绘图区进行坐标轴设置。
+
 						
 				
 第六章数据分析
