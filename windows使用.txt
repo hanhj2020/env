@@ -45,3 +45,18 @@ windows使用技巧
 	在资源管理器中工具-查看中勾去掉简单共享
 	然后再需要的共享文件夹上右击共享及安全，从安全选项中去掉everybody，添加需要共享的用户名
 
+5.显示桌面
+	建立一个文件desktop.scf
+	[shell]
+	command=2
+	iconfile=explorer.exe,3
+	[taskbar]
+	command=toggledesktop
+	
+	win+d也是返回桌面的快捷键
+	
+6	屏幕捕捉
+	微信alt+a
+	qq
+	ctrl+alt+a
+	
