@@ -48,22 +48,30 @@ ESC键用来退出。
 
 
 命令：
-l	直线	line
-rec	矩形	rectang
-c	圆形	circle
-pol	正多边形	polygen
-ml	多线	multi line
 
-cha	倒角	chamfer
-f	圆角	fillet
-co	复制	copy
-o	偏移	offset
-tr	修剪	trim
-mi	镜像	mirror
-	
-bo	边界	boundary
-di	距离	dist
-pr	特性	properties
+简短命令	意义	全名
+
+构造		在绘图菜单和面板中
+l			直线	line
+ray			射线	
+xline		构造线	可用来等分角
+rec			矩形	rectang
+
+修改		在修改菜单和面板中
+c			圆形	circle
+pol			正多边形	polygen
+ml			多线	multi line
+
+cha			倒角	chamfer
+f			圆角	fillet
+co			复制	copy
+o			偏移	offset
+tr			修剪	trim
+mi			镜像	mirror
+			
+bo			边界	boundary
+di			距离	dist
+pr			特性	properties
 
 2绘图环境
 limits	图纸界限设置
