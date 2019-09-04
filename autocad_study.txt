@@ -49,7 +49,7 @@ ESC键用来退出。
 
 命令：
 
-简短命令	意义	全名
+简短命令	意义	全名	说明
 
 构造		在绘图菜单和面板中
 l			直线	line
@@ -57,26 +57,31 @@ ray			射线
 xline		构造线	可用来等分角
 rec			矩形	rectang
 
-修改		在修改菜单和面板中
 c			圆形	circle
 pol			正多边形	polygen
 ml			多线	multi line
 
+bo			边界	boundary
+reg			创建面域 region
+
+修改		在修改菜单和面板中
 cha			倒角	chamfer
 f			圆角	fillet
 co			复制	copy
 o			偏移	offset
 tr			修剪	trim
 mi			镜像	mirror
-			
-bo			边界	boundary
+explode		分解
 di			距离	dist
 pr			特性	properties
+sc			缩放	scale	利用缩放的参考，可以设置新的长度
+ro			旋转	rotate  利用旋转命令中的参考，可以按照参考的方向旋转。设置基点后，可以选择初始角为0，也可以利用两点来指定初始角。然后，可以选择参考的两点作为新的角度。
+
 
 2绘图环境
 limits	图纸界限设置
 units	设置单位，精度	菜单：格式-》单位
-layer	建立图层	菜单：格式-》图层
+layer	建立图层	菜单：格式->图层
 lts		设置全局线型比例，也可单个通过属性来设置
 
 夹点编辑
