@@ -113,6 +113,15 @@
 		O	进入编辑模式，在当前行前插入一行。
 		r	替换当前光标下的字符,光标不移动，替换后还是normal状态。
 		R	进入替换模式，键入的字符替换原字符，光标向后移动。
+
+			在编辑状态下移动光标，不能通过hjkl，但是可以通过加上控制符来使用hjkl。方法如下：
+			编辑.vimrc文件加上如下的命令：
+			inoremap <c-h>	<left>
+			inoremap <c-j>	<down>
+			inoremap <c-k>	<up>
+			inoremap <c-l>	<right>
+			对于c-h在原来的terminal终端中定义为删除键。如果c-h不能使用，需要搜索加载的vim文件中是否有定义该键的地方，把他取消掉。
+
 		d{motion}	删除motion移动到的字符。
 			motion是移动单词，比如w:next word,b:back word,l,h,j,k等。
 			比如：
