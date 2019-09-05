@@ -28,9 +28,16 @@ git 下载：sudo apt-get install git
 		--remove-section name 删除一个组
 		--rename-section name newname 重命名一个组
 		-l 列出当前所有变量
-		-e 编辑当前变量
+		-e 打开编辑器，编辑当前变量
 	有时文件内容没变,但是文件属性变了,又不想重新提交这个变化,可以在config中配置:
 	git config core.fileMode false
+	config的一些选项
+	core.safecrlf true/false
+	core.autocrlf true/false
+	i18n.commitencoding gbk/utf-8默认 提交信息的编码
+	i18n.logoutputencoding gbk/utf-8
+	gui.encoding gbk/utf-8	gitk使用的编码
+
 
 初始化仓库：
 	在工作目录下执行：git init 可以在当前工作目录下创建一个仓库用来管理当前目录下的改动。

@@ -23,12 +23,23 @@ gbk	:
 big5：是台湾，香港使用的汉字编码,其编码并不与gbk兼容。
 
 unicode:
-	是一种世界通用编码，将所有字符统一编码，占用2个字节，0000-ffff，其中汉字，韩文，日文占用3000-9fff。unicode收录了2万多个汉字。
+	是一种世界通用编码，将所有字符统一编码。unicode编码从0000-10ffff，分成17个平面，每个平面有65536个字符，占用2个字节，即0000-ffff。目前定义的平面有0，，1，2，14，15，16，包括了238605个编码。
+	其中15，16专用区，0平面中有6400（e000-f8ff）和2048(d800-dfff)个专用.剩余99089个编码，分布在其他区中。
+	平面2中定义了43253个汉字，平面0中定义了27973个汉字。
+	比如 汉 的编码为6c49
 	
-utf8:
-	unicode transformation format，是一种针对unicode的中间码。其特点是长度不一定，从1个字节到8个字节。
-	如果原字符是ascii，则utf8	也是一个字节，其最高位为0
-	对于多字节，utf8从高位开始编码，最高为连续几个1代表用几个字节来表示原字符。后面字符的高2为都是10.
+utf:	unicode transformation format，
+	是一种针对unicode的中间码。其特点是长度不一定，从1个字节到8个字节。
+	utf按照最小编码单位可以分成utf-8,utf-16,utf-32 。utf-8就是最小编码单位为8位，即一个字节。
+	如果原字符是ascii，则utf8也是一个字节，其最高位为0
+	对于多字节，utf8从高位开始编码，最高为连续几个1代表用几个字节来表示原字符。
+	对于不同的unicode编码区，utf8用不同的编码格式
+	unicode编码（十六进制）	utf8编码（二进制）				字节数
+	0-7f					0xxxxxxx						1
+	80-7ff					110xxxxx 10xxxxxx				2
+	800-ffff				1110xxxx 10xxxxxx 10xxxxxx		3
+	10000-10ffff			11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 4
+	后面字符的高2位都是10.
 	对于多字节utf编码长度是原字符长度+1,比如汉字的utf8编码长度是3.
 	例如：
 	啊
@@ -37,4 +48,18 @@ utf8:
 				554a	大头序
 	utf8		e5958a
 
+	utf8-bom	bom（byte order mark)带字节序的utf8编码。
+				网络字节序是小头序，即高字节在前，高字节先传
+				计算机中一般为大头序，即低字节在前
+				在文件开头带上bom
+				big ending		:feff
+				little ending	:ff fe 
+
+				编码		bom
+				utf-16be	fe	ff
+				utf-16le	ff	fe
+				utf8		no
+				utf8-bom	ef	bb	bf
+				utf-32le	ff fe 00 00
+				utf-32be	00 00 fe ff
 
