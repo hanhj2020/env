@@ -34,6 +34,7 @@ git 下载：sudo apt-get install git
 	config的一些选项
 	core.safecrlf true/false
 	core.autocrlf true/false
+	core.quotepath true/false 中文显示提交
 	i18n.commitencoding gbk/utf-8默认 提交信息的编码
 	i18n.logoutputencoding gbk/utf-8
 	gui.encoding gbk/utf-8	gitk使用的编码

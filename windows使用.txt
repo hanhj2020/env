@@ -59,4 +59,13 @@ windows使用技巧
 	微信alt+a
 	qq
 	ctrl+alt+a
+
+7  在visual box中利用u盘来安装系统
+	在visual box中安装系统是，有时候，iso文件并不是启动光盘，只有启动U盘，此时需要用真实U盘启动。
+	为了使用真实U盘，要将U盘用一个文件来描述，然后加载这个文件，成为虚拟磁盘。
+	在visual box目录下运行
+	vboxmanage internalcommands createrawvmdk -filename xx.vmdk -rawdisk \\.\physicaldriveX
+	这里X是插入U盘后，所看到的磁盘号。0,1,2,3...
+	将此文件作为磁盘设备加载。然后按照磁盘，光驱顺序启动。
+	
 	
