@@ -114,17 +114,20 @@ git 下载：sudo apt-get install git
 
 远程仓库操作：
 	git remote add 远程库名 远程库地址：建立与远程git库的连接
-		远程库名是远程用来跟踪所有版本仓库的名字，一般为origin，例如：
-	git remote add origin git@192.168.15.23:simple.git,这条命令实际上是修改本地仓库的配置文件：
-	[remote "origin"]
-		url=git@192.168.15.23:simple.git
-		fetch=+refs/heads/*:refs/remotes/origin/*
-	git branch --set-upstream-to=远程库名/远程分支：建立本地分支与远程库的联系。
-		创建远程库连接时会默认建立origin与master分支的联系，如果想建立远程库与其他分支的联系，可以通过上面的命令，比如：git branch --set-upstream-to=origin/other_br
-	它实际上是修改本地库的配置文件
-	[branch "other_br"]
-		remote=origin
-		merge=refs/heads/other_br
+		远程库名是远程用来跟踪所有版本仓库的名字，一般为origin，
+		例如：git remote add origin git@192.168.15.23:simple.git,这条命令实际上是修改本地仓库的配置文件：
+		[remote "origin"]
+			url=git@192.168.15.23:simple.git
+			fetch=+refs/heads/*:refs/remotes/origin/*
+	git branch --set-upstream-to=远程库/远程分支 本地分支：建立本地分支与远程分支的联系。
+	(在低版本的git中，该命令为git branch --set-upstream 本地分支 远程库/远程分支)
+		在使用该命令前需要执行git fetch命令，将远程的分支拉下来，否则会报错。
+		比如：git branch --set-upstream-to=origin/master master
+		它实际上是修改本地库的配置文件
+		[branch "master"]
+			remote=origin
+			merge=refs/heads/master
+		这个内容，也可以手动敲入
 
 	git clone git@url：从远程git库中下载整个项目
 
