@@ -42,15 +42,15 @@ utf:	unicode transformation format，
 	后面字符的高2位都是10.
 	对于多字节utf编码长度是原字符长度+1,比如汉字的utf8编码长度是3.
 	例如：
-	啊
-	区位码：	b0a1
-	unicode		4a55	小头序
-				554a	大头序
-	utf8		e5958a
+
+	汉字	：	啊
+	区位码	：	b0a1
+	unicode	：	554a	
+	utf8	：	e5958a
 
 	utf8-bom	bom（byte order mark)带字节序的utf8编码。
-				网络字节序是小头序，即高字节在前，高字节先传
-				计算机中一般为大头序，即低字节在前
+				网络字节序是大头序，即高字节在前，高字节先传
+				计算机中一般为小头序，即低字节在前
 				在文件开头带上bom
 				big ending		:feff
 				little ending	:ff fe 
