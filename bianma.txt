@@ -40,9 +40,7 @@ utf:	unicode transformation format，
 	800-ffff				1110xxxx 10xxxxxx 10xxxxxx		3
 	10000-10ffff			11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 4
 	后面字符的高2位都是10.
-	对于多字节utf编码长度是原字符长度+1,比如汉字的utf8编码长度是3.
 	例如：
-
 	汉字	：	啊
 	区位码	：	b0a1
 	unicode	：	554a	
