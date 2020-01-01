@@ -1,14 +1,15 @@
 \documentclass[fleqn]{article}
-\usepackage{xeCJK}
+%\usepackage{xeCJK}
+\usepackage{ctex}
 \usepackage{graphicx}
 \usepackage{indentfirst}%产生首行缩进
-\usepackage{listings}
+%\usepackage{listings}
 \usepackage{makeidx}
 \usepackage{mylatex}
 \usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
-\setCJKmainfont{AR PL UMing TW MBE}
+%\setCJKmainfont{AR PL UMing TW MBE}
 \thispagestyle{headings}
-\lstset{language=C}
+%\lstset{language=C}
 \makeindex
 \begin{document}
 %\begin{CJK}{UTF8}{gbsn}
@@ -47,8 +48,8 @@
 		\begin{verbatim}
 			\documentclass{article}
 			\usepackage{CJK}			%使用CJK
-			\begin{CJK}{UTF8}{gbsn}		%指定编码UTF8,字体gbsn
 			\begin{document}
+			\begin{CJK}{UTF8}{gbsn}		%指定编码UTF8,字体gbsn
 				你好,世界
 			\end{CJK}
 			\end{document}
@@ -414,6 +415,15 @@
 		\end{tabular}
 			\caption{数学公式}
 		\end{table}	
+		
+		数学公式默认的居中排布。如果想左对齐或右对齐，可以在开始的地方设置\begin{verbatim}
+			\documentclass[fleqn]{article}
+		\end{verbatim}
+		还可以设置缩进宽度。\begin{verbatim}
+			\setlength{\mathindent}{0pt}
+			\end{verbatim}
+			
+			
 	\subsection{表和图}\index{table}\index{figure}
 		文档中常有表和图，需要给它们编号，table和figure就是为表和图加上编号的命令。table,figure在latex中称为浮动体。
 		\begin{verbatim}
