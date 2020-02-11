@@ -1352,6 +1352,17 @@
 	输入：
 		digraph 
 		或输入法
+
+第二十五章 灾难恢复
+	se nobackup 不产生备份文件 filename~
+	se noswapfile 不产生swp文件 filename.swp
+	se noundofile 不产生undo备份 filename.un~
+	se backup 产生备份文件 filename~
+	se swapfile 产生swp文件 filename.swp
+	se undofile 产生undo备份 filename.un~
+	se updatetime=xxxx 设置无字符敲入后等待时间后备份 默认4000ms 
+	se updatecount=xxxx 设置连续敲入n个字符后备份 默认200
+
 ======================================================================
 附录1：关于motion 
 	motion是移动命令，比如hljk。但是vim中的motion比这丰富的多。

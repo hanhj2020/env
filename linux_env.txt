@@ -288,7 +288,7 @@
 				-i info 
 
 
-	使用mount命令在在ubuntn下挂载windows的fat32分区的举例:
+	使用mount命令在在ubuntu下挂载windows的fat32分区的举例:
 
 		第一步：修改/etc/fstab;
 		
@@ -2404,11 +2404,17 @@ libreoffice:
 	loimpress	=powerpoint
 
 grub
-	file: 
+	根据需要编辑下列文件: 
 	/etc/default/grub 
 	/etc/grub.d/
-	run
-	update-grub
+	run update-grub
+
+添加字体：
+	一般linux的字体文件位于 /usr/share/fonts/目录下。
+	将字体文件拷贝到该目录（或新建目录），然后执行
+	mkfontscale,mkfontdir,lc-cache.
+	fc-list :lang=zh可以查看安装的中文字体。
+
 
 字号：
 9小五
