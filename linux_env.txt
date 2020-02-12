@@ -622,6 +622,8 @@
 　	　 如果只提供用户名,用户组不改变,如果同时提供用户名和组,之间用冒号或者点隔开.
 
 ##用户设置
+	用户信息保存在/etc/passwd中
+	用户组信息保存在/etc/group中
 
 	adduser/useradd,前者会提示一些信息，后者直接增加用户
 		-m 会在home目录下添加用户的目录
@@ -635,10 +637,17 @@
 		-l 锁定用户，即禁止用户
 		-u 解锁用户
 		通过usermod -L/U可以同样达到此目的
+
 	groupadd 添加用户组
 		-g gid 设置用户组号
 	groupmod 修改用户组
 	groupdel 删除用户组
+
+	直接查看/etc/group文件，可以看到组成员情况。
+	gpasswd -a user group 添加用户到组中
+	gpasswd -d user group 从组中删除用户
+
+
 
 ##find :查找文件
 　　调用格式:

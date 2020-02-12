@@ -1,5 +1,11 @@
-target=makefile.pdf latex_study.pdf
+target=makefile.pdf latex_study.pdf mark_down.html git服务器安装与设置.html bash.html 
 all:$(target)
+mark_down.html:mark_down.md
+bash.html:bash.md
+git服务器安装与设置.html:git服务器安装与设置.md
+
+%.html:%.md	
+	pandoc -f markdown  $< -o $@ -c dox.css
 latex_study.pdf:latex_study.tex
 	xelatex $<
 %.pdf:%.dvi
@@ -10,4 +16,4 @@ latex_study.pdf:latex_study.tex
 	latex $<
 .PHONY:clean
 clean:
-	rm -f *.out *.fls *.idx *.ind *.dvi *.ps *.log *.toc *.aux *.ilg *.lof *.lot 
+	rm -f *.out *.fls *.idx *.ind *.dvi *.ps *.log *.toc *.aux *.ilg *.lof *.lot  $(target)

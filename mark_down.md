@@ -9,7 +9,7 @@ markdown中连续一行或多行文字称为段落，段落看起来是连续的
 标题用#来表示，#表示一级标题，##表示二级标题。。。最多6级。
 
 ### 列表 
-无序列表可以用*，-，+等开头来表示， *和内容之间空1格。
+无序列表可以用\*，-，+等开头来表示， \*和内容之间空1格。
 
 - a
 - b 
@@ -19,8 +19,6 @@ markdown中连续一行或多行文字称为段落，段落看起来是连续的
 1. a
 2. b
 
-
-  
 ### 引用
 
 > 用>来表示引用，可以将段落缩进。  
@@ -31,25 +29,41 @@ markdown中连续一行或多行文字称为段落，段落看起来是连续的
 > `this is code 引用中的代码`
 
 ### 代码
-用``来包括行内代码。比如`这是行内代码`。  
+用\`\`来包括行内代码。比如`这是行内代码`。  
 用一个tab或4格空格开始一个代码段。比如
 
 	this is a code paragraph
 	this is second line.
-   
+
+
+### 字体格式   
+
+**着重**，*斜体*，`code`
+	
 ### 表格
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+	|a|b|c|
+	|--|--|--:|
+	|a|b|c|
 
 |a|b|c|
-|--|:--|:--|
+|--|--|--:|
 |a|b|c|
+第二行中的:代表对齐方向。
 
+### 图片和链接
+ 
+- ![test](photo.jpg "jpg")
+- [sohu](http://www.sohu.com "sohu")
 
+###markdown工具
 
-1. 
-- [sohu](http://www.sohu.com "fdsa")
+**编辑器**  
+ 
+- windows：markdownpad
+- linux：retext
+- mac：mou
+
+**工具**
+
+- pandoc： 可以将md文件转换成html，docx，pdf等格式的工具。windows，linux下有相应版本。
