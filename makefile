@@ -1,7 +1,8 @@
-target=makefile.pdf latex_study.pdf mark_down.html git服务器安装与设置.html bash.html 
+target=makefile.pdf latex_study.pdf mark_down.html git服务器安装与设置.html bash.html  linux_env_study.html 
 all:$(target)
 mark_down.html:mark_down.md
 bash.html:bash.md
+linux_env_study.html:linux_env_study.md
 git服务器安装与设置.html:git服务器安装与设置.md
 
 %.html:%.md	
