@@ -32,7 +32,7 @@
 	date "%Y-"
 
 
-**ntpdate	网络时间**
+**ntpdate 网络时间**
 
 	ntpdate -q server 查询网络时间
 	ntpdate server 修改系统时间 必须有root权限
@@ -111,7 +111,7 @@
 
 	调用格式：
 		time 程序
-**echo	将字符串输出到标准输出**
+**echo 将字符串输出到标准输出**
 
 	调用格式：
 		echo [options] xxx
@@ -121,7 +121,7 @@
 		-e	解释\转义符
 		-E	不解释\转义符
 	也可以使用echo命令来执行命令。比如echo `ls`。
-**read	从键盘接受输入**
+**read 从键盘接受输入**
 
 	调用格式：
 		read [options] var
@@ -154,7 +154,7 @@ ctrl-d	结束输入
 		w	back a window
 		d	foward a half window
 		u	back a half window
-**cat	显示文本**
+**cat 显示文本**
 
 	选项：
 		-n 显示行号
@@ -174,7 +174,7 @@ ctrl-d	结束输入
 	选项：
 		-n	count
 		-f	持续输出
-**tee	三通。将标准输入输出到文件和标准输出**
+**tee 三通。将标准输入输出到文件和标准输出**
 
 	调用格式：
 		tee [options] file 
@@ -188,7 +188,7 @@ ctrl-d	结束输入
 
 	选项：
 		-n 按照数值而不是按照字符串大小比较
-**tr	替换字符**
+**tr 替换字符**
 
 	调用格式
 		tr	被替换字符	替换后的字符
@@ -225,7 +225,7 @@ ctrl-d	结束输入
 		-f from
 		-t to 
 		-o outputfile
-**md5sum	求文件的md5散列值**
+**md5sum 求文件的md5散列值**
 
 	调用格式：
 		md5sum [options] files
@@ -296,7 +296,7 @@ ctrl-d	结束输入
 还有pcre，perl compile regular expression  
 更多的正则表达式可参见info grep regualr
 
-**grep	在文件中搜索字符(global regualr expression print)**
+**grep 在文件中搜索字符(global regualr expression print)**
 
 	调用格式 
 		grep optional PATTEN files 
@@ -312,7 +312,7 @@ ctrl-d	结束输入
 		-e 'command' 多个命令,例如 grep -e 'command1' -e 'command2' files
 		-f command_file 
 
-**sed	字节流处理程序，按行处理。**
+**sed 字节流处理程序，按行处理。**
 
 	调用格式
 		sed 'command' files
@@ -325,7 +325,7 @@ ctrl-d	结束输入
 		比如:sed 's/\(a\)/\1BB/g' a.txt
 		a.txt: abc	替换为：aBBbc
 
-**awk	字符处理程序，按行处理，将行中字符分列。**
+**awk 字符处理程序，按行处理，将行中字符分列。**
 
 	调用格式：
 		awk 'command' files
@@ -347,21 +347,24 @@ ctrl-d	结束输入
 		内部变量：$0,表示整行，$1,表示被空格分开的第一个字符串，$2...
 		NR	当前行数
 		NF	当前列数
- 		例子1：统计英文文本的单词出现频率
-			cat README |tr '=><\.\-\(\)\[0-9\]@:/' ' '|tr ' \011' '\012'|grep -v '^ *$'|sort|uniq -c|sort -n|tail -n 20
-			1.用tr命令将标点符号转换成空格
-			2.用tr命令将tab或空格转换成换行。tr中用数字表示字符用\NNN,只能是8进制。011是TAB，012是换行。
-			3.用grep去掉空行。^ *$,表示空行，-v表示取反，取不是空行的行。
-			4.用sort排序。
-			5.用uniq -c 去掉重复行，并列出出现次数。
-			6.用sort -n 对出现次数排序。
-			7.用tail -n 20 列出频率前20个结果。
+
+
+例子1：统计英文文本的单词出现频率
+
+	cat README |tr '=><\.\-\(\)\[0-9\]@:/' ' '|tr ' \011' '\012'|grep -v '^ *$'|sort|uniq -c|sort -n|tail -n 20
+	1.用tr命令将标点符号转换成空格
+	2.用tr命令将tab或空格转换成换行。tr中用数字表示字符用\NNN,只能是8进制。011是TAB，012是换行。
+	3.用grep去掉空行。^ *$,表示空行，-v表示取反，取不是空行的行。
+	4.用sort排序。
+	5.用uniq -c 去掉重复行，并列出出现次数。
+	6.用sort -n 对出现次数排序。
+	7.用tail -n 20 列出频率前20个结果。
 ## 4 文本比较
 
-**cmp	文本逐字节比较**
+**cmp 文本逐字节比较**
 
  	cmp file1 file2
-**diff	比较两个文本文件**
+**diff 比较两个文本文件**
 
 	调用格式：
 		diff [options] files
@@ -434,7 +437,7 @@ ctrl-d	结束输入
 	..		进程当前上一级目录  
 	/		路径分隔
 
-**ls	列出文件**
+**ls 列出文件**
 
 	选项
 		-l	长格式
@@ -450,13 +453,13 @@ ctrl-d	结束输入
 		-t	按照时间排序，新在前
 		-i	显示inode
 		-h	按照好理解的方式显示数字
-**pwd	打印当前进程所在的目录**
+**pwd 打印当前进程所在的目录**
 
 	选项
 		-P	打印绝对物理目录
 		-L	打印相对目录
 		不带参数时，默认是带-L选项
-**mv	移动文件**
+**mv 移动文件**
 
 	调用格式：mv [options] from to 
 			如果to不存在，则相当于将from改名为to
@@ -466,7 +469,7 @@ ctrl-d	结束输入
 			如果不在同一个文件系统中，则是一个拷贝然后删除原文件的动作。
 	选项
 			-v	显示详细信息
-**cp	复制文件**
+**cp 复制文件**
 
 	调用格式：
 			cp options dir1 dir2
@@ -474,7 +477,7 @@ ctrl-d	结束输入
 			-u	仅拷贝更新的文件
 			-v	显示详细信息
 			-r	递归拷贝
-**rm	删除文件**
+**rm 删除文件**
 
 	选项
 		-r	递归
@@ -487,7 +490,7 @@ ctrl-d	结束输入
 
 	选项
 		-p	自动创建不存在的目录。例如mkdir a/b/c,自动创建a，b，c目录
-**rsync	增量拷贝	**
+**rsync	增量拷贝**
 
 	调用格式：
 		rsync [options] src dest	:本地拷贝
@@ -497,7 +500,7 @@ ctrl-d	结束输入
 		rsync的有用之处在于它的增量拷贝，可以减少传输量。
 ## 6 shell
 
-- **shell的作用：**
+- **shell的作用**
 
 	shell是用户与操作系统之间的交互接口，相当于一个命令解释器，负责处理用户命令（如将*.cpp 展开多个文件），为运行程序建立环境。  
 	Linux中有多种shell，比如sh，bash，csh，ksh，zsh。
@@ -508,11 +511,11 @@ ctrl-d	结束输入
 	1）以当前shell为父shell，建立一个新子shell来执行。  
 	2）在当前shell中执行。
 
-	新子bash执行
+	新子shell执行
 
 		bash xx 或
 		./xx
-	在当前bash中执行 
+	在当前shell中执行 
 
 		. xx 注意.和xx之间的空格。或
 		source xx
@@ -520,7 +523,7 @@ ctrl-d	结束输入
 		
 - **shell中的变量：**
 
-	- 定义变量
+	- **定义变量** 
 
 		var=xx  
 		在shell中用var=xxx就可以给var变量赋值为xxx。 
@@ -571,7 +574,7 @@ ctrl-d	结束输入
 		如果想在子shell中使用这些变量，可以在父shell中将这些变量通过export var变为环境变量。  
 		在子shell中可以修改这些变量，但不会影响父shell中同名变量。
 
-- **shell命令行中的元字符：**
+- **shell中的元字符：**
 
 	元字符就是具有特殊含义的字符，shell遇到这些字符会做特殊处理
 
@@ -593,26 +596,27 @@ ctrl-d	结束输入
 
 	shell的元字符在引号中，大部分失去其特殊意义，但是shell中的引号对于元字符的作用不尽相同。
 
-	-	':单引号
+	- **':单引号**	
 
 			单引号中元字符都失去意义，包括转义符。如果其中有'，则需要用'将前面的内容结束，然后用\'表示',此时如果后面还有内容则用'再继续。  
 		比如有dont't do this.如果想用'表示上面内容，则需要'dont'\''t do this'.即如果想匹配abc'def,就要'abc'\''def'，将'前后两部分用''包起来。
 
-	-	":双引号
+	- **":双引号**	
 
 			双引号中仅保留$var,``，\。如果双引号内容中有$或`,\,"用作原义，则必须做转义\$,\`,\\,\"。
 
-	- \`:反引号
+	- **\`:反引号** 
 
 			反引号用作执行命令，其中内容不允许再出现`，如果出现必须用转义符。
 			比如files=`echo \`ls -l\``。其他内容等同于在原来的命令行，元字符具有其特殊意义，该转义的地方还是要转义。
 
 		反引号的返回值：  
-			如果ret=`command`,其是将command的标准输出结果到ret变量中。相当于重定向，即将标准输出重定向到ret变量中。 
+			如果ret=\`command\`,其是将command的标准输出结果到ret变量中。相当于重定向，即将标准输出重定向到ret变量中。   
 			如果想知道command是否执行成功，要看$?的结果。 
-			$?的结果是个字串0，或1。 0代表执行成功，非0代表执行失败。判断时：if [ $ret = "0" ] then;echo "successful";else echo "fail";fi;  
-		注意用=，而且=两边要留空格，不像赋值时两边不能有空格。原因是[ 实际是一个程序，其里面的参数实际上是作为参数输入给 [,为了区别各个参数，所以需要用空格将各个参数分开，就像命令行一样。  
+			$?的结果是个字串0，或1。 0代表执行成功，非0代表执行失败。  
 
+				if [ $ret = "0" ] then;echo "successful";else echo "fail";fi;  
+		注意用=，而且=两边要留空格，不像赋值时两边不能有空格。
 - **shell中的转义**
 
 	在shell中，首先由bash对命令行进行处理，包括对转义的处理，然后将处理后的命令行交给所调用的程序，由程序对命令行进行处理。因此，转义包括多个层次。
@@ -633,7 +637,7 @@ ctrl-d	结束输入
 
 - **shell的重定向：**
 
-	- **输入重定向：**
+	- **输入重定向**
 
 			prog < xxx
 		liunx许多程序默认的输入是标准输入，如果不带参数，就是用标准输入作为输入。如果有文件作为参数，就用文件作为标准输入。  
@@ -642,9 +646,24 @@ ctrl-d	结束输入
 			prog << xxx 
 		采用两个<号表示xxx作为分界符，在其后的内容作为prog的输入，直到再次遇见xxx。
 
+		举例：自动生成一个文本
+
+			1 cat <<EOF |tee cgitrc
+			2 #css,logo
+			3 css=/cgit.css
+			4 logo=/cgit.png
+			5 scan_path=/home/git/repositories
+			6 enable-index-links=1
+			7 EOF
+		这段文本将会生成一个cgitrc文件，文件内容为2-6行文字。  
+		第一行cat <<EOF 。  
+		cat file 命令是将file文件的内容输出到标准输出上。<<将文件重定向，将文件重定向到后面的内容，直到遇到EOF字符。  
+		|tee cgitrc 表示将cat的输出通过管道输出到tee中，tee程序将输入内容同时输出到文件和标准输出上。
+
+
 			prog <<< xxx
 		采用三个<号表示，将xxx作为prog的输入。
-	- **输出重定向：**
+	- **输出重定向**
 
 			prog > file 
 		将标准输出重新定向到文件file，如果file不存在就新建，否则覆盖。
@@ -673,7 +692,7 @@ ctrl-d	结束输入
 			2->stderr	2->stdout			2->stdout
 			所以最后标准输出重定向到log中，错误输出仍然将输出到log中。
 
-	- **管道：**
+	- **管道**
 
 		管道是将前一个程序的标准输出与下一个程序的标准输入相连接。将前一个程序的标准输出作为后一个程序的标准输入。  
 		ls |grep aaa.会看到什么？  
@@ -681,40 +700,56 @@ ctrl-d	结束输入
 		如果想这么做应当将列出的文件作为参数给grep，实现这个功能的是xargs,命令为ls | xargs grep aaa 。  
 		xargs的功能是将前面命令的输出作为参数附加到后面一个命令中。如果命令行太长，可以用-s来扩大，最长为128kb。
 
-- **条件判断：**
+- **shell的条件判断** 
 
 	shell判断一个程序是否执行成功，是看程序返回值是否为0,如果是0,表示执行成功;结果非0,表示执行不成立。  
 	在shell中的条件判断有test或者[。注意[是一个程序，和test这个程序是一样的。  
 	比如test $a = 9 或者 [ $a = 9 ].test和[的唯一区别在于用[后面必须跟上]。  
 	还有一点就是既然[是一个程序，后面的内容就是其参数，所以[后面必须跟一个空格。  
-	test判断内容包括：
-
-		1.判断文件类型。比如 
-			-d 判断是否是目录
-			-e 是否存在
-			-r 是否可读
-			-w 是否可写
-			等等
-		2.判断字符串或数字的逻辑关系
-			= 是否相等
-			!= 
-			>
-			>=
-			用于数字判断
-			-eq	相等
-			-ne 不等
-			-gt 大于
-			-lt	小于
-			等等
-			注意1：条件判断符两边也要有空格分开。比如：
-			[ $a = a ]
-			否则test或[程序会将其连在一块，而不是作为多个参数。
-			另外，对于$var这样的变量在条件中最好用“$a”将其扩起来，以防止$a是一个空值时，导致逻辑不对。
-			注意2：如果条件判断符是shell元字符，注意要转义。比如：
-			[ $a \> $b ]
-			否则shell将会把>解释成重定向。或者在新的shell中可以用[[ $a > $b ]]来表示。
-		3.在条件判断中可以用 -a 表示两个条件与，-o表示两个条件或，将多个条件链接起来。比如 
-			[ $a = a -a $b = b]	
+	test使用：
+		
+		test expression
+		expression可以是：
+		( expression )
+			:expression is true
+		! expression 
+			:expression is not true 
+		expression1 -a expression2 
+			:expression1 and expression2 is true 
+		expression1 -o expression2 
+			:expression1 or expression2 is true 
+		-n string 
+			:the length of string is not zero
+		-z string 
+			:the length of string is zero 
+		string1 = string 2 
+			:the strings are equal
+		string1 != string2 
+			:the strings are not equal 
+		number1 -eq number2
+			:number1 与 number2相等
+		number1 -ne number2
+			:number1 与 number2不等
+		number1 -ge number2
+			:number1 >= number2
+		number1 -le number2
+			:number1 <= number2
+		number1 -gt number2
+			:number1 > number2
+		number1 -lt number2
+			:number1 < number2
+		-d file 判断file是否是目录
+		-e file 判断file是否存在
+		-r file 判断file是否可读
+		-w file 判断file是否可写
+		等等
+		注意1：条件判断符两边也要有空格分开。比如：
+		[ $a = a ]
+		否则test或[程序会将其连在一块，而不是作为多个参数。
+		另外，对于$var这样的变量在条件中最好用“$a”将其扩起来，以防止$a是一个空值时，导致逻辑不对。
+		注意2：如果条件判断符是shell元字符，注意要转义。比如：
+		[ $a \> $b ]
+		否则shell将会把>解释成重定向。或者在新的shell中可以用[[ $a > $b ]]来表示。
 
 - **表达式expr：用于计算表达式的值。**
 
@@ -736,20 +771,20 @@ ctrl-d	结束输入
 		0：如果计算结果非空或非0
 		1：如果计算结果为空或0
 		2：如果表达式有错
-
 		注意1：在表达式中可能出现元字符，这是需要做转义。
-
-			比如：expr $a \> $ b,因为>在shell中是元字符。
-			需要转义的：(),*,>,<,&,|
+		比如：expr $a \> $ b,因为>在shell中是元字符。
+		需要转义的：(),*,>,<,&,|
 		注意2：如果在shell的条件判断中用到程序，则shell是根据程序的返回值来判断。  
 		所以如果用expr作为shell的条件判断，不要用其返回值，而是要用其输出结果，否则返回的都是真，仅表示执行expr程序成功。  
 		比如：[ `expr $a \> $b ` = 1] && echo "a>b".
 
+	在正则表达式中有一个特殊作用，就是从前面字串中挖出特殊字段，比如：
 
-		在正则表达式中有一个特殊作用，就是从前面字串中挖出特殊字段，比如：
-			expr abcdefg : '.*\(d\)',从字串中挖出d。这里用''表示对里面的元字符bash不做处理，这样就避免了多次转义，里面的内容就是正则表达式的内容。
+		expr abcdefg : '.*\(d\)'
+	从字串中挖出d。这里用''表示对里面的元字符bash不做处理，这样就避免了多次转义，里面的内容就是正则表达式的内容。
 	
-		一个例子，比如我们想知道ping一个地址的返回时间。
+	一个例子，比如我们想知道ping一个地址的返回时间。
+
 		64 bytes from 110.43.83.1 (110.43.83.1): icmp_seq=1 ttl=51 time=26.2 ms,
 		str=`ping www.sohu.com -c 1 |grep from`;
 		expr "$str" : '.*time=\(.*\)ms'
@@ -758,7 +793,7 @@ ctrl-d	结束输入
 
 	与条件中的条件组合不同，这里的复合逻辑是指多个条件的组合。比如  
 
-		 $a = a ] && [ $b = c ].
+		 [ $a = a ] && [ $b = c ].
 	当然这个逻辑关系也可以用[ $a = a -a $b = c ]来表示，但是这里仅仅是示意。更多的情况是将条件2用作动作。  
 	因为在shell中如果有两个条件用与符号&&连接，则shell首先判断条件1,如果条件1成立才执行条件2判断，这样就往往用此方式来判断条件1,如果成立则执行条件2中的动作。  
 	类似的还有逻辑或||。
