@@ -1,0 +1,34 @@
+#!/bin/bash 
+#查看远程是否挂载了
+ret=`findmnt |grep "share_doc" `
+if [ ! -z "$ret" ];then
+	result="远程已经挂载"
+else
+	result="远程没有挂载"
+fi
+#用户选择是否挂载或卸载
+dialog --title "挂载或卸载远程机器的硬盘?"	\
+		--menu "$result" 20 50 7 \
+			"mount" "mount dell machine hard disk" \
+			"umount" "umount dell machine hard disk" \
+2>/tmp/tmp.$$
+ret=`cat /tmp/tmp.$$`
+rm -f /tmp/tmp.$$
+
+clear
+#执行挂载或卸载
+if [ "$ret" = 'mount' ] ;then
+	sudo mount -t cifs //192.168.0.103/document /home/hanhj/share_doc -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
+	sudo mount -t cifs //192.168.0.103/down /home/hanhj/win_download -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
+elif [ "$ret" == 'umount' ];then
+	sudo umount /home/hanhj/share_doc
+	sudo umount /home/hanhj/win_download
+fi
+
+ret=`findmnt |grep "share_doc" `
+if [ ! -z "$ret" ];then
+	result="远程已挂载"
+else
+	result="远程已卸载"
+fi
+echo "$result"
