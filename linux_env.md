@@ -194,7 +194,7 @@ ctrl+prtsc 全屏截取到剪切板
    
 
 ##chmod
-- 功能:  
+- 用途:  
 改变文件权限属性
 
 - 调用格式:
@@ -260,62 +260,64 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	　　某个文件a.c,该文件的所有者和组是hanhj。chmod o-r-w-x a.c去掉other的所有权限，这样其他用户就不能使用这个文件。编译一个程序xx打开a.c文件,xx的所有者和组是hanhj。如果对这个程序不加s权限chmod u+s xx ,则当其他用户tom执行这个程序的时候，他的身份是tom，他不能打开a.c文件，因为它属于other组，没有读写a.c文件的权限。但是如果将xx程序加上suid权限，则tom执行这个xx程序的时候就变成hanhj，则它可以打开a.c文件。  
 
 ##umask
-- 用途：用于设置权限掩码。
+- 用途：  
+用于设置权限掩码。
 - 调用格式：
 
 		umask xxx
-- 说明：
+- 说明：  
 	当创建新文件时，新文件的权限就是777-掩码。  
-	如：umask=0002，则创建新文件夹的权限为777-0002=775，普通文件的权限是666-0002=664（执行权限不用umask来设置，因为此设置会影响系统安全）。
+	如：`umask=0002`，则创建新文件夹的权限为777-0002=775，普通文件的权限是666-0002=664（执行权限不用umask来设置，因为此设置会影响系统安全）。
 
 ## findmnt 
-- 用途：列出当前已经挂载的设备
+- 用途：  
+	列出当前已经挂载的设备
 - options:  
-
-		-t fs_type
+	- -t fs_type
 
 ## lsblk
 		
-- 用途：列出系统中的块设备信息。
+- 用途：  
+	列出系统中的块设备信息。
 - 调用格式:
 
 		lsblk [option] [device]
 - 选项：
-
-		-o UUID 
+	- -o UUID 
 
 ## blkid
-- 用途：显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
+- 用途：  
+	显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
 - 调用格式
 
 		blkid options device
-- 选项：
-
-		-p probe
-		-i info 
+- 选项：  
+	- -p probe
+	- -i info 
 
 ## dd
-- 用途：文件拷贝和转换命令。
+- 用途：  
+	文件拷贝和转换命令。
 - 调用格式 
 
 		dd if=xxx of=xxx bs=xx count=xx
 		如：dd if=/dev/cdrom of=root.iso
 - 选项：
 
-		if：input file  
-		of：output file  
-		bs：bytes copy   
-		count ：how many bs  
+	- if：input file  
+	- of：output file  
+	- bs：bytes copy   
+	- count ：how many bs  
 
 ##mount:
 
 - 调用格式：
 
 		mount -t 文件类型 挂载设备 挂载点
-		举例：mount -t ntfs /dev/sda1 /media/windows
-		将/dev/sda1磁盘分区以ntfs文件类型挂载到/media/windows目录下 
+	举例：mount -t ntfs /dev/sda1 /media/windows  
+	将/dev/sda1磁盘分区以ntfs文件类型挂载到/media/windows目录下 
 	文件类型：可以从/etc/filesystem或/proc/filesysem文件中看支持哪些文件系统。  
-	挂载设备：一般scsi设备是sdxx，ide设备是hdxx，软盘设备是fdxx 
+	挂载设备：一般scsi设备是sdxx，ide设备是hdxx，软盘设备是fdxx   
 	挂载点：就是需要挂载的文件目录。  
 	可以用命令行方式来挂载设备，也可以通过/etc/fstab文件提供的信息来挂载。
 
@@ -372,9 +374,9 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 			就可以将windows fat分区按照我们想要的路径和用户名和组挂载上了。
 				
 
-##网络共享：
-将网络上的文件在局域网内共享。
-
+##网络共享
+- 用途：  
+	将网络上的文件在局域网内共享。
 - 用samba来共享:
 
 	samba是一种基于smb/cifs协议的提供网络文件共享服务.其客户端被windows,linux所支持。
@@ -506,7 +508,8 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 			举例 mount -t nfs 192.168.15.23 /mnt/tmp -o nolock ,intr,rsize=1024,wsize=1024 
 	
 ## tftp
-- 用途:通过TFTP协议传输文件
+- 用途:  
+	通过TFTP协议传输文件
 
 - 服务器：    
 	1. 启动服务器：
@@ -526,7 +529,8 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 			
 ##ls
 			
-- 用途：显示目录内容
+- 用途：  
+	显示目录内容
 - 调用格式：
 
 		ls [options] [file]
@@ -592,71 +596,115 @@ ls -d */ 仅显示当前目录下的目录
 
 ##realpath:	显示路径的实际物理路径，将链接转换成实际的物理路径
 
-##cp :复制文件
-　　 调用格式:
-　　	 cp [选项] [参数]
-　　 选项:
-　		 -a 同-dpR,保持源文件的结构和属性
-	　　 -b 当目标文件存在时,在覆盖前为其创建一个备份.
-	　　 -d 如果复制的源文件是符号链接,则仅复制符号链接本身.
-	　　 -p 保持源文件的所有者,权限,时间属性.
-	　　 -R或-r 递归复制所有子目录
-	　　 -i 如果目标文件存在,在覆盖前提示用户.默认情况下Linux环境都有别名 cp cp -i
-	　　 -l 创建源文件的硬符号链接,同ln
-	　　 -s  创建源文件的符号链接,同ln -s
-	　　 -u 仅当源文件比目标文件新或者目标文件不存在的时候才复制.
-	　　 -v 详细显示命令的执行操作.
-	　　 扩展:
-	　　 linux环境中许多命令的选项具有相同的意义,举例
-	　　    -i 表示提示用户
-	　　 -v 表示显示详细过程
-	　　 -R 表示递归
-	　　 -f 表示不提示用户
+##cp 
+- 用途： 
+	复制文件
+- 调用格式:
 	
-##scp 远程复制文件
-　　scp src_file dest_file
-　　example scp hanhj@192.168.15.23:/home/hanhj/.vimrc .
+		cp [选项] [参数]
 
-##mv :移动文件
-　　 调用格式:
-　　	 mv [选项] [参数]
-　　 选项:
-	　　 -i 同cp
-	　　 -f 同cp
-	　　 -u 同cp
-	　　 -b 同cp
-	　　 -v 同cp
+- 选项:  
+	- -a 同-dpR,保持源文件的结构和属性
+	- -b 当目标文件存在时,在覆盖前为其创建一个备份.
+	- -d 如果复制的源文件是符号链接,则仅复制符号链接本身.
+	- -p 保持源文件的所有者,权限,时间属性.
+	- -R或-r 递归复制所有子目录
+	- -i 如果目标文件存在,在覆盖前提示用户.默认情况下Linux环境都有别名 cp cp -i
+	- -l 创建源文件的硬符号链接,同ln
+	- -s  创建源文件的符号链接,同ln -s
+	- -u 仅当源文件比目标文件新或者目标文件不存在的时候才复制.
+	- -v 详细显示命令的执行操作.
+	- 扩展:
+	- linux环境中许多命令的选项具有相同的意义,举例
+	-    -i 表示提示用户
+	- -v 表示显示详细过程
+	- -R 表示递归
+	- -f 表示不提示用户
+	
+##scp 
+- 用途  
+	远程复制文件
+- 调用格式 
+
+		cp src_file dest_file
+		xample scp hanhj@192.168.15.23:/home/hanhj/.vimrc .
+
+##mv 
+- 用途：  
+	移动文件
+
+- 调用格式:
+
+		mv [选项] [参数]
+- 选项:  
+	- -i 同cp
+	- -f 同cp
+	- -u 同cp
+	- -b 同cp
+	- -v 同cp
 	
 
-##pwd :打印当前工作目录
-　　 -v 同cp
-	 -P 显示绝对路径 
+##pwd 
+- 用途  
+	打印当前工作目录
+- 调用格式：
 
-##df :显示当前磁盘使用情况
-	-h 按照人可阅读显示
+		pwd [options]
+- 选项  
 
-##du:显示目录占用磁盘情况
-	-b 按照byte统计
-	-k 按照k统计
-	-m 按照M统计
-	-B 按照指定大小统计
-	-c 统计总量
+	- -v 同cp
+	- -P 显示绝对路径 
 
-##who
-	:-r runlevel
+##df   
+- 用途：  
+	显示当前磁盘使用情况
+- 调用格式：
+	
+		df [options]
+- 选项  
+	- -h 按照人可阅读显示
+
+##du 
+- 用途  
+	显示目录占用磁盘情况
+- 调用格式：
+
+		du [options]
+
+- 选项  
+	- -b 按照byte统计
+	- -k 按照k统计
+	- -m 按照M统计
+	- -B 按照指定大小统计
+	- -c 统计总量
+
+##who  
+- 用途
+	显示当前用户
+- 调用格式：
+
+		who [options]
+- 选项  
+	- -r 显示当前运行级别
+
 
 ##sudo 
-	选项：
-		-H 以用户的根目录设置环境变量
-		-i 以root身份登录并运行
-		-l 列出用户可运行命令
-		-u user 以user身份运行
-	
-	相关文件/etc/sudoers
-		sudoers用来配置sudo用户，文件内容如下：
+- 用途   
+	以超级用户身份运行
+- 调用格式
+
+		sudo [options]]  命令 
+- 选项：  
+	- -H 以用户的根目录设置环境变量
+	- -i 以root身份登录并运行
+	- -l 列出用户可运行命令
+	- -u user 以user身份运行
+- 说明： 
+文件/etc/sudoers:sudoers用来配置sudo用户，文件内容如下：
+
 		# Host alias specification
 		用来配置主机别名，方便配置主机
-
+		
 		# User alias specification
 		用户别名，方便配置用户
 		
@@ -673,232 +721,291 @@ ls -d */ 仅显示当前目录下的目录
 		# Members of the admin group may gain root privileges
 		%admin ALL=(ALL) ALL
 	
-##rm :删除文件
-　　 调用格式:
-　　	 rm [选项] [参数]
-　　 选项:
-	　　 -f 同cp
-	　　 -i 同cp
-	　　 -R/-r 同cp
-	　　 -v 同cp
+##rm
+- 用途  
+	删除文件  
+- 调用格式:
+
+		rm [选项] [参数]
+- 选项:  
+	- -f 同cp
+	- -i 同cp
+	- -R/-r 同cp
+	- -v 同cp
 	
-　　 扩展:
-	　　 rm  一般用来删除文件,如果要删除目录要加上-r选项.
 
-##rmdir :删除空目录
-　　 调用格式:
-	　 rmdir [选项] [参数]
-　　 选项:
-	　 -p 递归删除所有父目录 parent
-　　	-v 同cp
+##rmdir 
+- 用途  
+	删除空目录
+- 调用格式:
 
-　　 扩展:
-	　 rmdir只能删除空目录,如果目录不为空则报错.
-　　	当使用-p选项的时候,输入的参数必须是最后一级.
+		rmdir [选项] [参数]
+- 选项:
+
+	- -p 递归删除所有父目录 parent
+　　- -v 同cp
+
+- 说明:  
+	rmdir只能删除空目录,如果目录不为空则报错.  
+	当使用-p选项的时候,输入的参数必须是最后一级.
 
 
-##chgrp :改变文件所属组
+##chgrp   
+- 用途:改变文件所属组
+- 调用格式:
 
-　　 选项:
-	　　 -f 不显示报错信息
-	　　 -R 递归调用
-	　　 -v 显示过程
+		chgrp [options] group file 
+- 选项:  
+	- -f 不显示报错信息
+	- -R 递归调用
+	- -v 显示过程
 	
-　　 扩展:
-	　 类似的命令:
-　　	chown
+- 说明:  
+	 类似的命令chown
 
 
-##chown :改变文件所属组和用户
-　　 选项:
-	　　 -f 同chgrp
-	　　 -R 同chgrp
-	　　 -v 同chgrp
+##chown  
+- 用途:改变文件所属组和用户
+- 调用格式:
+
+		chown group:user file 
+
+- 选项:   
+	- -f 同chgrp
+	- -R 同chgrp
+	- -v 同chgrp
 	
-　　 扩展
-　	　 如果只提供用户名,用户组不改变,如果同时提供用户名和组,之间用冒号或者点隔开.
+- 说明：  
+	如果只提供用户名,用户组不改变,如果同时提供用户名和组,之间用冒号或者点隔开.
 
 ##用户设置
-	用户信息保存在/etc/passwd中
-	用户组信息保存在/etc/group中
 
-	adduser/useradd,前者会提示一些信息，后者直接增加用户
-		-m 会在home目录下添加用户的目录
-		-g gid 设置用户组号
-		-u uid 设置用户号
-		默认的会添加与用户名相同的用户组。
-	usermod 修改用户信息，包括密码，但是最好不要用此命令修改密码，因为会导致影子文件中的密码是明文。/etc/shadow
-	deluser 删除用户
-		--remove-home删除home目录下的用户目录
-	passwd 用来修改用户密码
-		-l 锁定用户，即禁止用户
-		-u 解锁用户
-		通过usermod -L/U可以同样达到此目的
+用户信息保存在/etc/passwd中   
+用户组信息保存在/etc/group中  
 
-	groupadd 添加用户组
-		-g gid 设置用户组号
-	groupmod 修改用户组
-	groupdel 删除用户组
-
-	直接查看/etc/group文件，可以看到组成员情况。
-	gpasswd -a user group 添加用户到组中
-	gpasswd -d user group 从组中删除用户
-
-
-
-##find :查找文件
-　　调用格式:
-		find options expression  action
-		find中的expression可以包括文件名，可以使用*,?,[]等文件通配符，但是为了防止shell首先将其展开，需要将其用‘’将其括起来。否则将出现意外的结果。
-	options:
-		-xdev	排除非本文件系统文件
-		-mount	同-xdev
-	expression:
-		+n	greater n
-		-n  less n
-		n	equal n
-		-name 指定文件名
-		-gid  查找指定用户组id中的文件
-		-uid  查找指定用户名id中的文件
-		-group查找指定用户组中文件
-		-user 查找指定用户名中的文件
-		-path 指定路径
-		-prune 如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。
-		-amin 查找指定分钟前访问过的文件。
-			注意：这里所说的指定分钟前是指第n分钟前，是指查找n分钟到n+1分钟之间所修改的文件，如果访问时间在n+1分钟之前就不会找到。如果想找n分钟之前访问的文件应当在n前面加+。下面关于时间的查找情况一样。
-		-atime 查找指定天数,或前（+），或内（-）访问过的文件.举例:find . -atime +3,查找3天前访问过的文件
-		-cmin 查找指定分钟,或前（+），或内（-）改变文件状态的文件
-		-ctime 查找指定天数,或前（+），或内（-）改变文件状态的文件
-		-mmin 查找指定分钟,或前（+），或内（-）修改文件内容的文件
-		-mtime 查找指定天数,或前（+），或内（-）修改文件内容的文件
-		-a/c/mnewer file 时间与file比较 
-		-size 按照size比较 
-		-maxdepth 查找深度
-	logic of expression:
-		expr1 -o expr2	:or logic
-		expr1 -or expr2	:or logic
-		expr1 expr2		:and logic 
-		expr1 -a expr2	:and logic
-		! expr			:not logic
-		-nor expr		:not logic 
-		\( exp1 \) , \( exp2 \) 执行exp1 和 exp2 
-	action:
-		-print	默认动作，打印查找出来的文件。
-		-exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`.在;前面加上转义符\的意思是由于;在bash中解释成命令的结尾，如果不加转义符，该find命令就将结束。而在find命令中可以有多个执行语句，所以要避免解释成find命令结尾。
-	　　  举例：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`
-	　　	注意要加上print选项，否则不显示文件名，不好区分。
-			多个执行语句：	find / -ctime +30 -a \( -name '.vimrc' -o -name 'vimrc' \) -exec grep -n 'mmap' {} \; -exec echo {} \;
-				在根目录下查找30天前修改.vimrc或vimrc文件，然后查找其中包括nmap的行，同时打印该文件名。
-	　　-ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示.
-　　 扩展:
-	　　 查找除某个目录下的文件
-		　　 find . -path xx -prune -o -print
-	　　 排除多个目录，查找某个文件
-　　		 find . \( -path ./tmp -o -path ./dsp/bak \) -prune -o  -name "*.c" -o -name "*.cpp" -o -name "*.h" 
-	　　 prune：修剪的意思
-　　	 xargs 用于在程序后面添加参数。
-			默认的xagrs用标准输入作为输入。
-			举例：find / -name  'vimrc' -print | xagrs grep -n 'local'; 将find的输出文件名作为grep的输入，这样grep命令可以只执行一次。
-			同样的功能可以用find / -name 'vimrc' -exec grep -n 'local' {} \;来做，但是这样每次找到一个文件就要调用grep，效率较低。
-			xargs自动填充输入参数缓冲区可以达到128k，如果多于128k就将参数分割调用程序。这样可以防止直接调用参数缓冲区过小导致程序不能执行的问题。举例：
-			ls *.dat|cat ,如果dat文件过多，可能导致cat命令的缓冲区溢出，这时可用ls *.dat|xargs cat
-
-##ln :创建链接
-　　 调用格式：
-	　　 ln 源文件 链接文件.
-　　	 默认是创建硬链接,所谓'硬链接'就是两个文件具有相同的inode,创建硬链接的文件必须与源文件在同一分区中.不能为文件夹创建硬链接.
-　　 选项:
-	　　 -f 强制覆盖
-　　	 -i 提示
-	　　 -s 创建符号链接,符号链接仅仅是一个符号,相当于windows中的"快捷方式"
-　　	 -v 显示过程
-
-##mkdir :创建目录
-　　 调用格式
-	　　 mkdir 目录名
-　　 选项:
-	　　 -p  可以创建中间缺少的目录
-	　　 -m 可以设置目录属性,默认的是根据umask来设置属性.
-	　　 -v 显示过程
+- 用户   
+	- useradd增加用户  
+		- -m 会在home目录下添加用户的目录  
+		- -g gid 设置用户组号  
+		- -u uid 设置用户号  
+		默认的会添加与用户名相同的用户组。  
 	
-##which,whereis :查找指令的二进制程序,man手册,源代码在磁盘中的位置
-　　 选项:
-	　　 -b 查找二进制
-	　　 -m 查找man
-	　　 -s 查找src
+	- adduser 增加用户	
+	- deluser 删除用户  
+		- --remove-home删除home目录下的用户目录  
+	- usermod 修改用户信息，包括密码，  
+		但是最好不要用此命令修改密码，因为会导致影子文件中的密码是明文。/etc/shadow  
+	- passwd 用来修改用户密码  
+		- -l 锁定用户，即禁止用户
+		- -u 解锁用户  
+		通过usermod -L/U可以同样达到此目的
+- 组用户  
+	直接查看/etc/group文件，可以看到组成员情况。  
+	- groupadd 添加用户组  
+		- 调用格式：
+				
+				groupadd [options] group
+		- options 
+			- -g gid 设置用户组号
+	- groupmod 修改用户组
+	- groupdel 删除用户组
+	- gpasswd 组用户操作
+		- 调用格式  
+
+				gpasswd [options] user group
+		- options  
+			- -a 添加用户到组中
+			- -d 从组中删除用户
+	
+##find 
+- 用途:查找文件
+- 调用格式:
+
+		find options expression  action
+	find中的expression可以包括文件名，可以使用*,?,[]等文件通配符，但是为了防止shell首先将其展开，需要将其用‘’将其括起来。否则将出现意外的结果。
+- options:  
+	- -xdev	排除非本文件系统文件
+	- 	-mount	同-xdev
+- expression:  
+	- +n	greater n
+	- -n  less n
+	- n	equal n
+	- -name 指定文件名
+	- -gid  查找指定用户组id中的文件
+	- -uid  查找指定用户名id中的文件
+	- -group查找指定用户组中文件
+	- -user 查找指定用户名中的文件
+	- -path 指定路径
+	- -prune 如果没有给出-depth（表示先处理目录中文件，再处理目录），则不进入当前目录。如果给出-depth则返回false，没有效果。
+	- -amin 查找指定分钟前访问过的文件。
+	- 	注意：这里所说的指定分钟前是指第n分钟前，是指查找n分钟到n+1分钟之间所修改的文件，如果访问时间在n+1分钟之前就不会找到。如果想找n分钟之前访问的文件应当在n前面加+。下面关于时间的查找情况一样。
+	- -atime 查找指定天数,或前（+），或内（-）访问过的文件.举例:find . -atime +3,查找3天前访问过的文件
+	- -cmin 查找指定分钟,或前（+），或内（-）改变文件状态的文件
+	- -ctime 查找指定天数,或前（+），或内（-）改变文件状态的文件
+	- -mmin 查找指定分钟,或前（+），或内（-）修改文件内容的文件
+	- -mtime 查找指定天数,或前（+），或内（-）修改文件内容的文件
+	- -a/c/mnewer file 时间与file比较 
+	- -size 按照size比较 
+	- -maxdepth 查找深度
+- logic of expression:
+	- expr1 -o expr2	:or logic
+	- expr1 -or expr2	:or logic
+	- expr1 expr2		:and logic 
+	- expr1 -a expr2	:and logic
+	- ! expr			:not logic
+	- -nor expr		:not logic 
+	- \( exp1 \) , \( exp2 \) 执行exp1 和 exp2 
+- action:
+	- -print	默认动作，打印查找出来的文件。
+	- -exec 指令 {} \; 对于find输出的结果执行-exec指定的指令,执行指令前会提示.`{}`表示前面输出的结果，注意最后要加上`\;`.在;前面加上转义符\的意思是由于;在bash中解释成命令的结尾，如果不加转义符，该find命令就将结束。而在find命令中可以有多个执行语句，所以要避免解释成find命令结尾。  
+	举例：显示找出的文件内容：`find . -name "app" -print -exec cat {} \;`  
+	注意要加上print选项，否则不显示文件名，不好区分。  
+	多个执行语句：	find / -ctime +30 -a \( -name '.vimrc' -o -name 'vimrc' \) -exec grep -n 'mmap' {} \; -exec echo {} \;  
+	在根目录下查找30天前修改.vimrc或vimrc文件，然后查找其中包括nmap的行，同时打印该文件名。 
+	- -ok 指令{} \; 对于find输出的结果执行-ok指定的指令,执行指令没有提示. 
+
+- 说明:
+	- 查找除某个目录下的文件
+
+			find . -path xx -prune -o -print
+	- 排除多个目录，查找某个文件
+
+　　		 find . \( -path ./tmp -o -path ./dsp/bak \) -prune -o  -name "*.c" -o -name "*.cpp" -o -name "*.h" 
+		　　 prune：修剪的意思
+
+## xargs
+- 用途 用于在程序后面添加参数。
+- 调用格式：  
+	默认的xagrs用标准输入作为输入。	举例：
+		
+		find / -name  'vimrc' -print | xagrs grep -n 'local'; 
+	将find的输出文件名作为grep的输入，这样grep命令可以只执行一次。  
+	同样的功能可以用find / -name 'vimrc' -exec grep -n 'local' {} \;来做，但是这样每次找到一个文件就要调用grep，效率较低。  
+	xargs自动填充输入参数缓冲区可以达到128k，如果多于128k就将参数分割调用程序。这样可以防止直接调用参数缓冲区过小导致程序不能执行的问题。举例：
+
+		ls *.dat|cat ,
+	如果dat文件过多，可能导致cat命令的缓冲区溢出，这时可用`ls *.dat|xargs cat`
+
+##ln 
+- 用途:创建链接
+- 调用格式:
+
+		 ln 源文件 链接文件.
+　　 默认是创建硬链接,所谓'硬链接'就是两个文件具有相同的inode,创建硬链接的文件必须与源文件在同一分区中.不能为文件夹创建硬链接.
+- 选项:  
+	- -f 强制覆盖
+	- -i 提示
+	- -s 创建符号链接,符号链接仅仅是一个符号,相当于windows中的"快捷方式"
+	- -v 显示过程
+
+##mkdir 
+- 用途:创建目录
+- 调用格式
+
+		 mkdir 目录名
+- 选项:
+	- -p  可以创建中间缺少的目录
+	- -m 可以设置目录属性,默认的是根据umask来设置属性.
+	- -v 显示过程
+	
+##which,whereis 
+- 用途：查找指令的二进制程序,man手册,源代码在磁盘中的位置
+- 调用格式:
+
+		which xx
+- 选项:
+	- -b 查找二进制
+	- -m 查找man
+	- -s 查找src
 	
 ##tar
-	调用格式：
+- 用途：压缩文件	
+- 调用格式:
+
 		tar [options] [zipfiles] [files]
-	选项：
-		-c	代表压缩
-		-x	代表解压
-		-v	代表显示过程
-		-t  显示压缩文件中的内容
-		-f	代表文件
-		-z	代表gzip格式
-		-j	代表gzip2格式。如果不知道文件的压缩格式，可以先用file命令来显示文件格式。
-		-J	代表xz格式
-		-C	代表改变解压目录。
-	举例：
-		压缩文件：
-			tar -czvf xx.tar.gz /tmp 
-			tar -cjvf xx.tar.gz2 /tmp
-		解压文件：
-			tar -xzvf xx.tar.gz -C /tmp
-			tar -xjvf xx.tar.gz2 -C /tmp
+- 选项：
+	- -c	代表压缩
+	- -x	代表解压
+	- -v	代表显示过程
+	- -t  显示压缩文件中的内容
+	- -f	代表文件
+	- -z	代表gzip格式
+	- -j	代表gzip2格式。如果不知道文件的压缩格式，可以先用file命令来显示文件格式。
+	- -J	代表xz格式
+	- -C	代表改变解压目录。
+
+举例：    
+压缩文件：
+
+	tar -czvf xx.tar.gz /tmp 
+	tar -cjvf xx.tar.gz2 /tmp
+解压文件：
+
+	tar -xzvf xx.tar.gz -C /tmp
+	tar -xjvf xx.tar.gz2 -C /tmp
 
 ##zip
-	调用格式：
+- 用途：压缩文件	
+- 调用格式:
+
 		zip [options] zipfile files
-	选项：
-		-r	recurse
-		-d	删除文件
-		-v	显示操作过程
+- 选项：
+	- -r	recurse
+	- -d	删除文件
+	- -v	显示操作过程
 	
 ##unzip
-	调用格式：
+- 用途：解压缩文件	
+- 调用格式:
+
 		unzip [options] zipfile 
-	选项：	
-		-l	list files 
-		-d  改变输出目录
-		-v	显示操作过程
+- 选项：	
+	- -l	list files 
+	- -d  改变输出目录
+	- -v	显示操作过程
 
 ##gzip
-	调用格式：
+- 用途：压缩文件	
+- 调用格式:
+
 		gzip [options] file 
 		gunzip [options] file.gz 
 		zcat file.gz 
-	选项：
-		-d 解压 
-		-l 列出压缩比等压缩文件信息
-		-c 改变输出为标准输出.
-			gzip默认在file压缩后，将在原文件后面加上后缀.gz以替换原文件。为了保留原文件可以gzip -c file > file.gz.注意后面要加上>file.gz,否则gzip将压缩结果输出到屏幕上，会出现乱码。如果想压缩多个文件可以gzip -c a.txt b.txt >file.gz 
+- 选项：
+	- -d 解压 
+	- -l 列出压缩比等压缩文件信息
+	- -c 改变输出为标准输出.
+		gzip默认在file压缩后，将在原文件后面加上后缀.gz以替换原文件。为了保留原文件可以gzip -c file > file.gz.注意后面要加上>file.gz,否则gzip将压缩结果输出到屏幕上，会出现乱码。如果想压缩多个文件可以gzip -c a.txt b.txt >file.gz 
 		zcat可以显示压缩后的文件内容，相当于gunzip -c file.gz 
 
 ##rar
-	调用格式：
+- 用途：压缩文件	
+- 调用格式:
+
 		rar <action> [options] rarfile [files] [path_to_extract]
-	action：
-		a	压缩文件
-		l	显示压缩文件
-		x	解压文件
-		d	删除文件
-		c	为压缩包添加注释。ctrl-d退出
-		v   显示过程
-	选项：
+- action：
+	- a	压缩文件
+	- l	显示压缩文件
+	- x	解压文件
+	- d	删除文件
+	- c	为压缩包添加注释。ctrl-d退出
+	- v   显示过程
+- 选项：
 		-r recurse
 
-	unrar
-	调用格式：
+##	unrar
+- 用途：解压缩文件	
+- 调用格式：
+
 		unrar <action> [options] rarfile [path_to_extract]
-	action:
-		e	解压到当前目录
-		x	解压全目录
-		l   列出压缩文件内容
-		如果用x，则path_to_exotract必须先存在
+- action:  
+	- e	解压到当前目录
+	- x	解压全目录
+	- l   列出压缩文件内容
+	如果用x，则path_to_exotract必须先存在
 
 ##压缩总结
+
 	.suffix			压缩					解压
 	.gz				gzip files				gzip -d/gunzip zipfile
 	.bz2			bzip2 files				bzip2 -d/bunzip2 zipfile
@@ -908,57 +1015,92 @@ ls -d */ 仅显示当前目录下的目录
 	.rar			rar a zipfile files		unrar x zipfile [-d]
 	.zip			zip zipfile files		unzip zipfile [-d] 
 
-##updatedb　更新搜索文件数据库
-	相关配置文件为/etc/updatedb.conf
+##updatedb　
+- 用途 更新搜索文件数据库  
+相关配置文件为/etc/updatedb.conf
 
-##locate　搜索文件
-	与updatedb关联，默认是从 var/lib/mlocate/mlocate.db中查找文件。
-　　-b 文件名
-　　
-##dirname:获取路径名
-
-##basename:获取除去路径的文件名
-
-##rename: 批量修改文件名
-	调用格式：
-	　　rename srcfilename destfilename filelist
-　　	可以使用正则表达式
-　　举例：
-	　　abc.txt abc1.txt abcf.txt,如果想把a替换替换成m，可以输入：rename 's/a/m/' * 
-
-
-##file :检测文件类型
-　　 选项:
-	　　 -f  用输入的文件来检查
-
-##touch :改变文件时间
-　　 调用格式:
-	　　 touch 文件,默认使用当前时间作为文件最后访问时间和修改时间
-　　 选项:
-	　　 -t [CCYY]MMDDHHmm[.ss],指定时间
-	　　 -a  <时间> 仅修改最后访问时间
-	　　 -m  <时间> 仅修改修改时间
-	 使用touch命令可以创建新文件
-	　　 touch newfile
+##locate
+- 用途 搜索文件  
+与updatedb关联，默认是从 var/lib/mlocate/mlocate.db中查找文件。
+- 调用格式 
 	
-##time:统计程序运行时间
-	调用格式：
+	locate [options] pattern
+- 选项  
+	- -b basename.match only basename
+
+##dirname
+- 用途：获取路径名
+
+##basename
+- 用途:获取除去路径的文件名
+- 调用格式：
+
+		basename filename [suffix]
+	如果跟suffix则去掉文件后缀名。	
+	
+
+##rename
+- 用途: 批量修改文件名
+- 调用格式：  
+
+		rename [options] regular  files
+	使用perl正则表达式来更名文件
+- 举例：
+
+		有文件abc.txt abc1.txt abcf.txt,  
+		如果想把a替换替换成m，可以输入：rename 's/a/m/' *.txt 
+
+
+##file 
+- 用途:检测文件类型
+- 调用格式
+
+	file [options] files 
+- 选项:
+
+	- -f  用输入的文件来检查
+
+##touch 
+- 用途:改变文件时间
+- 调用格式:
+
+		touch 文件,
+	默认使用当前时间作为文件最后访问时间和修改时间
+- 选项:
+	- -t [CCYY]MMDDHHmm[.ss],指定时间
+	- -a  <时间> 仅修改最后访问时间
+	- -m  <时间> 仅修改修改时间
+	使用touch命令可以创建新文件. touch newfile
+	
+##time
+- 用途： 统计程序运行时间
+- 调用格式
+		
 		time program
-	选项：	
-		-p 按照可移植格式显示
-	举例：time -p grep hello . -r  --include "*.h" >/dev/null
-		结果：
+- 选项：
+	- -p 按照可移植格式显示
+
+- 举例：
+
+		time -p grep hello . -r  --include "*.h" >/dev/null
+	结果：
+
 		real xx 程序实际执行时间，与当前系统执行任务有关
 		user xx  用户指令执行时间
 		sys  xx  系统指令执行时间（调用内核）
 	
 ##date
-	调用格式：
+- 用途：显示时间		
+- 调用格式：
+
 		date [options] +FORMAT
-	选项：
-		-d str	按照str中指定的时间显示。这个str可以是人类可以理解的时间。举例：date -d '2019-1-1'
-		-s str  按照str中指定的时间设置时间。
-		FORMAT用来格式化时间
+- 选项：
+	- -d str	按照str中指定的时间显示。  
+		举例：date -d '2019-1-1'
+	- -s str  按照str中指定的时间设置时间。
+
+	FORMAT用来格式化输出时间格式
+
 			%Y	年
 			%y	两位数的年
 			%m	月
@@ -972,312 +1114,389 @@ ls -d */ 仅显示当前目录下的目录
 			%A	周几，用全写的英文表示
 	
 
-##grep:查找字串
-	调用格式：
-	　　grep [options] pattern [dir] files
+##ps：
+- 用途 显示当前进程
+- 选项：
+	- -e	显示全部进程
+	- -all	显示详细内容
+
+##set：
+- 用途 查看本地定义的变量
+
+
+##unset 
+- 用途：取消变量
+- 调用格式：
+
+		unset xx 
+
+##env  
+- 用途：显示所有环境变量
+
+
+##export
+- 用途：将变量设置为环境变量
+- 调用格式
+
+		export var=xx 
+	　　export增加的环境变量是临时的,关机后就没有了.
+　　	在/etc/profile下面定义永久的环境变量.其他可以设置永久环境变量的地方：/etc/profile.d,/etc/bash.bashrc，~/.bashrc,~/.profile
+
+##source：
+- 用途：在当前bash中执行脚本。
+
+	在bash中启动一个程序时，bash一般会启动一个新的bash，然后再新的bash中执行该程序。在新的bash中会继承父bash的环境变量，但是不会继承临时变量。子bash中可以设置环境变量，但是退出时，此环境变量丢失，不会影响父bash。  
+	如果用source来执行程序，则bash会在当前bash中执行程序，所以在程序中如果设置环境变量，则当前环境中的环境变量将发生改变。
+
+##regular expression正则表达式
+
+正则表达式可以灵活处理字符串,最初用于sed和grep，称为regex，后来pythom，java等开发语言也支持了正则表达式。  
+注意不要与shell中的文件通配符混了。在shell中用*来匹配任意字符的字符串,用?来匹配一个字符。  
+举例：ls *.txt。在这里，shell首先解释命令中的文件通配符，并将其展开，与这里将的正则表达式是不同的。  
+
+正则表达式中的元字符：
+
+- 基本元字符  
+
+		. * [ \ ^ $  
+- 扩展元字符
+
+		? + { | ( ) < >  
+
+- 基本元字符解释：  
+
+		.	可以匹配1个任何单字符  
+		*	匹配其前面字符的0次到多次，比如12*4,表示匹配2的0次到多次，如1224，12224,14都能匹配。  
+		[	表示一个字符集合开始  
+		\	表示转义其后的控制字符  
+		^	表示开头  
+		$	表示结尾  
+		[-] 表示一个字符集合，在这个集合中除非在特殊位置，控制字符是其原义。  
+			- 字符，表示范围  
+			在字符集合中用-在两个字符之间，表示字符的一个范围。例如[a-z],表示a-z的字符集合。如果想匹配-，则应当将其放在最后。  
+		^   表示取补集  
+			^如果在[的开头，表示与字符集合之外的字符匹配。比如[^a-z]，则匹配任何非小写字母。如果想匹配^则应当将其放在不是第一个字符的位置。  
+		]   表示匹配集合结束。  
+			如果想匹配]，应当将其放在第一个位置。  
+
+- 扩展元字符解释：  
+
+		() 表示分组，()中的字符是一个字符串，表示匹配这个字符串。
+		比如(xas)，表示匹配xas。使用()做组匹配时，如果匹配上可以用\1,\2..表示前面的组字符串，这在输出时往往有用。
+		|	表示逻辑或的关系。比如[ae]\|[bd]，表示匹配ae或者bd。或关系比较特殊只有在egrep中可以使用。  
+		+   表示匹配前面字符1次到多次。比如a+,表示匹配a至少一次。  
+		?	表示匹配前面字符0次到1次。比如a?,表示匹配a 0次或1次  
+		{}	{m,n},表示匹配至少m次，至多n次。比如a{3,4},表示匹配a至少3次，至多4次。  
+		<>	表示精确匹配	  
+			
+以上控制字符如果在基本regex中使用时，需要在前面加上转义符\，即将普通字符转义成控制字符。例如`grep 'a\+' `,`grep 'a\{3\}'` 。在扩展grep中转义符可以加也可以不加(grep -e,or egrep)。  
+
+- 预定义的字符集合  
+	[: ... :]形式的预定义字符集合  
+	[:alnum:],表示字母和数字  
+	[:alpha:],表示字母   
+	[:digit:],表示数字 0-9  
+	[:xdigit:],表示十六进制的数字0-9,a-f，A-F   
+	...  
+	更多参见man awk   
+	在grep中使用这些预定义字符集合需要在前面加上[],比如  
+
+		grep [[:alpha:]] xx   
+	以\\开头的预定义字符：  
+
+		\w	a word  
+		\W	non word   
+		\s	blank  
+		\S	non blank  
+		...  
+		不同的程序对此定义不同，上面几个比较通用。  
+		具体程序参见其man手册。  
+
+vim的参见:h regular   
+
+##grep
+- 用途:查找字串
+- 调用格式：
+
+		grep [options] pattern [dir] files
 		没有dir，默认是当前目录
-	选项：
-		-i 忽略大小写
-		-w 匹配整个单词
-		-x 匹配一行
-		-r 在路径中递归查找
-		-R 在路径中递归查找，包括链接
-		-n 显示行号
-		-v 反向匹配
-		--include=pattern 包括展开的文件名
-		--exclude=pattern 不包括展开的文件名
-		--exclude-dir=dir 不包括路径
-		-A num ,显示匹配行前面的num行
-		-B num ,显示匹配行之后的num行
-		-C num,显示匹配行前后的num行 
-		-o pattern 仅显示匹配的字符
-	注意：
-		比如想查找当前目录下包括子目录中的c，cpp文件中包括return 0;语句的部分。
-		grep "return 0" . -r  *.cpp *.c 会在子目录中查找所有文件，而不是cpp，c文件。因为首先是shell展开当前目录的cpp，c文件，然后对当前目录进行递归查找，此时就不会仅仅包括cpp和c文件。
-		所以应当为：grep "return 0"	. -r --include=*.cpp --include=*.h
-		如果想以其他目录搜索，应当加上-r：
-		grep "return 0" dir -r --include=*.cpp --include=*.h
-		而不能
-		grep "return 0" dir --include=*.cpp --include=*.h
-		或
-		grep "return 0" dir/* --include=*.cpp --include=*.h
+- 选项：  
+	- -i 忽略大小写
+	- -w 匹配整个单词
+	- -x 匹配一行
+	- -r 在路径中递归查找
+	- -R 在路径中递归查找，包括链接
+	- -n 显示行号
+	- -v 反向匹配
+	- --include=pattern 包括展开的文件名
+	- --exclude=pattern 不包括展开的文件名
+	- --exclude-dir=dir 不包括路径
+	- -A num ,显示匹配行前面的num行
+	- -B num ,显示匹配行之后的num行
+	- -C num,显示匹配行前后的num行 
+	- -o pattern 仅显示匹配的字符
+- 说明：
+
+	比如想查找当前目录下包括子目录中的c，cpp文件中包括return 0;语句的部分。  
+	`grep "return 0" . -r  *.cpp *.c` 会在子目录中查找所有文件，而不是cpp，c文件。因为首先是shell展开当前目录的cpp，c文件，然后对当前目录进行递归查找，此时就不会仅仅包括cpp和c文件。  
+	所以应当为：`grep "return 0"	. -r --include=*.cpp --include=*.h`  
+	如果想以其他目录搜索，应当加上-r：  
+	`grep "return 0" dir -r --include=*.cpp --include=*.h`  
 	
 ##| 管道
 	将前一个程序的标准输出作为下一个程序的标准输入
 	linux中的许多程序将标准输入（比如控制台的键盘）作为输入。其输出为标准输出（比如控制台的屏幕）。管道即将二者连接起来。
 	举例：
 		 set | grep ...
-	　　 grep可以使用正则表达式。如果想获得逻辑与的结果，举例查看某个文件中包括“字串1”和“字串2”的内容的行：
-	　　 cat search.txt|grep "xxxx1"|grep "xxxx2" 
+	　　 grep可以使用正则表达式。如果想获得逻辑与的结果，举例查看某个文件中包括“字串1”和“字串2”的内容的行： 
+	　　`cat search.txt|grep "xxxx1"|grep "xxxx2"`
 
-##ps：显示当前进程
-	选项：
-		-e		显示全部进程
-		-all	显示详细内容
-
-##set：查看本地定义的变量
-
-
-##unset：取消变量
-	调用格式：
-		unset xx 
-
-##env：显示所有环境变量
-
-
-##export：将变量设置为环境变量
-	调用格式：
-		export var=xx 
-	　　export增加的环境变量是临时的,关机后就没有了.
-　　	在/etc/profile下面定义永久的环境变量.其他可以设置永久环境变量的地方：/etc/profile.d,/etc/bash.bashrc，~/.bashrc,~/.profile
-
-##source：在当前bash中执行脚本。
-	在bash中启动一个程序时，bash一般会启动一个新的bash，然后再新的bash中执行该程序。在新的bash中会继承父bash的环境变量，但是不会继承临时变量。子bash中可以设置环境变量，但是退出时，此环境变量丢失，不会影响父bash。
-	如果用source来执行程序，则bash会在当前bash中执行程序，所以在程序中如果设置环境变量，则当前环境中的环境变量将发生改变。
-
-##regular expression正则表达式
-	正则表达式可以灵活处理字符串,最初用于sed和grep，称为regex，后来pythom，java等开发语言也支持了正则表达式。
-	注意不要与shell中的文件通配符混了。在shell中用*来匹配任意字符的字符串,用?来匹配一个字符。举例：ls *.txt。在这里，shell首先解释命令中的文件通配符，并将其展开，与这里将的正则表达式是不同的。
-
-	正则表达式中的元字符：
-		基本元字符
-			. * [ \ ^ $
-		扩展元字符
-			? + { | ( ) < >
-		基本元字符解释：
-			.	可以匹配1个任何单字符
-			*	匹配其前面字符的0次到多次，比如12*4,表示匹配2的0次到多次，如1224，12224,14都能匹配。
-			[	表示一个字符集合开始
-			\	表示转义其后的控制字符
-			^	表示开头
-			$	表示结尾
-			[-] 表示一个字符集合，在这个集合中除非在特殊位置，控制字符是其原义。
-				- 字符，表示范围
-				在字符集合中用-在两个字符之间，表示字符的一个范围。例如[a-z],表示a-z的字符集合。如果想匹配-，则应当将其放在最后。
-				^ 字符 ，表示取补集
-				^如果在[的开头，表示与字符集合之外的字符匹配。比如[^a-z]，则匹配任何非小写字母。如果想匹配^则应当将其放在不是第一个字符的位置。
-				] 字符，表示匹配集合结束。
-				如果想匹配]，应当将其放在第一个位置。
-		扩展元字符解释：
-			() 表示分组，()中的字符是一个字符串，表示匹配这个字符串。比如(xas)，表示匹配xas。例如 egrep '(xas)',注意不能是 egrep (xas)。使用()做组匹配时，如果匹配上可以用\1,\2..表示前面的组字符串，这在输出时往往有用。
-			|	表示逻辑或的关系。比如[ae]\|[bd]，表示匹配ae或者bd。或关系比较特殊只有在egrep中可以使用。
-			+   表示匹配前面字符1次到多次。比如a+,表示匹配a至少一次。
-			?	表示匹配前面字符0次到1次。比如a?,表示匹配a 0次或1次
-			{}	{m,n},表示匹配至少m次，至多n次。比如a{3,4},表示匹配a至少3次，至多4次。
-			<>	表示精确匹配	
-			以上控制字符如果在基本regex中使用时，需要在前面加上转义符\，即将普通字符转义成控制字符。例如grep 'a\+' ,grep 'a\{3\}' 。在扩展grep中转义符可以加也可以不加(grep -e,or egrep)。
-	预定义的字符集合
-		[: ... :]形式的预定义字符集合
-			[:alnum:],表示字母和数字
-			[:alpha:],表示字母 
-			[:digit:],表示数字 0-9
-			[:xdigit:],表示十六进制的数字0-9,a-f，A-F 
-			...
-				更多参见man awk 
-			在grep中使用这些预定义字符集合需要在前面加上[],比如
-				grep [[:alpha:]] xx 
-		以\开头的预定义字符：
-			\w	a word 
-			\W	non word 
-			\s	blank
-			\S	non blank
-			...
-			不同的程序对此定义不同，上面几个比较通用。
-			具体程序参见其man手册。
-			vim的参见:h regular 
+		
 ##sed  流编辑器 stream edit for filtering and transform text
-　　概述：
-		sed用于对输入的文本逐行处理。sed不会改变源内容，除非特地指定。sed输出到标准输出。
-　　调用格式：
+- 用途：sed用于对输入的文本逐行处理。  
+sed不会改变源内容，除非特地指定。sed输出到标准输出。
+- 调用格式：
+
 		sed [选项] '脚本命令' inputfile
-　　选项：
-		-e 执行后面的脚本命令，如果有多个脚本命令，可以用-e 隔开。
-	　　-f 脚本文件
-　　	-i 修改源文件
-	　　-n quiet 不显示自动匹配的字串
-　　	脚本命令：[地址]动作
-			动作分为无地址动作，无地址或只有1个地址的动作，有地址范围的动作。
-			地址：地址可以是用数字，也可用匹配来产生。	
-				$	表示最后一行。（正则表达式中的$表示一行的行尾位置）
-				n1,n2	范围从n1行到n2行
-				n1,+N	范围从n1到后面N行
-				n1,~N	范围从n1间隔N行
-					举例sed '1,~2p',则打印奇数行
-				/pattern/ 匹配字串地址
-				如果地址后跟!则表示地址范围是以上地址取反。
-			无地址动作：
+- 选项：  
+	- -e 执行后面的脚本命令，如果有多个脚本命令，可以用-e 隔开。
+	- -f 脚本文件
+	- -i 修改源文件
+	- -n quiet 不显示自动匹配的字串
+- 脚本命令：
+	- 格式：[地址]动作  
+
+		动作分为无地址动作，无地址或只有1个地址的动作，有地址范围的动作。
+	- 地址：指明范围。  
+
+		地址可以是用数字，也可用匹配来产生。
+		- $	表示最后一行。（正则表达式中的$表示一行的行尾位置）
+		- n1,n2	范围从n1行到n2行
+		- n1,+N	范围从n1到后面N行
+		- n1,~N	范围从n1间隔N行
+		 	举例`sed '1,~2p'`,则打印奇数行
+		- /pattern/ 匹配字串地址
+
+			如果地址后跟!则表示地址范围是以上地址取反。
+	- 动作：当匹配上的时候的动作
+
+		- 无地址动作：
+
 				: label 做标记?
 				#comment 注释
-			无地址或只有一个地址的动作：
+		- 无地址或只有一个地址的动作：
+
 				=		打印行号
 				i text 在地址前插入文本
 				a text 在地址后插入文本
 				r file 在地址后插入文本
 				R file 在地址后插入文本，并对每一行解释执行。？
-			地址范围的动作：
+		- 地址范围的动作：
+
 				p		打印当前行
 				c text 将选定行替换成text。(整行替换)
 				d		删除选定行
 				s/pattern/repleace/	将匹配的部分替换成replace
 				y/source/dest/		将source中出现的字符，替换成dest中的对应字符。要求source和dest必须等长。
 				w file	将选定部分写到文件中。
-	举例：
-	　　 删除空行：`sed '/^$/d' demo.txt` 
-	　　 行尾添加内容：`sed 's/$/append/' demo.txt`
-	　　 行尾删除刚才添加的内容：`sed 's/append$//' demo.txt`
-	　　 大小写转换 `sed 's/[a-z]/\u&/g' demo.txt`,`sed 's/[A-Z]/\l&/g' demo.txt`
-	　　 注意：\d,\u,\l,不能用在正则表达式的匹配中，只能用在转换中，如果在匹配中只能是字母本身。
+- 举例：
+
+	删除空行：`sed '/^$/d' demo.txt`  
+	行尾添加内容：`sed 's/$/append/' demo.txt`  
+	行尾删除刚才添加的内容：`sed 's/append$//' demo.txt`  
+	大小写转换 `sed 's/[a-z]/\u&/g' demo.txt`,`sed 's/[A-Z]/\l&/g' demo.txt`  
+	注意：\d,\u,\l,不能用在正则表达式的匹配中，只能用在转换中，如果在匹配中只能是字母本身。
 
 ##awk
-	概述：
-		awk是另一个类似于sed的行文本处理程序，awk的原理是逐行读入文本，按照定义好的分割符将文本切割成多列，然后通过类似于c的脚本进行处理。awk认为输入的文本是结构的，可以分割成多列。sed只能提供内定的一些处理命令，而awk可以通过编程来实现比较复杂的处理。
-		awk是符合PROSIX 1003.1标准的语言。gawk程序来自论文：AWK Programing Language，由Aho,Kemighan和Weinberger完成。
-	调用格式：
+- 用途：
+	awk是另一个类似于sed的行文本处理程序。  
+	awk的原理是逐行读入文本，按照定义好的分割符将文本切割成多列，然后通过类似于c的脚本进行处理。awk认为输入的文本是结构的，可以分割成多列。sed只能提供内定的一些处理命令，而awk可以通过编程来实现比较复杂的处理。
+
+	awk是符合PROSIX 1003.1标准的语言。gawk程序来自论文：AWK Programing Language，由Aho,Kemighan和Weinberger完成。
+- 调用格式：
+
 		awk [-v var=value] [-F value] [-f program-file] 'program text' [file ...]。
-		-f program-file	：输入的awk脚本文件
-		-F ：定义分隔符
-			awk -F '/'
-			分隔符也可以在BEGIN中来定义。举例{BEGIN{FS="/"}}
-		-v val=value ：设置变量.可以被BEGIN所识别  
-			可以给awk输入参数，在awk中可以直接引用输入参数，
-			举例
-			1)awk -v OFS="." 'BEGIN{print OFS}' test.txt
-			2)awk -v OFS="." -f test.awk test.txt
-	program text：pattern {action}
-			如果没有匹配，则默认是匹配每一行
-			如果没有动作，则默认动作是print
-			不能既没有匹配也没有动作。
+- 选项 		
+	- -f program-file	：输入的awk脚本文件
+	- -F ：定义分隔符
+		awk -F '/'
+		分隔符也可以在BEGIN中来定义。举例{BEGIN{FS="/"}}
+	- -v val=value ：设置变量.可以被BEGIN所识别  
+		可以给awk输入参数，在awk中可以直接引用输入参数，
+		举例
+		1)awk -v OFS="." 'BEGIN{print OFS}' test.txt
+		2)awk -v OFS="." -f test.awk test.txt
+- program text：
+	
+	- 格式：pattern {action}
 
-			pattern可以是：
-				BEGIN	：表示在读取文件前的动作
-				END		：表示在读取文件后的动作
-				/regular/：正则表达式
-					正则表达式与一般的正则表达式使用方法一致。需要说明的是awk支持扩展正则表达式。举例:[:alnum:],[:alpha:],等
-				relation expression	：关系表达式
-					关系表达式可以用在下面动作一节中所有定义的操作。通常用作测试特定字段与特定正则表达式是否匹配。
-					pattern && pattern：	逻辑与
-					pattern || pattern：	逻辑或
-					pattern?pattern:pattern
-			action：
-				action就像c语言一样。
-				在awk中action需要用'{}'来包括。
-				如果{}中的操作含有更多的操作，可以再次嵌套。
-				动作之间用;分隔。
+		如果没有匹配，则默认是匹配每一行
+		如果没有动作，则默认动作是print
+		不能既没有匹配也没有动作。
+
+		- pattern：  
+			BEGIN	：表示在读取文件前的动作  
+			END		：表示在读取文件后的动作  
+			/regular/：正则表达式
+
+			> 正则表达式与一般的正则表达式使用方法一致。需要说明的是awk支持扩展正则表达式。举例:[:alnum:],[:alpha:],等  
+
+			relation expression	：关系表达式  
+
+			> 关系表达式可以用在下面动作一节中所有定义的操作。通常用作测试特定字段与特定正则表达式是否匹配。
+
+				pattern && pattern：	逻辑与 
+				pattern || pattern：	逻辑或
+				pattern?pattern:pattern
+		- action：
+				action就像c语言一样。 
+				在awk中action需要用`'{}'`来包括。 
+				如果`{}`中的操作含有更多的操作，可以再次嵌套。 
+				动作之间用;分隔。  
 				动作包括：
-					(...)	：分组
-					+-×/%
-					++，-- 
-					！
-					<,>,=,!=,==
-					~,!~	：正则表达式的比较
-					&&，||
-					|		：管道
-					in		:array的操作
-					print exp
-					printf format,expr..
-					...other fun 
-					在awk中执行shell命令：
-						1）awk '{print|"command"'
-							awk '{print|"ls"}'
-						2) awk '{system("command")}'
-							awk '{system("ls")}'
-							awk '{v1="echo";v2="abc";system(v1" "v2)}'
-					special filenames
-					/dev/stdin or 1
-					/dev/stdout or 2	
-						print "something" > /dev/stderr 
-						or
-						print "something" | "cat 1>&2""
-					/dev/fd/n
-				内部变量：
-					$0	代表整行
-					$1	代表分隔的第1列数据
-					$2	代表分隔的第2列数据
-					...
-					NF 表示每行的单元数
-					NR 表示文件的行数
-					FS 表示列分隔符，默认是空格
-					OFS 表示输出列分隔符，默认是空格
-					RS 表示记录分隔符，默认是换行符
-					ORS 表示输出记录分隔符，默认是换行符
-					...
-					注意：如果修改了输入分隔符，则相应的输出分隔符也要修改，否则分隔符就是默认的。
-				变量：
-					定义变量：
-						var=varl
-						变量不需要象c语言需要预先定义，也没有类型区分。
-						这个定义可以在命令行中，也可以在脚本中。如果在命令行中，则此变量只有在命令执行的时候才生效，而在BEGIN中不会生效，除非用-v var=varl来定义。	
-					引用变量：
-						就像c语言中一样，直接使用。不需要向shell中需要用$var来引用。
-					数组：
-						数组用[]来表示，awk可以自动扩展。举例：
-							a[1]=1;a[2]=2...
-				awk中的函数：
-						split(s,A,r):将字串分割。
-							s:源字串，r:正则分割符，A：分割后字串
-							awk 'BEGIN{s="a/b/c";split(s,A,'/');OFS="-";print A[1],A[2],A[3];}'
-							结果是：a-b-c
-						gsub(r,t,[s]):全局替换
-							r：正则匹配字串，t：匹配后替换字串，s:源字串，如果没有，默认是$0
-							echo aaa2017|awk '{gsub(/[0-9]+/,"bbb")'
-						sub(r,s,t):
-							类似与sub，只是将t中第一次出现的r用s替换
-							awk 'BEGIN{t="abc";sub("a","s",t);print t}'
-						inedx(t,s):
-							返回t中s所处的位置
-						length(s):
-							返回s的长度
-						substr(t,pos):
-							返回t中从pos之后的字串
-						substr(t,pos,len):
-							返回t中从pos之后长度为len的字串。
-							pos,len是数字,与index正好相反。	
-						match(s,r):
-							返回r在s中的位置。r是正则表达式。失败返回0
-							如果返回匹配字串，可以用：substr(s,match(s,r))
-						更多函数参见man awk 
+				
+				(...)	：分组  
+				+-×/%
+				++，-- 
+				！
+				<,>,=,!=,==
+				~,!~	：正则表达式的比较
+				&&，||
+				|		：管道
+				in		:array的操作
+				print exp
+				printf format,expr..
+				...other fun 
+				在awk中执行shell命令：
+					1）awk '{print|"command"'
+						awk '{print|"ls"}'
+					2) awk '{system("command")}'
+						awk '{system("ls")}'
+						awk '{v1="echo";v2="abc";system(v1" "v2)}'
+				special filenames
+				/dev/stdin or 1
+				/dev/stdout or 2	
+					print "something" > /dev/stderr 
+					or
+					print "something" | "cat 1>&2""
+				/dev/fd/n
 
-#关于条件组合的总结：
-	逻辑与逻辑或的关系在多个地方都会用到，但是有些区别。
-	假设a=1,b=3
-	c语言中的逻辑：
+- 内部变量：
+
+		$0	代表整行
+		$1	代表分隔的第1列数据
+		$2	代表分隔的第2列数据
+		...
+		NF 表示每行的单元数
+		NR 表示文件的行数
+		FS 表示列分隔符，默认是空格
+		OFS 表示输出列分隔符，默认是空格
+		RS 表示记录分隔符，默认是换行符
+		ORS 表示输出记录分隔符，默认是换行符
+		...
+		注意：如果修改了输入分隔符，则相应的输出分隔符也要修改，否则分隔符就是默认的。
+- 变量：
+定义变量：
+
+		var=varl
+		变量不需要象c语言需要预先定义，也没有类型区分。
+		这个定义可以在命令行中，也可以在脚本中。如果在命令行中，则此变量只有在命令执行的时候才生效，而在BEGIN中不会生效，除非用-v var=varl来定义。	
+	引用变量：
+		就像c语言中一样，直接使用。不需要向shell中需要用$var来引用。
+	数组：
+		数组用[]来表示，awk可以自动扩展。举例：
+			a[1]=1;a[2]=2...
+- 函数：
+
+	- split(s,A,r):将字串分割。
+		s:源字串，r:正则分割符，A：分割后字串
+		awk 'BEGIN{s="a/b/c";split(s,A,'/');OFS="-";print A[1],A[2],A[3];}'
+		结果是：a-b-c
+	- gsub(r,t,[s]):全局替换  
+		r：正则匹配字串，t：匹配后替换字串，s:源字串，如果没有，默认是$0
+		echo aaa2017|awk '{gsub(/[0-9]+/,"bbb")'
+	- sub(r,s,t):
+		类似与sub，只是将t中第一次出现的r用s替换
+		awk 'BEGIN{t="abc";sub("a","s",t);print t}'
+	- inedx(t,s):
+		返回t中s所处的位置
+	- length(s):
+		返回s的长度
+	- substr(t,pos):
+		返回t中从pos之后的字串  
+	- substr(t,pos,len):
+		返回t中从pos之后长度为len的字串。  
+		pos,len是数字,与index正好相反。	  
+	- match(s,r):
+		返回r在s中的位置。r是正则表达式。失败返回0
+		如果返回匹配字串，可以用：substr(s,match(s,r))  
+	更多函数参见man awk 
+
+## 关于条件组合的总结：
+逻辑与逻辑或的关系在多个地方都会用到，但是有些区别。
+假设a=1,b=3
+
+-	c语言中的逻辑：
+	
 		|,||,&,&&
 		|	:或操作：	if(a>1|b>3) 
 		&	:与操作：	if(a>1&b>3) 
 		||	:逻辑或：	if((a>1)||(b>3))	:先判断前面一个逻辑，如果前面一个逻辑真,则不判断后面一个逻辑。
 		&&	:逻辑与：	if((a>1)&&(b>3))	:先判断前面一个逻辑，如果前面一个逻辑假,则不判断后面一个逻辑。
-	awk中的逻辑:
+	
+-	awk中的逻辑:
+	
 		||	:逻辑或	
-			awk与c语言非常类似，但是awk中没有或操作，与操作 ，像if(a>1|b>3)的操作是不被允许。而if(a>1||b>3)是被允许的。
-	makefile中的逻辑：
+	
+	awk与c语言非常类似，但是awk中没有或操作，与操作 ，像if(a>1|b>3)的操作是不被允许。而if(a>1||b>3)是被允许的。
+	
+-	makefile中的逻辑：
+	
 		ifeq	：makeifle中比较简单，只有ifeq逻辑等：
-				ifeq(expr1,expr2)
-	正则表达式中的逻辑：
-		|	:逻辑或。举例：
-			[a-z\|1-9]
-	shell中的逻辑:
+		ifeq(expr1,expr2)
+	
+-	正则表达式中的逻辑：
+	
+		|	:逻辑或。举例：[a-z\|1-9]
+	
+-	shell中的逻辑:
+	
 		-and
 		-or ...
-		在shell中|代表管道，&代表后台。不能直接使用
-		除非在expr程序中，在脚本命令中只使用||，&&，或-or(-o)，-and(-a)。
-		举例：					  
-			if [ $a -gt 1 -o $b -gt 3 ];then	:逻辑或,-o 代表-or 
-			if [ $a -gt 1 -a $b -gt 3 ];then	:逻辑与,-a 代表-and 
-			if ((a>1||b>3))						:扩展的shell，用类似c语言的风格。
-		condition11 || condition12			:复合逻辑或，如果前面一个逻辑为真，则不执行后面一个逻辑判断，否则执行后面一个逻辑判断。
-		举例：if [ $a -gt 1] || [ $b -gt 3 ];then
-		condition1 && condition2			:复合逻辑与，只有前面一个操作成功，才会执行后面一个操作。该逻辑往往用来做连续两个动作。
-		举例：[ $a>1 ] && echo "a>1"
+	在shell中|代表管道，&代表后台。不能直接使用  
+	除非在expr程序中，在脚本命令中只使用||，&&，或-or(-o)，-and(-a)。
+	举例：					  
+	
+		if [ $a -gt 1 -o $b -gt 3 ];then	:逻辑或,-o 代表-or 
+		if [ $a -gt 1 -a $b -gt 3 ];then	:逻辑与,-a 代表-and 
+		if ((a>1||b>3))						:扩展的shell，用类似c语言的风格。
+	
+	
+	 condition11 || condition12			:复合逻辑或，如果前面一个逻辑为真，则不执行后面一个逻辑判断，否则执行后面一个逻辑判断。举例：
+	
+		if [ $a -gt 1] || [ $b -gt 3 ];then
+	
+	condition1 && condition2			:复合逻辑与，只有前面一个操作成功，才会执行后面一个操作。该逻辑往往用来做连续两个动作。
+	举例：
+	
+		[ $a > 1 ] && echo "a>1"
+	
 	expr中的逻辑：
+	
 		expr1 \| expr2	:逻辑或
 		expr1 \& expr2	:逻辑与 
+	
+## 关于程序控制的总结
 
-#关于程序控制的总结
-	awk的程序控制：
-		awk与c语言很接近：在脚本中完全可以按照c语言的语法，下面是可以在命令行中输入：
-		关键字：
+- awk的程序控制：
+
+	awk与c语言很接近：在脚本中完全可以按照c语言的语法，下面是可以在命令行中输入：
+
+	- 关键字：
+
 			if,else if,else ,while,do,for,,break,continue,exit,{}switch,case
-		语法：		
+	- 语法：		
+
 			if(condition)statement;else statement;
 			for(expr1;expr2;expr3)statement;
 			for(var in array) statement;
@@ -1288,10 +1507,14 @@ ls -d */ 仅显示当前目录下的目录
 			continue;
 			exit statement;
 			delete array
-	shell的程序控制：
-		关键字：
+
+- shell的程序控制：
+
+	- 关键字：
+
 			[],if,elif,else,fi,while,do,done,for,in,case,esac
-		语法：	
+	- 语法：	
+
 			[ condition ] && statement;
 			if [ condition ];then
 				statement
@@ -1312,135 +1535,168 @@ ls -d */ 仅显示当前目录下的目录
 				*)		statement;;
 			esac		
 
-##sort:对文本中的内容进行排序。
-	概述：
-		sort认为文本中的数据是结构化的，同awk类似，通过分隔符，将每行文本分成多个域，然后针对某个域进行排序。比较时如果两个记录的第一列的内容相同则根据第二列进行排序，以此类推。
-	调用格式：
+##sort:
+- 用途：对文本中的内容进行排序。
+	sort认为文本中的数据是结构化的，同awk类似，通过分隔符，将每行文本分成多个域，然后针对某个域进行排序。比较时如果两个记录的第一列的内容相同则根据第二列进行排序，以此类推。
+- 调用格式：
+
 		sort [options] [files]
-	选项：
-		-t 设置分隔符，默认分隔符是空格，通过分隔符将记录分成多列，可以设置多个分隔符。
-		-kn 设置比较的列，n是想要比较的列，从1开始。默认是第一列。
-		-n 指定按照数字比较，默认是按照字串比较，举举例果内容为100,默认是按照字串100进行比较。
-		-c 测试文件是否已经排序。
-		-m 合并两个已经排序的文件。
-		-r 逆序 
-		-o 输出文件 
-		-u 排除重复项
+- 选项：
 
-##uniq:统计文件重复行
-	选项：
-		-c 显示重复行数次数及重复行内容
-		-u 显示非重复行
-		-d 显示重复行
+	- -t 设置分隔符，默认分隔符是空格，通过分隔符将记录分成多列，可以设置多个分隔符。
+	- -kn 设置比较的列，n是想要比较的列，从1开始。默认是第一列。
+	- -n 指定按照数字比较，默认是按照字串比较，举举例果内容为100,默认是按照字串100进行比较。
+	- -c 测试文件是否已经排序。
+	- -m 合并两个已经排序的文件。
+	- -r 逆序 
+	- -o 输出文件 
+	- -u 排除重复项
+
+##uniq
+- 用途	统计文件重复行
+- 选项：
+	- -c 显示重复行数次数及重复行内容
+	- -u 显示非重复行
+	- -d 显示重复行
 	
-	uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而sort中的重复行可以不连续。
-	举例：
-		统计文本中单词的出现频率，显示出现次数和单词，次数多的在前面。
-		cat record.txt|sed -e 's/\.//g' -e 's/://g' -e 's/ /\n'|sort|uniq -c|sort -nr;
-		前面2个sed用于将不想统计的单词去掉，后面一个sed将用空格分开单词形成一个单列的文件，接着用sort将此文件排序，此文件中有重复行就是重复出现的单词，然后用uniq统计重复单词的数量，最后逆序输出该统计结果。
+uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而sort中的重复行可以不连续。
 
-##join:用于将两个类似数据库的文件连接起来
-	选项：	
-		-a1	除了共有部分记录，还列出文件1中不包括共有部分的记录
-		-a2 除了共有部分记录，还列出文件2中不包括共有部分的记录
-		-v1 仅列出文件1中不包括共有部分的记录
-		-v2 仅列出文件2中不包括共有部分的记录
-		-1  文件1中用于比较的关键字所在列，默认是第一列
-		-2  文件2中用于比较的关键字所在列，默认是第一列
-		-o  输出的列
-		-t  列分隔符
+举例：
+
+> 统计文本中单词的出现频率，显示出现次数和单词，次数多的在前面。
+> 
+>`cat record.txt|sed -e 's/\.//g' -e 's/://g' -e 's/ /\n'|sort|uniq -c|sort -nr;`
+>
+> 前面2个sed用于将不想统计的单词去掉，后面一个sed将用空格分开单词形成一个单列的文件，接着用sort将此文件排序，此文件中有重复行就是重复出现的单词，然后用uniq统计重复单词的数量，最后逆序输出该统计结果。
+
+##join
+- 用途：用于将两个类似数据库的文件连接起来
+- 选项：	
+	- -a1	除了共有部分记录，还列出文件1中不包括共有部分的记录
+	- -a2 除了共有部分记录，还列出文件2中不包括共有部分的记录
+	- -v1 仅列出文件1中不包括共有部分的记录
+	- -v2 仅列出文件2中不包括共有部分的记录
+	- -1  文件1中用于比较的关键字所在列，默认是第一列
+	- -2  文件2中用于比较的关键字所在列，默认是第一列
+	- -o  输出的列
+	- -t  列分隔符
 		如果两个文件有共有列，则列出包括共有列的记录的两个文件的所有列。
-	举例
-		两个文件为：
-		file1：
-			1 a b c
-			2 a1 b1 c1
-			3 a2 b2 c2
-		file2:
-			1 a d e
-			2 a2 d2 e2
-		则join file1 file2为
-			1 a b c d e
-			2 a1 b1 c1 a2 d2 e2
-		默认的是以第一列作为比较的关键字
+举例
 
-##split 分割文件
-	选项：
-		-n 分割成几个文件
-		-b size 按照字节数来分
-		-C size 按照字节数来分，尽可能保持行完整
+	两个文件为：
+	file1：
+		1 a b c
+		2 a1 b1 c1
+		3 a2 b2 c2
+	file2:
+		1 a d e
+		2 a2 d2 e2
+	join file1 file2
+	结果为：
+		1 a b c d e
+		2 a1 b1 c1 a2 d2 e2
+	默认的是以第一列作为比较的关键字
 
-##cut   按列取出文件
-		-c n 从第几个字节取出
-			-c 1,-c 1-2，-c1,3
-		-f 从第几域取出
-		-d 定义域分割字符
+##split
+- 用途：分割文件
+- 选项：
+	- -n 分割成几个文件
+	- -b size 按照字节数来分
+	- -C size 按照字节数来分，尽可能保持行完整
 
-##paste 将两个文件按行合并
-	调用格式：	
+##cut
+- 用途：按列取出文件
+- 选项 
+	- -c n 从第几个字节取出  
+	  -c 1,-c 1-2，-c1,3
+	- -f 从第几域取出
+	- -d 定义域分割字符
+
+##paste 
+- 用途：将两个文件按行合并
 		paste [options] file1 file2
-	选项：	
-		-s 将连接的文件写在一行中
-		-d 定义连接符
+- 选项：	
+	- -s 将连接的文件写在一行中
+	- -d 定义连接符
 
-	举例 file1
+举例 
+
+	file1
 		a b c
 		a1 b1 c1
-		file2：
+	file2：
 		d e
 		d1 e1
-		paste -d@ file1 file2
-		结果为：
+	paste -d@ file1 file2
+	结果为：
 		a b c @d e
 		a1 b1 c1@d1 e1
 
-##xxd:显示二进制文件
-		-gn n为按照几个字节显示记录
+##xxd
+- 用途：显示二进制文件
+- 选项：
 
-##od:显示二进制文件
-		-t type
-			c	c:character
+	- -gn n为按照几个字节显示记录
+
+##od
+- 用途：显示二进制文件
+- 选项
+	- -t type
+		type:
+			c:character
 			ox	o:octal x:1,2
 			xx	x:hex	x:1,2,3..
 
 ##hexedit 
+- 用途：显示二进制文件
 
 
 ##chkconfig 配置服务
+- 用途：配置系统的服务程序
 
-　　先在/etc/init.d/目录下编辑此文件,文件名就是服务名,举例server
-　　case "$1" in
-　　    start)
-　　    cd /home/hanhj/tmp/language/py
-　　    /home/hanhj/tmp/language/py/server2.py &
-　　     ;;
-　　   stop)
-　　    killall server2.py
-　　       ;;
-　　   status)
-　　   status server2.py
-　　   ;;
-　　   restart)
-　　   $0 stop
-　　   $0 start
-　　   ;;
-　　 *)
-　　   echo "Usage:$0 {start|stop|status|restart}"
-　　   exit 1
-　　esac
-　　 exit 0
-　　意:
-　　要将此文件加上可执行属性:sudo chmod +x server
-　　然后,运行chkconfig -a server;将此命令加入到服务中.(如果没有安装chkconfig命令,可以执行:sudo apt-get install chkconfig)
-　　此时用chkconfig -l ,可以看见server服务在列表中,但是全是off状态,
-　　可以用chkconfig server on,将服务打开
-　　 server               0:off  1:off  2:on   3:on   4:on   5:on   6:off
-　　 0,1,...表示启动时的级别;
-　　此时,重启系统后,server服务将自动启动,
-　　如果想手动启停服务,可以
-　　service server start|stop
-　　或者:
-　　/etc/init.d/server start|stop
+	维护位于/etc/init.d/目录下的服务配置脚本。添加，删除，修改。
+- 说明：
+
+	如果想配置一个服务。  
+	1. 编辑一个服务脚本程序,文件名就是服务名,如server。
+
+			case "$1" in
+			    start)
+			    cd /home/hanhj/tmp/language/py
+			    /home/hanhj/tmp/language/py/server2.py &
+			     ;;
+			   stop)
+			    killall server2.py
+			       ;;
+			   status)
+			   status server2.py
+			   ;;
+			   restart)
+			   $0 stop
+			   $0 start
+			   ;;
+			 *)
+			   echo "Usage:$0 {start|stop|status|restart}"
+			   exit 1
+			esac
+			exit 0
+
+	2. 将此文件加上可执行属性:sudo chmod +x server   
+	3. chkconfig -a server;将此命令加入到服务中
+
+
+查询服务
+
+	chkconfig -l 
+将服务打开
+
+	chkconfig server on
+
+
+如果想手动启停服务,可以 
+
+	service server start|stop
+	/etc/init.d/server start|stop
 
 
 ##uname:显示系统版本-r显示核心版本,-a显示全部;

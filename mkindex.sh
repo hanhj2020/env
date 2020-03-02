@@ -6,14 +6,14 @@
 files=`ls --hide=index.html|grep html`
 if [ -z "$files" ];then exit 1;fi
 cat <<eof |tee index.md
-|文件|
-|:--------|
+|files|
+
 eof
 
 for i in $files;do
 	str="|[`basename $i .html`]($i)|"
 	cat <<eof|tee -a index.md
-${str}
+${str}  
 eof
 done
 pandoc index.md -o index.html 
