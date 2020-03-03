@@ -590,11 +590,18 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 
 ls -d */ 仅显示当前目录下的目录
 
-##basename:显示路径中最后的部分
+##basename:
+- 用途：显示路径中最后的部分
+- 调用格式：
 
-##dirname :显示路径中最后部分前面的路径
+		basename dir [suffix]
+如果有suffix，表示去掉后缀名 
 
-##realpath:	显示路径的实际物理路径，将链接转换成实际的物理路径
+##dirname
+- 用途:显示路径中最后部分前面的路径
+
+##realpath
+- 用途:显示路径的实际物理路径，将链接转换成实际的物理路径
 
 ##cp 
 - 用途： 
@@ -1651,7 +1658,7 @@ uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而s
 - 用途：显示二进制文件
 
 
-##chkconfig 配置服务
+##chkconfig 
 - 用途：配置系统的服务程序
 
 	维护位于/etc/init.d/目录下的服务配置脚本。添加，删除，修改。
@@ -1699,288 +1706,381 @@ uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而s
 	/etc/init.d/server start|stop
 
 
-##uname:显示系统版本-r显示核心版本,-a显示全部;
+##uname
+- 用途:显示系统版本
+- 选项   
+	- -r 显示核心版本,
+	- -a 显示全部;
+
+##history 
+- 用途:　显示输入过的命令
+- 配置  
+	在~/.bashrc文件中可以有以下配置项  
+	HISTCONTROL=ignoredups,忽略连续的重复输入  
+	HISTCONTROL=erasedups,忽略所有命令中重复的输入  
+	HISTTIMEFORMAT='%F %T|',配置命令前的时间
+
+- 使用  
+	history 数字,显示最近n条的输入命令  
+	!n,执行数字指示的命令,注意是直接在控制台中输入  
+	!char,执行最近的与char匹配的命令,举例最近执行了dir命令,则!dir就执行dir命令
+	history -c,清除历史记录
+
+##okular
+- 用途：阅读和注释pdf
+- 使用：  
+	划线 f6
+
+##evince
+- 用途：pdf文档阅读器
 
 
-##history:　显示输入过的命令
-　　在~/.bashrc文件中可以有以下配置项
-　　HISTCONTROL=ignoredups,忽略连续的重复输入
-　　HISTCONTROL=erasedups,忽略所有命令中重复的输入
-　　HISTTIMEFORMAT='%F %T|',配置命令前的时间
-　　命令:
-　　history 数字,显示最近n条的输入命令
-　　!n,执行数字指示的命令,注意是直接在控制台中输入
-　　!char,执行最近的与char匹配的命令,举例最近执行了dir命令,则!dir就执行dir命令
-　　history -c,清除历史记录
+## pencil2d
+- 用途 ：作图
 
+## pinta
+- 用途： 作图
 
-
-##okular　：阅读和注释pdf
-　　划线 f6
-
-##evince：pdf文档阅读器
-
-
-##作图软件：
-　　pencil2d
-　　pinta
-
-##crontab　用来设置计划任务
-　　crontab -e 编辑计划任务
-　　crontab -l 显示计划任务
-　　-u 表示用户
-	编辑计划任务时，会显示该任务执行的分，时，日，月，周，命令
-	/n 表示每隔
-	n1-n2 表示从n1到n2 
-	n1,n2 表示可选的数值
-	举例：*/1 * * * * echo "ddd" 表示每隔1分钟打印ddd
-	用户的crontab放置在/var/spool/cron/crontabs/user文件下
+##crontab
+- 用途：用来设置计划任务
+- 选项：  
+	- -e 编辑计划任务
+	- -l 显示计划任务
+	- -u 表示用户
+- 说明：  
+	编辑计划任务时，每条任务用：分 时 日 月 周几 用户 命令  表示  
+	/n 表示每隔  
+	n1-n2 表示从n1到n2   
+	n1,n2 表示可选的数值  
+	例如   
+	
+		#m h day_of_month month day_of_week user command  
+		*/1 * * * *  hanhj echo "ddd"   
+	表示每隔1分钟打印ddd  
+- 配置    
+	用户的crontab放置在/var/spool/cron/crontabs/user文件下  
 	系统的cron放置在/etc/cron/crontab,/etc/cron.d/ 下
 
 
-##开机服务程序
-　　1）添加开机服务程序最简单的方法是在/etc/rc.local中添加脚本程序。rc.local是开机时最后执行的命令。脚本程序可以是很简单的一句话举例：
-　　 在rc.local中添加a.sh,a.sh的内容为：echo 'hello'。注意需要将a.sh的属性改成可执行：chmod +x a.sh .a.sh可以放在环境变量path中
-　　 的任何地方；
-　　2）开机服务程序可以通过脚本来实现，开机程序的脚本放在/etc/init.d/目录下，可以看见这里有许多脚本举例ssh，apache2等。最简单的脚本如下：
-　　 /etc/init.d/myfun :
-　　 start(){
-　　  echo "my fun start'
-　　  a.sh
-　　 }
-　　 stop(){
-　　  echo "my fun stop"
-　　 }
-　　 编辑好脚本后，用sysv-rc-conf命令将此服务置于某种启动模式之下，启动模式是指计算机启动的不同环境，在linux中有6种启动模式，分别为：
-　　 0-关机
-　　 1-单用户
-　　 2-不带网络的多用户
-　　 3-带网络的多用户
-　　 4-不可用
-　　 5-带图形界面的多用户
-　　 6-重启
-　　 我们常用的是3,5
-　　 在etc目录下有rc.0，rc.1 ... 等目录，里面放的是不同启动模式下需要执行的活动举例s01apache2，s表示启动如果是，k表示关闭，后面是一个数字
-　　 最后是服务名，该活动实际上是一个链接，链接到init.d中的脚本，这样在不同模式下需要启动或关闭服务就可以通过修改链接（修改链接名的第一个字母）
-　　 或添加删除链接来完成。
-　　 手动的修改这些链接比较麻烦，linux中提供了chkconfig工具（在ubuntu中废弃了这个工具，取而代之的是sysv-rc-conf）.
-　　 chkconfig --add 服务名 用来添加服务;
-　　 chkconfig -level 启动级别 服务名 on/off 可以设置相关服务的启动级别和开关该服务;
-　　 chkconfig --list 可以列出当前的服务。
-　　 sysv-rc-conf提供类似的图形化的界面，使用起来更加方便。
-　　 如果服务做了改动，举例删除了/init.d/xxx服务，可以用sysv-rc-conf -P 来清除缓冲区，使其不在图形界面上显示。
-	
-	配置服务的另外方法：systemd.
-	linux启动的过程：post->boot sequence->boot loader->Kernel+initrams->rootfs->/sbin/init,
-	不同版本linux的init不同，在centos5中是systemV，在centos6中是upstart，在centos7中是systemd（可以看到/sbin/init实际上是链接到/lib/systemd/systemd）.
-	相关文件是：
-		/lib/systemd/system/ 这里面有后缀名为service,target,path等文件。service就是服务名，相当于/etc/init.d/中的文件，target是运行等级文件。
-		/etc/systemd/system/ 这里面是管理员的配置文件，是指向/lib/systemd/system中的链接文件。
-	相关命令是：systemctl
-		启动/停止服务：systemctl start/stop xx.service
-			替代命令：service xx start/stop or /etc/init.d/xx start/stop
-		禁止/恢复服务：systemctl disable/enable xx.service 
-			类似命令：checkconfig xx on/off ,sysv-rc-conf。如果该服务不是属于systemd，则可能转交给systemd-sysv-install,举例apache2服务。所以有可能出现明明在/etc/init.d/中禁止的服务，但是依然不能禁止。
-		禁止/恢复服务：systemcrl mask/unmask xx.servie,实际上是在/etc/systemd/system/目录下创建一个该服务名的链接，该链接指向/dev/null 
-		杀死服务：systemctl kill xx.service
-		查看服务：
-			systemctl -t help 列出服务类别：
-				可以是service，socket，busname，target，snapshot，mount，device，automount，swap，timer，path，slice，scope。
-			systemctl list-units -t x or systemctl -t x
-				x可以是service，或其他上面的类型。该命令是列出指明类型的服务，列出其状态。
-			systemctl status xx.service
-			is-active:是否激活
-			is-enabled：是否禁止
-			list-dependencies ：列出依赖关系
 
+##开机服务程序 
+
+
+- 系统的启动模式： 
+	启动模式是指计算机启动的不同环境，在linux中有6种启动模式，分别为：
+
+		 0-关机
+		 1-单用户
+		 2-不带网络的多用户
+		 3-带网络的多用户
+		 4-不可用
+		 5-带图形界面的多用户
+		 6-重启
+		我们常用的是3,5
+	 在etc目录下有rc.0，rc.1 ... 等目录，里面放的是不同启动模式下需要执行的活动。比如s01apache2，s表示启动如果是，k表示关闭，后面是一个数字, 最后是服务名。 该活动实际上是一个链接，链接到init.d中的脚本。 这样在不同模式下需要启动或关闭服务就可以通过修改链接（修改链接名的第一个字母）或添加删除链接来完成。
+
+- 服务脚本  
+	1. 编辑脚本  
+		服务程序的脚本放在/etc/init.d/目录下。比如hello这个服务：
+
+			文件名：/etc/init.d/hello
+			文件内容：
+			case "$1" in
+				start()
+					echo "my fun start"
+					a.sh
+					;;
+				stop()
+					echo "my fun stop"
+					;;
+				*)
+					echo "usage $0 start)stop)"
+					exit 1;;
+			esac
+	2. 配置脚本  
+		- 用chkconfig   
+			参见chkconfig命令
+		- 用sysv-rc-conf	
+			相比chkconfig，前者提供图形化的界面，使用起来更加方便。
+			如果服务做了改动，举例删除了/init.d/xxx服务，可以用sysv-rc-conf -P 来清除缓冲区，使其不在图形界面上显示。
+	3. 启动停止服务
+			
+			执行/etc/init.d/xx start or stop 
+			or service xx start/stop 
+
+- rc.local文件  
+	/etc/rc.local是开机时最后执行的命令。可以将需要执行的命令放在其中。注意需要将要执行的程序的属性改成可执行，并放在环境变量path中
+
+
+- systemd
+	systemd是另外一种启动服务配置方法。  
+	linux启动的过程：post->boot sequence->boot loader->Kernel+initrams->rootfs->/sbin/init    
+	不同版本linux的init不同，在centos5中是systemV，在centos6中是upstart，在centos7中是systemd（可以看到/sbin/init实际上是链接到/lib/systemd/systemd）.  
+	- 配置文件  
+		- /lib/systemd/system/  
+			这里面有后缀名为service,target,path等文件。service就是服务名，相当于/etc/init.d/中的文件，target是运行等级文件。
+		- /etc/systemd/system/ 
+			这里面是管理员的配置文件，是指向/lib/systemd/system中的链接文件。  
+	- 命令：systemctl 
+		- 调用格式 systemctl command [options]
+		- command
+			- start/stop  启动/停止服务
+
+					systemctl start/stop xx.service
+			- disable/enable 禁止/恢复服务：
+
+					systemctl disable/enable xx.service 
+					or systemcrl mask/unmask xx.servie
+				实际上是在/etc/systemd/system/目录下创建一个该服务名的链接，该链接指向/dev/null 
+
+			- kill 杀死服务
+
+					systemctl kill xx.service
+			- status 查看状态
+		
+					systemctl status xx.service
+						is-active:是否激活
+						is-enabled：是否禁止
+					list-dependencies ：列出依赖关系
+			- systemctl -t help 列出服务类别：  
+				可以是service，socket，busname，target，snapshot，mount，device，automount，swap，timer，path，slice，scope。
+			- list-units 列出指明类型的服务，列出其状态。
+
+					systemctl list-units -t x or systemctl -t x
+					x可以是service，或其他上面的类型。
+		- 说明：  
+			如果该服务不是属于systemd，则可能转交给systemd-sysv-install。例如apache2服务。所以有可能出现明明在/etc/init.d/中禁止的服务，但是依然不能禁止。  
 			who -r ，runlevel，systemctl get-default,显示当前运行等级
 
-##apt-key :获取公鈅
-	调用格式：
-		apt-key [--keyring filename] command parameter
-			command:
-				add filename :add a new key to the list of trusted keys.
-				the key is read from filename. - is stdin.
-				del keyid 
-				export keyid	:export key keyid to stdou 
-				exportall
-				list	:list trusted keys 
-			--keyring filename :special keyring file the command should operate.default is trusted.gpg.
-			files:
-				/etc/apt/trusted.gpg 
+##apt-key 
+- 用途:获取公鈅
+- 调用格式：
 
-## gpg 是PGP协议的工具（pgp->pretty good privacy）
-	调用格式：
-	　	gpg --keyserver URL --recv keyid
-			URL是公钥服务器地址，比如：
-				keyserver.ubuntu.com
-				subkeys.pgp.net
-				pgpkeys.mit.edu 
+		apt-key [--keyring filename] command parameter
+- command  
+	- add filename :add a new key to the list of trusted keys.  
+				the key is read from filename. - is stdin.
+	- del keyid :keyid 就是list出来的/后面的字串
+	- export keyid	:export key keyid to stdou 
+	- exportall
+	- -list	:list trusted keys 
+	- --keyring filename :special keyring file the command should operate.default is trusted.gpg.files:  
+		/etc/apt/trusted.gpg 
+
+## gpg 
+- 用途：获取公钥工具（pgp->pretty good privacy）
+- 调用格式：
+
+		gpg --keyserver URL --recv keyid
+	URL是公钥服务器地址，比如：	keyserver.ubuntu.com，subkeys.pgp.net，pgpkeys.mit.edu 
 			keyid是需要获得的公钥id
-	例子：获得一个公钥，并添加到本地
+- 例如：获得一个公钥，并添加到本地
+
 		gpg --keyserver keyserver.ubuntu.com --recv keyid 
 		apt-key export keyid|sudo apt-key all -
 
-##apt 软件包管理
-	调用格式：
+##apt 
+- 用途：软件包管理。在老的Ubuntu中为apt-get，新的Ubuntu中用apt代替。
+- 调用格式：
+
 		apt [opions] <action> [pkg]
-	action:
-		install pkg		:安装软件
-		remove pkg		:移除软件，但不包括配置文件
-		update			:根据/etc/source.list,更新软件信息
-		upgrade			:升级软件
-		dist-upgrade	:更新操作系统
-		search regex	:用regex来查找软件
-		show pkg		:显示软件包信息
-		edit-sources	:编辑软件源文件source.list 
-		list pkg		:显示软件包的安装状态。类似dpkg-query --list 
-		source pkg		:安装软件源程序包
-		----以下是apt-get中的命令，可以用apt来调用
-		build-dep pkg 	:为编译软件安装依赖包
-		autoclean		:清除下载的软件包
-		autoremove		:删除下载的一些不需要的依赖包。
-		download		:下载软件安装包deb文件到本目录。
+- action:  
+	- install pkg		:安装软件
+	- remove pkg		:移除软件，但不包括配置文件
+	- update			:根据/etc/source.list,更新软件信息
+	- upgrade			:升级软件
+	- dist-upgrade	:更新操作系统
+	- search regex	:用regex来查找软件
+	- show pkg		:显示软件包信息
+	- edit-sources	:编辑软件源文件source.list 
+	- list pkg		:显示软件包的安装状态。类似dpkg-query --list 
+	- source pkg		:安装软件源程序包
+	- build-dep pkg 	:为编译软件安装依赖包
+	- autoclean		:清除下载的软件包
+	- autoremove		:删除下载的一些不需要的依赖包。
+	- download		:下载软件安装包deb文件到本目录。
 
-		pkg可以带版本号
-		apt可以认为等同与apt-get
-		安装软件时，如果不太记得名字，可以先用search 来找一下是否有类似名字的软件，找到后再用install来安装。
-		如果需要软件包，可以用download来下载。
-		如果下载源程序包，可以用build-dep解决依赖性问题。
+pkg可以带版本号  
+apt可以认为等同与apt-get  
+安装软件时，如果不太记得名字，可以先用search 来找一下是否有类似名字的软件，找到后再用install来安装。  
+如果需要软件包，可以用download来下载。  
+如果下载源程序包，可以用build-dep解决依赖性问题。
 	
-	使用中的几个问题：
-		1）源的问题
-			apt使用的源位于 /etc/apt/sources.list 中，可以手工修改。
-				deb http://packages.linuxdeepin.com/ubuntu precise main restricted universe multiverse
-				deb-src http://packages.linuxdeepin.com/ubuntu precise main restricted universe multiverse
-				deb是包，deb-src是包的源程序
-				后面是源地址
-				precise表示版本，不同版本名称不同。如果仅仅是更换源地址，版本不要变。网上的各种源后面所跟的版本号不要照抄。
-				后面表示内容
-			如果需要更改源地址，可以直接修改其中的源地址。
-		2)	源认证
-			有些源需要公钥认证，此时需要将该源的公钥导入到本地。
-			需要用上面gpg命令中的方法导入公钥。
+- 使用中的几个问题：  
+	1. 源的问题
+		apt使用的源位于 /etc/apt/sources.list 中，可以手工修改。  
 
+			deb http://packages.linuxdeepin.com/ubuntu precise main restricted universe multiverse
+			deb-src http://packages.linuxdeepin.com/ubuntu precise main restricted universe multiverse
+		第一列：deb是包，deb-src是包的源程序。  
+		第二列：是源地址    
+		第三列：precise表示版本，不同版本名称不同。 如果仅仅是更换源地址，版本不要变。网上的各种源后面所跟的版本号不要照抄。  
+		后面列表示内容。
+	2. 源认证  
+		有些源需要公钥认证，此时需要将该源的公钥导入到本地。  
+		需要用上面gpg命令中的方法导入公钥。
 		
-#apt-cache  
-		apt-cache pkgnames	:print all installed package
-		apt-cache dumpavail	:print all available package
-		apt-cache showpkg pkgs	:print infomation of pkgs
-		apt-cache search regex:查找软件包.apt search 可能找到一些不是精确匹配的软件。
+##apt-cache  
+- 用途：用来查询apt包的程序。在ubuntu新版本中已经合并到apt中。
+- 调用格式：
+
+		apt-cache command 
+- command:  
+	- pkgnames	:print all installed package
+	- dumpavail	:print all available package
+	- showpkg pkgs	:print infomation of pkgs
+	- search regex:查找软件包.apt search 可能找到一些不是精确匹配的软件。
 		
-#aptitude
-		一种图形化的apt工具
+##aptitude
+- 用途：一种图形化的apt工具
 
-#界面软件管理程序
-	software-properties-gtk 更新设置程序
-	gnome-software 程序管理程序
-	update-manager 检查更新软件程序
+##界面软件管理程序
+- 用途：包括以下程序    
+	software-properties-gtk 更新设置程序  
+	gnome-software 程序管理程序  
+	update-manager 检查更新软件程序  
 
-#dpkg
-	调用格式：
+##dpkg
+- 用途：软件包安装工具	
+- 调用格式：
+
 		dpkg <action> [pkg]	:pkg 要求精确匹配
-	action:
-		-i :安装软件
-		-r :卸载软件
-		-s :state显示软件安装包信息
-		-l :显示软件安装状态
-		-L --listfiles：显示软件包内文件
-	----以下是dpkg-deb的命令
-	dpkg-deb  
-		-b :产生一个deb文件
-			下面详细描述产生过程
-		-x :解压一个deb文件 
-		-I :显示一个deb文件信息
-	dpkg-query  
-		-l :显示软件安装状态
-		-s :state显示软件安装包信息 
-		-S filename search pattern
-			:serarch filename from install package 
-		-p package-name
-			:display details of package 
-		-L package name
-			:list files installed on your system of package
-	制作一个安装包：
-		举例安装一个my-app软件
-		首先创建以这个软件为名的目录
-		然后将所需要安装的软件相关文件拷贝到这个目录中，这个目录是所安装系统的根目录。
-		在这个目录下创建DEBIAN目录，在这个目录中创建control文件，作为dpkg创建deb文件的信息，内容如下：
-				Package:my-app
-				version: 1.4.0
-				architecture:i386
-				installed-size:4096
-				maintainer:gatieme
-				provides:bioinfoserv-arb
-				description: this is my-app 
-				section:bioinfoserv-arbserv
-				depends:
-				suggests:
-		然后执行：dpkg -b my-app 
+- action:
+	- -i :安装软件
+	- -r :卸载软件
+	- -s :state显示软件安装包信息
+	- -l :显示软件安装状态
+	- -L --listfiles：显示软件包内文件
+	
+## dpkg-deb  
+- 用途：软件包生成工具
+- 调用格式：
+
+		dpkg-deb <action> deb 
+- action 
+	- -b :产生一个deb文件
+	- -x :解压一个deb文件 
+	- -I :显示一个deb文件信息
+
+制作一个my-app软件安装包；
+
+> 首先创建以这个软件为名的目录  
+> 然后将所需要安装的软件相关文件拷贝到这个目录中，这个目录是所安装系统的根目录。  
+> 在这个目录下创建DEBIAN目录，在这个目录中创建control文件，作为dpkg创建deb文件的信息，内容如下： 
+>
+> 		Package:my-app  
+> 		version: 1.4.0  
+> 		architecture:i386  
+> 		installed-size:4096  
+> 		maintainer:gatieme  
+> 		provides:bioinfoserv-arb  
+> 		description: this is my-app   
+> 		section:bioinfoserv-arbserv  
+> 		depends:  
+> 		suggests:  
+> 然后执行：dpkg -b my-app 
+
+## dpkg-query  
+- 用途：软件包查询工具
+- 调用格式
+	
+		dpkg-query <action> [software]
+- action  
+	- -l :显示软件安装状态
+	- -s :state显示软件安装包信息 
+	- -S filename search pattern  
+	 	:serarch filename from install package 
+	- -p package-name  
+	 	:display details of package 
+	- -L package name  
+		:list files installed on your system of package
 
 
-## snap
-	- 用途：另外一个软件包命令行
+## snap  
+- 用途：另外一个软件包命令行
 
 ##wget 
-	从远程网站下载文件
-	-r 递归 
-	-c 断点续传
-	-p 下载图片
-	-e 执行命令，如果远方网站有robots.txt里面有disallow的字眼，表示不能自动下载，这时可以用-e robots=off 来关掉此限制。
+- 用途：从远程网站下载文件
+- 调用格式：
 
-##nc 网络调试工具
-	server:nc -l [ip] port ;ip不写默认是本地任选ip地址
-	client:nc ip port 
-	-s ：设定socket中发送地址source ip，不能与-l同时使用
-	-S ：enable rfc 2385 tcp md5 signature option
-	-z ：scan listening daemons
-	-u ：udp
-	-p ：source port 
-	-l ：listening
-	-O ：specifies output size
-	-I ：specifiles input size
-	-4 ：use ipv4
-	-6 ：use ipv6
-	下面的命令可以在客户端发送命令到服务端，并执行
-	server:
-	rm -f /tmp/f 
-	mkfifo /tmp/f
-	cat f|sh -i 2>&1|nc -l port >f
-	client:
-	nc ip port 
-	这时，客户端提示符为$
-	可以输入举例ls，cd等命令
-	ctrl-d退出。
+		wget [options] url 
+- 选项  
+	- -r 递归 
+	- -c 断点续传
+	- -p 下载图片
+	- -e 执行命令，如果远方网站有robots.txt里面有disallow的字眼，表示不能自动下载，这时可以用-e robots=off 来关掉此限制。
 
-##tcpdump 网络抓包工具
-	tcpdump [-i interface] [protocol] [port] 
-	tcpdump tcp port 7998 ;抓取本机默认网卡的上tcp协议中所有端口号为7998的数据包。
-	-i 网卡
-	protocol 协议：ip,tcp,udp,icmp,arp,rarp，eth等
-	net 网络名，举例 tcpdump net xxx
-	port 与协议有关，
-	src 源
-	dst 目的地，举例tcp src port 7998，ip src 192.168.1.2
-	host 主机名，举例tcpdump host 192.168.1.2
-	逻辑 and，or,!,>,<,==,! 
-		举例不想抓某个ip的包：tcpdump tcp port 7998 and host ! 218.106.89.76
-	可以用协议[字节]来获取相应协议的字节，从而达到对内容进行过滤的目的。举例：tcpdump ip[2:2]获取ip包的长度
-	-w 将原始包写入一个文件以供分析
-	-W 写入的文件c格式输出
-	-r 读入一个文件进行分析
-	-l 一边抓包，一边显示 tcpdump -l |tee dat; tcpdump -l >dat & tail -f dat 
-	-# 显示包号
-	-p 取消杂散模式
-	-t tt ttt tttt ttttt 显示时间格式
-	-v vv vvv 分析包
-	-U 一旦有包来了，立即更新写入的文件
-	-x，-xx，-X，-XX 分析文件
-	-Z 以某个用户身份使用。
-	举例：
-	在本机抓取tcp协议的端口号为7998（src and dst），排除218.106.89.76地址，实时写入文件dat。
+##nc 
+- 用途：网络调试工具
+- 调用格式
+
+		nc [options] 
+		server:服务端
+			nc -l [ip] port ;ip不写默认是本地任选ip地址
+		client:客户端
+			nc ip port 
+- 选项：			
+	- -s ：设定socket中发送地址source ip，不能与-l同时使用
+	- -S ：enable rfc 2385 tcp md5 signature option
+	- -z ：scan listening daemons
+	- -u ：udp
+	- -p ：source port 
+	- -l ：listening
+	- -O ：specifies output size
+	- -I ：specifiles input size
+	- -4 ：use ipv4
+	- -6 ：use ipv6
+
+下面的命令可以将命令到服务端，并将执行结果返回到客户端
+
+- 服务端：
+
+		 rm -f /tmp/f   
+		 mkfifo /tmp/f  
+		 cat f|sh -i 2>&1|nc -l port >f  
+- 客户端:  
+
+		 nc ip port   
+这时，客户端提示符为$，可以输入举例ls，cd等命令。ctrl-d退出。  
+
+##tcpdump 
+- 用途：网络抓包工具
+- 调用格式：
+
+		tcpdump [-i interface] [protocol] [port] 
+		tcpdump tcp port 7998 ;抓取本机默认网卡的上tcp协议中所有端口号为7998的数据包。
+- 选项 
+	- -i 网卡
+	- protocol 协议：ip,tcp,udp,icmp,arp,rarp，eth等
+	- net 网络名，举例 tcpdump net xxx
+	- port 与协议有关，
+	- src 源
+	- dst 目的地，举例tcp src port 7998，ip src 192.168.1.2
+	- host 主机名，举例tcpdump host 192.168.1.2
+	- 逻辑 and，or,!,>,<,==,!   
+		例如不想抓某个ip的包：tcpdump tcp port 7998 and host ! 218.106.89.76。  
+		可以用协议[字节]来获取相应协议的字节，从而达到对内容进行过滤的目的。举例：tcpdump ip[2:2]获取ip包的长度
+	- -w 将原始包写入一个文件以供分析
+	- -W 写入的文件c格式输出
+	- -r 读入一个文件进行分析
+	- -l 一边抓包，一边显示 tcpdump -l |tee dat; tcpdump -l >dat & tail -f dat 
+	- -# 显示包号
+	- -p 取消杂散模式
+	- -t tt ttt tttt ttttt 显示时间格式
+	- -v vv vvv 分析包
+	- -U 一旦有包来了，立即更新写入的文件
+	- -x，-xx，-X，-XX 分析文件
+	- -Z 以某个用户身份使用。
+
+举例：  
+在本机抓取tcp协议的端口号为7998（src and dst），排除218.106.89.76地址，实时写入文件dat。
+
 	tcpdump tcp port 7998 and host not 218.106.89.76 -w dat -U 
-	分析文件：
+分析文件：
+
 	tcpdump -r dat -X 
+
+tcp格式	
 	
         0                            15                              31
        -----------------------------------------------------------------
@@ -1996,434 +2096,496 @@ uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而s
        -----------------------------------------------------------------
 
 
-##apache:web服务器
-　　安装
-　　 从服务器安装：
-　　  sudo apt-get install apache2
-　　 从源代码安装
-　　 。。。
-　　配置apache
-　　 配置文件位于/etc/apache2下，其中有:
-　　 mods-available:存放可以用于加载的模块，这里的模块不是真正的程序，而是配置文件举例php.conf,php.load.load文件中指出装载模块的实际地址，conf文件用于配置该模块。
-　　 举例php.conf
-　　 <filesmatch ".php">
-　　  sethandler application/x-httpd-php
-　　 </filesmatch>
-　　 指出扩展名是php的处理方法
-　　 php.load
-　　 loadmodule php5_module /usr/lib/apache2/modules/libphp5.0.so
-　　 mods-enable:存放来自mods-available的链接，这样就可以方便的选择是否装入这些模块了。
-　　 sites-available:存放可以访问的本机文件目录，包括根目录，虚拟目录。
-　　 在sites-available中的文件，其内容包括目录路径和目录描述，举例
-　　 alias study /home/hanhj/study 这里描述一个虚拟目录和实际路径的对应关系
-　　 <directory /home/hanhj/study>
-　　  options indexes followsymlinks
-　　  allowoverride none
-　　  require all granted
-　　 </directory>
-　　 这里是对该目录属性的描述
-　　 sites-enable：存放sites-available的链接，通用用于方便的设置可供访问的目录
-　　 ports.conf
-　　 用于配置端口号
-　　 此外，还有配置文件apache2.conf 可以用来配置除了以上分开的配置文件未配置的内容；
+##apache:
+- 用途：web服务器  
+- 安装
 
-##wiki
-　　wiki is a php program with database,so it use apache,php and mysql(or other database)
-　　 1)sudo apt-get install apache2 mysql-server php7.0 php7.0-mysql libapache2-mod-php7.0 php7.0-xml
-　　php is as a module of apache2. php version must suitible for apache,unless it will not work well,and up
-　　command is useful for install wiki envioument;
-　　and then,you should download wiki programe from wiki web site,if you download diffrent version it will
-　　not work well possibly,in my envioument i use mediawiki-1.26.3(the new version 1.27.1 report error when
-　　run index.php);
-　　 2)tar zxvf mediawiki-1.26.3.tar.gz
-　　and then,you should config apache sites-enable for wiki:
-　　 3)vi /etc/apache2/sites-enable/httpd.conf
-　　and then,you should config my sql ,create a database for wiki
-　　 4)
-　　  shell:mysql -u root -p
-　　  mysql>create database my_wiki;
-　　  mysql>grant all on my_wiki to wiki@localhost identified by '123456'
-　　  mysql>exit
-　　  Bye
-　　  this is  not computer user account passwd ,but the database user passwd
-　　and then ,you should add a computer user for wiki,like this:
-　　 5)
-　　  sudo adduser wiki
-　　  passwd wiki (not necessary)
-　　 6)
-　　  in browse :localhost/wiki
-　　  config your wiki
-　　  and put LocalSettins.php in your wiki dictory
+		sudo apt-get install apache2
+- 配置  
+	 配置文件位于/etc/apache2下  
+	-  mods-available:  
+	存放可以用于加载的模块，这里的模块不是真正的程序，而是配置文件  
+	例如php模块,其相关文件内容如下
+
+		php.conf
+
+			<filesmatch ".php">
+			sethandler application/x-httpd-php
+			</filesmatch>
+		php.load
+
+			loadmodule php5_module /usr/lib/apache2/modules/libphp5.0.so
+
+	-  mods-enable:存放来自mods-available的链接，这样就可以方便的选择是否装入这些模块了。
+	-  sites-available:  
+		存放可以访问的本机文件目录，包括根目录，虚拟目录。 
+		在sites-available中的文件，其内容包括目录路径和目录描述。例如：
+
+
+			 alias study /home/hanhj/study 这里描述一个虚拟目录和实际路径的对应关系
+			 <directory /home/hanhj/study>
+			 options indexes followsymlinks
+			 allowoverride none
+			 require all granted
+			 </directory>
+			 这里是对该目录属性的描述
+	 - sites-enable：  
+		存放sites-available的链接，通用用于方便的设置可供访问的目录
+	 - ports.conf  
+		 用于配置端口号
+	 - apache2.conf   
+		可以用来配置除了以上分开的配置文件未配置的内容；
+
+##wiki  
+- 用途：wiki is a php program with database,so it use apache,php and mysql(or other database)
+- 安装  
+	 1. install necessary program 
+
+			sudo apt-get install apache2 mysql-server php7.0 php7.0-mysql libapache2-mod-php7.0 php7.0-xml 
+		php is as a module of apache2. php version must suitible for apache,unless it will not work well,and up command is useful for install wiki envioument.
+		
+	2. download wiki program 
+		download wiki programe from wiki web site,if you download diffrent version it will not work well possibly,in my envioument i use mediawiki-1.26.3(the new version 1.27.1 report error when run index.php);
+
+	3. extract wiki source  
+		
+		tar zxvf mediawiki-1.26.3.tar.gz
+		
+	4. config apache sites-enable for wiki:
+
+		vi /etc/apache2/sites-enable/httpd.conf
+	5. config my sql  
+		create a database for wiki
+
+			mysql -u root -p
+			mysql>create database my_wiki;
+			mysql>grant all on my_wiki to wiki@localhost identified by '123456'
+			mysql>exit
+			Bye
+		this is  not computer user account passwd ,but the database user passwd
+	6.	add a computer user for wiki
+
+			 sudo adduser wiki
+			 passwd wiki (not necessary)
+	7. config wiki in browse
+		in browse :localhost/wiki  
+		 config your wiki
+		 and put LocalSettins.php in your wiki dictory
 
 ##mysql:
-　　login:mysql -u username -p
-　　mysql>show databases
-　　--创建数据库
-　　mysql> create database 数据库名称
-　　--创建表
-　　mysql> create table 表名 (列的名字（id）类型（int（4））primary key(定义主键) auto_increment（描述 自增），……，）；
-　　--插入数据
-　　mysql> insert into 表名(field1,field2...) values(value1,value2...);
-　　--查看所有数据库
-　　mysql> show databases ;
-　　--使用某个数据库
-　　mysql> use 数据库名称；
-　　--查看所使用数据库下所有的表
-　　mysql> show tables;
-　　--显示表的属性结构
-　　mysql> desc 表名；
-　　--创建数据库
-　　mysql> create database 数据库名称
-　　--删除数据库
-　　mysql> drop database databasename;
-　　--创建表
-　　mysql> create table 表名 (列的名字（id）类型（int（4））primary key(定义主键) auto_increment（描述 自增），……，）；
-		   create table newtable like oldtable;根据oldtable复制newtable的表结构;
-　　--删除表
-　　mysql> drop table tablename;
-	--更改表
-	mysql> alter table 表名 add/drop field [type]
-	mysql> alter table 表名 modify field type
+ 		 
+- 登录 
+
+		login:mysql -u username -p
+		mysql>show databases
+- 创建数据库
+
+		mysql> create database 数据库名称
+- 查看所有数据库
+
+		mysql> show databases ;
+- 使用某个数据库
+
+		mysql> use 数据库名称；
+- 查看所使用数据库下所有的表
+	
+		mysql> show tables;
+- 显示表的属性结构
+
+		mysql> desc 表名；
+- 创建数据库
+
+		mysql> create database 数据库名称
+- 删除数据库
+
+		mysql> drop database databasename;
+- 创建表
+
+		mysql> create table 表名 (列的名字(id)类型(int(4))primary key(定义主键) auto_increment(描述 自增))
+		create table newtable like oldtable;根据oldtable复制newtable的表结构;
+- 删除表
+
+		mysql> drop table tablename;
+- 更改表
+
+		mysql> alter table 表名 add/drop field [type]
+		mysql> alter table 表名 modify field type
 		通用的sql语句是alter table 表名 alter column field Type
-	--插入数据
-　　mysql> insert into 表名(field1,field2...) values(value1,value2...);
-		   insert into table1 select * from table2,从table2中复制所有数据到table1中;
-　　--删除表中的数据
-　　mysql> delete from table where id=？[or name=? (and name=?)];
-			delete from table ;删除所有数据
-	--更新数据
-	mysql> update 表名 set field1 = value,field2=value where...\ 
-　　--选择表中数据的显示
-　　--* 代表选择所有列 ，
-　　mysql> select * from 表名 where id=?[and name=？] [or name=?];
-　　mysql> select id,name from 表名 order by 某一列的名称 desc(降序，
-	--联合
-	mysql> select table1.field1 table2.field2 from table1,table2 where table1.field = table2.field
-		select table1.field1 table2.field2 from table1 inner join table2 on table1.field=table2.field
-		select a.name ,b.name, b.age from student a inner join person b on a.name=b.name;
-sql中的数据类型：
-integer(size),int(size),smallint(size),tinyint(size),decimal(size,d),numeeric(size,d),char(size),varchar(size),date(yyyymmdd);
+- 插入数据
 
-##设置动态库搜寻路径：
-　　方法１）修改/etc/ld.so.conf.d/在此路径下添加一个文件指明路径
-　　方法２）修改~/.bashrc文件，添加一行：export LD_LIBRARY_PATH=想要的路径:$LD_LIBRARY_PATH
-　　静态和动态连接：
-　　如果是静态连接需要加上　--static选项，举例g++ -I /usr/local/include/　a.cpp -L /usr/local/lib/ -lboost-serialization --static -o a
-　　如果是动态连接,可以不加上static ,但是需要用上面的方法指明库搜寻路径。
-　　一般第三方的库，会在配置文件时指出--prefix=xxx的选项，用于指明安装目录，我们一般放在/usr 或者/usr/local目录下，这样一般是在linux默认的搜寻路径中。
+		mysql> insert into 表名(field1,field2...) values(value1,value2...);
+	   insert into table1 select * from table2,从table2中复制所有数据到table1中;
+- 删除表中的数据
+		
+		mysql> delete from table where id=？[or name=? (and name=?)];
+		delete from table ;删除所有数据
+- 更新数据
 
-##gdb:调试程序，
+		mysql> update 表名 set field1 = value,field2=value where...\ 
+- 选择表中数据的显示   
+	- \* 代表选择所有列 ，
+		
+			mysql> select * from 表名 where id=?[and name=？] [or name=?];
+			mysql> select id,name from 表名 order by 某一列的名称 desc(表示降序)
+	- 联合 
+
+			mysql> select table1.field1 table2.field2 from table1,table2 where table1.field = table2.field
+			select table1.field1 table2.field2 from table1 inner join table2 on table1.field=table2.field
+			select a.name ,b.name, b.age from student a inner join person b on a.name=b.name;
+- sql中的数据类型：  
+	integer(size)  
+	int(size)  
+	smallint(size)  
+	tinyint(size)  
+	decimal(size,d)  
+	numeeric(size,d)  
+	char(size)  
+	varchar(size)  
+	date(yyyymmdd);
+
+##设置动态库搜寻路径： 
+1. 方法1  
+	修改/etc/ld.so.conf.d/在此路径下添加一个文件指明路径
+
+2. 方法2  
+	修改~/.bashrc文件，添加一行：export LD_LIBRARY_PATH=想要的路径;$LD_LIBRARY_PATH
+- 静态和动态连接：  
+	如果是静态连接需要加上　--static选项，
+		
+		g++ -I /usr/local/include/　a.cpp -L /usr/local/lib/ -lboost-serialization --static -o a
+如果是动态连接,可以不加上static ,但是需要用上面的方法指明库搜寻路径。  
+一般第三方的库，会在配置文件时指出--prefix=xxx的选项，用于指明安装目录，我们一般放在/usr 或者/usr/local目录下，这样一般是在linux默认的搜寻路径中a
+
+##gdb:
+- 用途:调试程序，
 	需要在编译和连接时加上-g选项。
-	启动：
-　　	gdb exe_file
+- 调用格式:  
+
+		gdb [options] file
 	　　gdb PID exe_id  运行时调试
-　　参数：
-　　	--symbols=SYMFILE
-　　		从指定文件中读取符号表。
-	　　--se=FILE 
-　　		从指定文件中读取符号表信息，并把他用在可执行文件中。 
-	　　--core=COREFILE 
-　　		调试时core dump的core文件。 
-	　　--directory=DIR
-　　		加入一个源文件的搜索路径。默认搜索路径是环境变量中PATH所定义的路径
-	帮助：
-		man gdb
-		进入gdb后:help xx
+- 选项： 
+	- --symbols=SYMFILE
+		从指定文件中读取符号表。
+	- --se=FILE 
+		从指定文件中读取符号表信息，并把他用在可执行文件中。 
+	- --core=COREFILE 
+		调试时core dump的core文件。 
+	- --directory=DIR
+		加入一个源文件的搜索路径。默认搜索路径是环境变量中PATH所定义的路径
 
-	调试时命令：
-		在gdb中输入命令，支持tab补齐。
+- 调试时命令：  
+	- 在gdb中输入命令，支持tab补齐。
+	- 设置输入参数：set args
 
-	　　设置输入参数：set args
-			举例：set	args 1 2 3 ：设置输入参数1 2 3
-	　　显示输入参数：show args
-			不用info args
-	　　装入调试程序：file xx
+			set	args 1 2 3 ：设置输入参数1 2 3
+	- 显示输入参数： show args  
+	- 装入调试程序：file xx  
+	- 显示源程序：list 简写l  
 
-	　　源程序：list 简写l
-			list		显示当前行范围前后的源程序
-			list line	显示当前文件的line范围前后的源程序
-	　　　	list -line	向前显示
-	　　　	list +line	向后显示
-	　　　	list first，last
-			list file:line	显示文件file的line行
-	　　　	set listsize count设置一次显示的行
-	　　　	edit，编辑代码，简写ed
-				需要设置EDITOR环境变量，如果没有设置默认是/usr/bin/ed\		
-			其他一些相关命令：
-	　　　　make,编译代码
-	　　　　cd 改变路径
-	　　　　pwd 显示路径
-	　　　　shell 执行shell，需要设置SHELL环境变量，如果没有设置默认是/usr/bin/sh
-	　　显示信息：info ，简写i。
+			list		显示当前行范围前后的源程序  
+			list line	显示当前文件的line范围前后的源程序  
+			list -line	向前显示  
+			list +line	向后显示  
+			list first，last  
+			ist file:line	显示文件file的line行  
+			set listsize count设置一次显示的行
+	- 编辑代码	edit 简写ed   
+		需要设置EDITOR环境变量，如果没有设置默认是/usr/bin/ed\		
+	- 其他一些相关命令：  
+
+			make,编译代码  
+			cd 改变路径  
+			pwd 显示路径  
+			shell 执行shell，需要设置SHELL环境变量，如果没有设置默认是/usr/bin/sh
+	- 显示信息：
+			
+			info ，简写i。 
 			info xx	;xx是定义的一些信息体。
-			xx包括：
-				break	断点信息
-				locals	局部变量
-				args	输入参数
-		　　　　frame	调用栈
-				...
-	　　显示调试程序（debuger）的信息: show
-			show xx ；xx是定义的一些调试程序信息。
-			xx包括：
-				ada -- Generic command for showing Ada-specific settings
-				annotate	注释的级别。
-				args		显示参数
-				...
-	　　显示数据：
-			显示变量：print，		简写p
-	　　　　	print/format  var
+				xx包括：
+				break	断点信息  
+				locals	局部变量  
+				args	输入参数  
+				frame	调用栈  
+				...  
+	- 显示调试程序（debuger）的信息: 
+		
+			show xx ；xx是定义的一些调试程序信息。  
+				xx包括：
+				ada -- Generic command for showing Ada-specific settings  
+				annotate	注释的级别。  
+				args		显示参数  
+				...  
+	- 显示数据：  
+		- 显示变量：print，	简写p
+
+				print/format  var
 				format表示显示格式。包括：
-		　　　　　　x 按十六进制格式显示变量。 
-		　　　　　　d 按十进制格式显示变量。 
-		　　　　　　u 按十六进制格式显示无符号整型。 
-		　　　　　　o 按八进制格式显示变量。 
-		　　　　　　t 按二进制格式显示变量。 
-		　　　　　　a 按十六进制格式显示变量。
-		　　　　　　c 按字符格式显示变量。 
-		　　　　　　f 按浮点数格式显示变量。　　 
-	　　		特殊变量：
-					`$pc`：程序计数器，
-					`$fp`当前堆栈指针,
-					`$sp`栈指针,
-					`$ps`当前处理器状态
-	　　　　显示数组：
-				　print base@length
-					base是数组的起始地址名称，length是显示的长度
-	　　　　内存：x 
-	　　　　　　x/nfh addr 
-	　　　　　　n 	is numbers will show
-	　　　　　　f 	数据显示形式，
+				x 按十六进制格式显示变量。 
+				d 按十进制格式显示变量。 
+				u 按十六进制格式显示无符号整型。 
+				o 按八进制格式显示变量。 
+				t 按二进制格式显示变量。 
+				a 按十六进制格式显示变量。
+				c 按字符格式显示变量。 
+				f 按浮点数格式显示变量。 
+		- 特殊变量：  
+
+				`$pc`：程序计数器，
+				`$fp`当前堆栈指针,
+				`$sp`栈指针,
+				`$ps`当前处理器状态
+		- 显示数组：
+
+				print base@length
+				base是数组的起始地址名称，length是显示的长度
+		- 内存：x 
+		
+				x/nfh addr 
+				n 	is numbers will show
+				f 	数据显示形式，
 					x表示16进制，
 					o表示8进制，
 					d表示十进制，
 					c表示字符，
 					f表示浮点，
 					s表示字符串
-	　　　　　　h	表示每个数字的宽度，默认是word
+				h	表示每个数字的宽度，默认是word
 					b表示1个byte，		(byte)
 					h表示半个字2个byte，(short)
 					w表示一个字4个byte，(word)
 					g表示8个byte		(longlong)
-	　　	自动显示变量：display expr
-				每当到达断点时自动显示变量
-			　　`display /i $pc` 会在断点时显示机器代码和源代码。
-	　　　　	`undisplay dnums`
-		　　　　`delete display dnums`
-	　　显示数组或变量类型：
-				whatis 变量， 
-				ptype 变量,
-				ptype比whatis显示更多信息。
+		- 自动显示变量：display expr  
+			每当到达断点时自动显示变量  
+			`display /i $pc` 会在断点时显示机器代码和源代码。  
+			`undisplay dnums`  
+			`delete display dnums`  
+		- 显示数组或变量类型：
 
-	　　设置变量：
+				 whatis 变量， 
+				 ptype 变量,
+			 ptype比whatis显示更多信息。
+
+	- 设置变量：set
+
 			set 变量=value
-			举例：set args 1 2 3
-	　　执行：
+			set args 1 2 3
+	- 执行：run,next,continue  
+
 			run 全速运行，			简写r
-			next 不进入的单步执行，	简写n
-			step 进入的单步执行，	简写s
-			continue 继续执行，		简写c
+			next[count] 不进入的单步执行，	简写n
+			step[count] 进入的单步执行，	简写s
+			continue[count] 继续执行，		简写c
+			count是执行的步数，如果不带count默认是执行1步。
 
-	　　函数调用：
+	- 函数调用：call 
+
 			call function-name
-	　　	call fun（1,3）
-	　　程序暂停：
-			程序暂停的方法有断点，观察点和handle。
+			call fun（1,3）
+	- 程序暂停：break,watch,handle  
+		- 断点：break 简写b  
+			- 设置断点   
+				设置行断点:		b line  
+		 		设置文件的断点	b file:line   
+		 		设置函数断点	b function  
+				设置条件断点	b line  if contion  
 
-	　　　　断点：break 简写b
-				设置断点：
-				 　 设置行断点:		b line
-	　　　　 　		设置文件的断点	b file:line 
-	　　　　 　		设置函数断点	b function
-	　　　　 　		设置条件断点	b line  if contion
-		　　　　 　		 eg：b 20 if count==100
-						对于条件的维护：condition 简写cond
-							对于已经设置的断点，可以添加删除，忽略条件。
-								添加条件：	condition bnum expr
-								消除条件： 	condition bnum 
-								忽略条件：	ignore bnum count，表示忽略断点count次
-								bnum是已经存在的断点号。
-				查看断点 info break
-	　　　　 　 删除断点：delete bnum，简写d，
-					举例d 2
+					b 20 if count==100
+					对于条件的维护：condition 简写cond
+					对于已经设置的断点，可以添加删除，忽略条件。
+					添加条件：	condition bnum expr
+					消除条件： 	condition bnum 
+					忽略条件：	ignore bnum count，表示忽略断点count次
+					bnum是已经存在的断点号。
+			- 查看断点 info break
+			-  删除断点：delete bnum，简写d，
+				
+					d 2
 					如果不带bnum则删除所有断点。
-	　　　　 　 禁止断点：disable bnum
-	　　　　 　 允许断点：enable bnum	
-		　　　　继续运行：
-	　　　　		step [count]	 
-		　　　　 	coutinue [count]
-	　　	　　 	next [count]
-					count是执行的步数，如果不带count默认是执行1步。
-		　　　	设置断点暂停后的动作：commands bnum
-					由commands 。。。 end组成
-					如果不带bnum，则以最近的一个断点为断点。
-					举例：
-	　　　　 　			b foo if count==100	设置一个条件断点
-			　　　　 　	commands			设置断点后的命令。在gdb中敲commands后回车，gdb会出现>的提示符，此时可以输入命令。以end为结束。
-	　　　　		 　		printf “count==100”
-	　　　　 　				continue
-	　　　　 　			end
-		　　　　 　		使用commands可以方便自动化测试。
+			- 禁止断点：disable bnum
+			- 允许断点：enable bnum	
+			- 设置断点暂停后的动作：commands bnum  
+				由commands 。。。 end组成  
+				如果不带bnum，则以最近的一个断点为断点。
+					b foo if count==100	设置一个条件断点  
+				 	commands 设置断点后的命令。在gdb中敲commands后回车，gdb会出现>的提示符，此时可以输入命令。以end为结束。  
+			 		printf “count==100”  
+	 				continue  
+	 			end  
+		 		使用commands可以方便自动化测试。
 					
-	　　　　观察点：watch 变量，
-				设置观察点后，当观察点数据发生变化，可以自动停下来。
+		- 观察点：watch  
+			设置观察点后，当观察点数据发生变化，可以自动停下来。
+
 				设置watch：watch var
 				查看watch ：info watch
 				删除watch ：delete watch watch_number
 
-	　　　　捕捉信号：
-				handle handle-name control
-		　　　　	handle-name：SIGPIPE，SIGINT。。。
-		　　　　	control:
-			　　　　	 nostop：不停止程序，也不发送给程序
-	　　　　			 stop:停止程序
-			　　　　	 print：显示一条信息
-	　　　　			 noprint：
-			　　　　	 pass：将信号发送给程序
-	　　　　			 nopass：停止程序，但不发送信号给程序
-	　　　　	 
-	　　　　	 catch event，
-					event可以是：
-	　　　　	 		hrow
-			　　	 	catch
-	　　　　			exec
-	　　　　			fork
-		　　　　	 	vfork
-	　　	　　	 	load/unload
-	　　　　	 	
-	　　栈：frame 简写f
-	　　　　bt	显示当前调用栈
-	　　　　f	显示当前代码
-	　　　　info f 显示栈信息,寄存器信息		
-	　　[gdb help](gdb_help.html)
+		- 捕捉信号：handle 
 
-	gdb的移植：
-		为了在目标板上运行gdb，可以做以下移植工作：
-		1.下载代码，从gnu网站上下载gdb，和ncurses代码
+				handle handle-name control
+			handle-name：
+					
+				SIGPIPE，SIGINT。。。
+			control:
+
+				 nostop：不停止程序，也不发送给程序
+				 stop:停止程序
+				 print：显示一条信息
+				 noprint：
+				 pass：将信号发送给程序
+				 nopass：停止程序，但不发送信号给程序
+		 
+		 - catch event，
+			event可以是：
+
+		 		throw
+				 	catch
+				exec
+				fork
+			 	vfork
+			 	load/unload
+		 	
+	- 栈：frame 简写f  
+		 bt	显示当前调用栈  
+		 f	显示当前代码  
+		 info f 显示栈信息,寄存器信息		
+	
+	 [gdb help](gdb_help.html)
+
+- gdb的移植：
+
+	为了在目标板上运行gdb，可以做以下移植工作：  
+
+	1. 下载代码，从gnu网站上下载gdb，和ncurses代码  
+
 			www.gnu.org/software/software.html
-		2.编译ncurses
-			ncurses是一个文本的gui界面库
+	2. 编译ncurses  
+		ncurses是一个文本的gui界面库
+
 			./configure --host=your cross compile --prefix=where you want install --without-ada --enable-termcap --with-shared
-			举例我的：./configure --host=arm-none-linux --prefix=/home/bin --without-ada --enable-termcap --with-shared
-			需要注意的是：cross compile 就是你的交叉编译器的前缀，在编译之间要设置环境变量path路径，使得能够找到该交叉编译器。
+			./configure --host=arm-none-linux --prefix=/home/bin --without-ada --enable-termcap --with-shared
+		需要注意的是：cross compile 就是你的交叉编译器的前缀，在编译之间要设置环境变量path路径，使得能够找到该交叉编译器。
+
 			make 
 			make install
-		3.编译gdb
-			./configure --host=your cross compile --prefix=where you want to install --without-x --disable-gdbtk --disable-tui --without-included-regex --without-included-gettext CPPFLAGS=your ncurese include  LDFLAGS=your ncurese lib dir
-		举例：
-			./configure --host=arm-none-linux --prefix=/home/bin --without-x --disable-gdbtk --disable-tui --without-included-regex --without-included-gettext CPPFLAGS=-I/home/bin/include  LDFLAGS=/home/bin/lib
-			编译好后，gdb就在gdb目录下，可以拷贝到目标板运行，同时也要拷贝ncurses的库。gdb调试的时候，需要源文件，如果是简单的程序，可以直接拷贝到目标板，如果程序较大，可以将计算机挂载到目标板上进行调试。
-			mount -t smbfs your ip/dir mount dir -o dir_mod=xxx,file_mode=xxx,noserverino,uid=xxx,gid=xxx
-			举例：mount -t smbfs //192.168.15.23/share_doc /mnt/tmp/ -o dir_mod=0777,file_mode=0777 ,noserverino,uid=1001,gid=1001
-			这样就可以直接在目标板上调试保存在计算机上的程序了，而不用拷贝。
+	3. 编译gdb
 
-			ddd是一个基于gdb的图形界面环境，
-			gdbtui是一个基于gdb的文本界面环境。
+			./configure --host=your cross compile --prefix=where you want to install --without-x --disable-gdbtk --disable-tui --without-included-regex --without-included-gettext CPPFLAGS=your ncurese include  LDFLAGS=your ncurese lib dir
+			./configure --host=arm-none-linux --prefix=/home/bin --without-x --disable-gdbtk --disable-tui --without-included-regex --without-included-gettext CPPFLAGS=-I/home/bin/include  LDFLAGS=/home/bin/lib
+	编译好后，gdb就在gdb目录下，可以拷贝到目标板运行，同时也要拷贝ncurses的库。gdb调试的时候，需要源文件，如果是简单的程序，可以直接拷贝到目标板，如果程序较大，可以将计算机挂载到目标板上进行调试。
+
+			mount -t smbfs your ip/dir mount dir -o dir_mod=xxx,file_mode=xxx,noserverino,uid=xxx,gid=xxx
+			mount -t smbfs //192.168.15.23/share_doc /mnt/tmp/ -o dir_mod=0777,file_mode=0777 ,noserverino,uid=1001,gid=1001
+	这样就可以直接在目标板上调试保存在计算机上的程序了，而不用拷贝。
+
+ddd是一个基于gdb的图形界面环境，  
+gdbtui是一个基于gdb的文本界面环境。
 
 ##内存检查工具valgrind
-　　valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  ./a.out
-　　valgrind使用memcheck工具来检查，如果是守护进程，可以用killall memcheck来退出进程。实际上有一个默认选项--tool=memcheck
-　　检查代码覆盖：
-　　valgrind --tool=callgrind ./a.out
-　　killall callgrind
-　　检查当前目录下有一个callgrind.out.xxx文件，xxxx表示当前程序的ｐｉｄ。
-　　callgrind_annotate --auto=yes callgrind.out.xxx>log
-　　然后可以用vi来查看这个文件。
-　　valgrind需要下载和安装。下载来自www.valgrind.org,程序为valgrind-x.x.x.tar.bz2.
-　　下载后tar vxf valgrind-x.x.x.tar.bz2
-　　./configure --prefix=/usr/local
-　　make install
-　　
-　　另外一个检查内存泄露的工具是mtrace
-　　不需要下载，在ubuntu中已经自动安装了，需要做的是：
-　　1）在文件中加入下列语句
-　　...
-　　#include <mcheck.h>
-　　...
-　　main(){
-　　...
-　　 set("MALLOC_TRACK","output",1);
-　　 mtrack();
-　　....
-　　}
-　　运行后在当前目录下，会产生一个output 文件，可以用mtrace output来查看。
-　　但是mtrace的记录都是机器级的，不如valgrind来的直接，是代码级的。
-　　
-　　Valgrind的最新版是3.2.0，它一般包含下列工具： 
-　　1.Memcheck 
-　　最常用的工具，用来检测程序中出现的内存问题，所有对内存的读写都会被检测到，一切对malloc()/free()/new/delete的调用都会被捕获。所以，它能检测以下问题： 
-　　1.对未初始化内存的使用； 
-　　2.读/写释放后的内存块； 
-　　3.读/写超出malloc分配的内存块； 
-　　4.读/写不适当的栈中内存块； 
-　　5.内存泄漏，指向一块内存的指针永远丢失； 
-　　6.不正确的malloc/free或new/delete匹配； 
-　　7,memcpy()相关函数中的dst和src指针重叠。 
-　　这些问题往往是C/C++程序员最头疼的问题，Memcheck在这里帮上了大忙。 
-　　用法：valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  your program
-　　然后会在当前目录看到一个logfile文件，然后就可以查看这个文件检查问题了。
-　　2.Callgrind 
-　　和gprof类似的分析工具，但它对程序的运行观察更是入微，能给我们提供更多的信息。和gprof不同，它不需要在编译源代码时附加特殊选项，但加上调试选项是推荐的。Callgrind收集程序运行时的一些数据，建立函数调用关系图，还可以有选择地进行cache模拟。在运行结束时，它会把分析数据写入一个文件。callgrind_annotate可以把这个文件的内容转化成可读的形式。 
-　　用法：valgrind --tool=callgrind  your program,然后可以发现在当前目录中有一个callgrind.out.xxxx的文件，可以直接查看这个文件看调用关系，但是很复杂，可以用kcachegrind callgrind.out.xxxx来查看，这是个图形化程序。左边窗口是所有调用的函数及其调用次数，运行时间所占比例等，右边窗口上半部是左边窗口所选择函数的调用者信息，下半部是该函数调用的函数信息。
-　　3.Cachegrind 
-　　Cache分析器，它模拟CPU中的一级缓存I1，Dl和二级缓存，能够精确地指出程序中cache的丢失和命中。如果需要，它还能够为我们提供cache丢失次数，内存引用次数，以及每行代码，每个函数，每个模块，整个程序产生的指令数。这对优化程序有很大的帮助。 
-　　用法：valgrind --tool=cachegrind  your program,然后可以发现在当前目录中有一个cachegrind.out.xxxx的文件，可以直接查看这个文件.也可以用kcachegrind程序来查看。
-　　4.Helgrind 
-　　它主要用来检查多线程程序中出现的竞争问题。Helgrind寻找内存中被多个线程访问，而又没有一贯加锁的区域，这些区域往往是线程之间失去同步的地方，而且会导致难以发掘的错误。Helgrind实现了名为“Eraser”的竞争检测算法，并做了进一步改进，减少了报告错误的次数。不过，Helgrind仍然处于实验阶段。 
-　　用法：valgrind --tool=helgrind --log-file=log your program,然后查看ｌｏｇ文件
-　　5. Massif 
-　　堆栈分析器，它能测量程序在堆栈中使用了多少内存，告诉我们堆块，堆管理块和栈的大小。Massif能帮助我们减少内存的使用，在带有虚拟内存的现代系统中，它还能够加速我们程序的运行，减少程序停留在交换区中的几率。 
-　　用法：valgrind --tool=massif your program,然后可以在当前目录中看到有一个massif.out.xxxx文件，可以查看该文件检查堆的使用情况。
-　　此外，lackey和nulgrind也会提供。Lackey是小型工具，很少用到；Nulgrind只是为开发者展示如何创建一个工具。我们就不做介绍了。  
-　　
+valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  ./a.out
+valgrind使用memcheck工具来检查，如果是守护进程，可以用killall memcheck来退出进程。实际上有一个默认选项--tool=memcheck
+检查代码覆盖：
+valgrind --tool=callgrind ./a.out
+killall callgrind
+检查当前目录下有一个callgrind.out.xxx文件，xxxx表示当前程序的ｐｉｄ。
+callgrind_annotate --auto=yes callgrind.out.xxx>log
+然后可以用vi来查看这个文件。
+valgrind需要下载和安装。下载来自www.valgrind.org,程序为valgrind-x.x.x.tar.bz2.
+下载后tar vxf valgrind-x.x.x.tar.bz2
+./configure --prefix=/usr/local
+make install
+
+另外一个检查内存泄露的工具是mtrace
+不需要下载，在ubuntu中已经自动安装了，需要做的是：
+1）在文件中加入下列语句
+...
+#include <mcheck.h>
+...
+main(){
+...
+ set("MALLOC_TRACK","output",1);
+ mtrack();
+....
+}
+运行后在当前目录下，会产生一个output 文件，可以用mtrace output来查看。
+但是mtrace的记录都是机器级的，不如valgrind来的直接，是代码级的。
+
+Valgrind的最新版是3.2.0，它一般包含下列工具： 
+1.Memcheck 
+最常用的工具，用来检测程序中出现的内存问题，所有对内存的读写都会被检测到，一切对malloc()/free()/new/delete的调用都会被捕获。所以，它能检测以下问题： 
+1.对未初始化内存的使用； 
+2.读/写释放后的内存块； 
+3.读/写超出malloc分配的内存块； 
+4.读/写不适当的栈中内存块； 
+5.内存泄漏，指向一块内存的指针永远丢失； 
+6.不正确的malloc/free或new/delete匹配； 
+7,memcpy()相关函数中的dst和src指针重叠。 
+这些问题往往是C/C++程序员最头疼的问题，Memcheck在这里帮上了大忙。 
+用法：valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  your program
+然后会在当前目录看到一个logfile文件，然后就可以查看这个文件检查问题了。
+2.Callgrind 
+和gprof类似的分析工具，但它对程序的运行观察更是入微，能给我们提供更多的信息。和gprof不同，它不需要在编译源代码时附加特殊选项，但加上调试选项是推荐的。Callgrind收集程序运行时的一些数据，建立函数调用关系图，还可以有选择地进行cache模拟。在运行结束时，它会把分析数据写入一个文件。callgrind_annotate可以把这个文件的内容转化成可读的形式。 
+用法：valgrind --tool=callgrind  your program,然后可以发现在当前目录中有一个callgrind.out.xxxx的文件，可以直接查看这个文件看调用关系，但是很复杂，可以用kcachegrind callgrind.out.xxxx来查看，这是个图形化程序。左边窗口是所有调用的函数及其调用次数，运行时间所占比例等，右边窗口上半部是左边窗口所选择函数的调用者信息，下半部是该函数调用的函数信息。
+3.Cachegrind 
+Cache分析器，它模拟CPU中的一级缓存I1，Dl和二级缓存，能够精确地指出程序中cache的丢失和命中。如果需要，它还能够为我们提供cache丢失次数，内存引用次数，以及每行代码，每个函数，每个模块，整个程序产生的指令数。这对优化程序有很大的帮助。 
+用法：valgrind --tool=cachegrind  your program,然后可以发现在当前目录中有一个cachegrind.out.xxxx的文件，可以直接查看这个文件.也可以用kcachegrind程序来查看。
+4.Helgrind 
+它主要用来检查多线程程序中出现的竞争问题。Helgrind寻找内存中被多个线程访问，而又没有一贯加锁的区域，这些区域往往是线程之间失去同步的地方，而且会导致难以发掘的错误。Helgrind实现了名为“Eraser”的竞争检测算法，并做了进一步改进，减少了报告错误的次数。不过，Helgrind仍然处于实验阶段。 
+用法：valgrind --tool=helgrind --log-file=log your program,然后查看ｌｏｇ文件
+5. Massif 
+堆栈分析器，它能测量程序在堆栈中使用了多少内存，告诉我们堆块，堆管理块和栈的大小。Massif能帮助我们减少内存的使用，在带有虚拟内存的现代系统中，它还能够加速我们程序的运行，减少程序停留在交换区中的几率。 
+用法：valgrind --tool=massif your program,然后可以在当前目录中看到有一个massif.out.xxxx文件，可以查看该文件检查堆的使用情况。
+此外，lackey和nulgrind也会提供。Lackey是小型工具，很少用到；Nulgrind只是为开发者展示如何创建一个工具。我们就不做介绍了。  
+
 ##单元测试中的代码覆盖率检查：
-　　1）在cppflags或cflags中加上 -fprofile-arcs -ftest-coverage
-　　2) 在ldflags中加上 -fprofile-arcs -ftest-coverage
-　　3) 编译文件，可以看到在当前目录中有后缀名为gcno文件
-　　4）运行程序，可以看到在当前目录中有后缀名为gcda文件，此时文件中已经包括了代码覆盖信息。但是还不能直观的显示出来。
-　　5）下载lcov工具，http://ltp.SourceInsight.net/coverage/lcov.php
-　　 lcov-x.x.tar.gz,
-　　 tar -zxvf lcov-x.x.tar.gz,mak install
-　　6) lcov -d .  -o coverage.info -b . -c -t your programe
-　　7) genhtml  coverage.info　-o 想要输出的目录
-　　8) 可以看到在当前目录下有一个你刚才建立的输出目录，里面是html文件，用浏览器查看index.html文件。
-　　
+1）在cppflags或cflags中加上 -fprofile-arcs -ftest-coverage
+2) 在ldflags中加上 -fprofile-arcs -ftest-coverage
+3) 编译文件，可以看到在当前目录中有后缀名为gcno文件
+4）运行程序，可以看到在当前目录中有后缀名为gcda文件，此时文件中已经包括了代码覆盖信息。但是还不能直观的显示出来。
+5）下载lcov工具，http://ltp.SourceInsight.net/coverage/lcov.php
+ lcov-x.x.tar.gz,
+ tar -zxvf lcov-x.x.tar.gz,mak install
+6) lcov -d .  -o coverage.info -b . -c -t your programe
+7) genhtml  coverage.info-o 想要输出的目录
+8) 可以看到在当前目录下有一个你刚才建立的输出目录，里面是html文件，用浏览器查看index.html文件。
+
 ##doxygen:用于生成项目帮助文档
-　　1.下载工具：sudo apt-get install doxygen
-　　2. 在项目所在目录 doxygen -g 会生成一个Doxygenfile 配置文件。
-　　 这里面的大多数内容可以不修改，主要要修改的地方
-　　 PROJECT_NAME           = "项目名称"
-　　 OUTPUT_DIRECTORY       =doxygen_file//设置输出目录
-　　 OUTPUT_LANGUAGE        =Chinese //语言选择
-　　 EXTRACT_PRIVATE        = YES//是否要检查private中的变量或函数
-　　 GENERATE_RTF           = YES//是否产生rtf文件，默认是在rtf目录下的refman。rtf
-　　 EXTRACT_LOCAL_CLASSES YES 是否解析源文件（cpp文件）中定义的类
-　　 SOURCE_BROWSER NO 如果为YES，源代码文件会被包含在文档中
-　　 INLINE_SOURCES NO 如果为YES，函数和类的实现代码被包含在文档中
-　　3. 注释代码
-　　 @exception {exception description} 对一个异常对象进行注释。
-　　 @warning {warning message } 一些需要注意的事情
-　　 @todo { things to be done } 对将要做的事情进行注释
-　　 @see {comment with reference to other items } 一段包含其他部分引用的注释，中间包含对其他代码项的名称，自动产生对其的引用链接。
-　　 @relates 通常用做把非成员函数的注释文档包含在类的说明文档中。
-　　 @since {text} 通常用来说明从什么版本、时间写此部分代码。
-　　 @deprecated
-　　 @pre { description of the precondition } 用来说明代码项的前提条件。
-　　 @post { description of the postcondition } 用来说明代码项之后的使用条件。
-　　 @code 在注释中开始说明一段代码，直到@endcode命令。
-　　 @endcode 注释中代码段的结束。
-　　 ///产生一条消息给control类，用于转发主站直接对电能表的批量抄读，1,2,3,4等级数据的返回
-　　 /**
-　　 ***********************************************************************
-　　 *  @brief  清除电表事件等级参数列表
-　　 *  @author  hhj
-　　 *  @param[in] AmmeterEventGrade &grade 电表事件分级表
-　　 *  @return  grade.data_id_set清除
-　　 *  @note 无。
-　　 *  @see  NULL
-　　 ***********************************************************************
-　　 */
-　　 以上都是有效的注释
-　　4. 运行 doxygen，会自动在doxygen_file目录下产生html和latex目录
+1.下载工具：sudo apt-get install doxygen
+2. 在项目所在目录 doxygen -g 会生成一个Doxygenfile 配置文件。
+ 这里面的大多数内容可以不修改，主要要修改的地方
+ PROJECT_NAME           = "项目名称"
+ OUTPUT_DIRECTORY       =doxygen_file//设置输出目录
+ OUTPUT_LANGUAGE        =Chinese //语言选择
+ EXTRACT_PRIVATE        = YES//是否要检查private中的变量或函数
+ GENERATE_RTF           = YES//是否产生rtf文件，默认是在rtf目录下的refman。rtf
+ EXTRACT_LOCAL_CLASSES YES 是否解析源文件（cpp文件）中定义的类
+ SOURCE_BROWSER NO 如果为YES，源代码文件会被包含在文档中
+ INLINE_SOURCES NO 如果为YES，函数和类的实现代码被包含在文档中
+3. 注释代码
+ @exception {exception description} 对一个异常对象进行注释。
+ @warning {warning message } 一些需要注意的事情
+ @todo { things to be done } 对将要做的事情进行注释
+ @see {comment with reference to other items } 一段包含其他部分引用的注释，中间包含对其他代码项的名称，自动产生对其的引用链接。
+ @relates 通常用做把非成员函数的注释文档包含在类的说明文档中。
+ @since {text} 通常用来说明从什么版本、时间写此部分代码。
+ @deprecated
+ @pre { description of the precondition } 用来说明代码项的前提条件。
+ @post { description of the postcondition } 用来说明代码项之后的使用条件。
+ @code 在注释中开始说明一段代码，直到@endcode命令。
+ @endcode 注释中代码段的结束。
+ ///产生一条消息给control类，用于转发主站直接对电能表的批量抄读，1,2,3,4等级数据的返回
+ /**
+ ***********************************************************************
+ *  @brief  清除电表事件等级参数列表
+ *  @author  hhj
+ *  @param[in] AmmeterEventGrade &grade 电表事件分级表
+ *  @return  grade.data_id_set清除
+ *  @note 无。
+ *  @see  NULL
+ ***********************************************************************
+ */
+ 以上都是有效的注释
+4. 运行 doxygen，会自动在doxygen_file目录下产生html和latex目录
 
 ##网络配置：
 基本工具：
