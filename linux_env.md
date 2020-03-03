@@ -2481,284 +2481,285 @@ tcp格式
 ddd是一个基于gdb的图形界面环境，  
 gdbtui是一个基于gdb的文本界面环境。
 
-##内存检查工具valgrind
-valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  ./a.out
-valgrind使用memcheck工具来检查，如果是守护进程，可以用killall memcheck来退出进程。实际上有一个默认选项--tool=memcheck
-检查代码覆盖：
-valgrind --tool=callgrind ./a.out
-killall callgrind
-检查当前目录下有一个callgrind.out.xxx文件，xxxx表示当前程序的ｐｉｄ。
-callgrind_annotate --auto=yes callgrind.out.xxx>log
-然后可以用vi来查看这个文件。
-valgrind需要下载和安装。下载来自www.valgrind.org,程序为valgrind-x.x.x.tar.bz2.
-下载后tar vxf valgrind-x.x.x.tar.bz2
-./configure --prefix=/usr/local
-make install
+##valgrind
+- 用途：内存检查工具  
+	Valgrind的最新版是3.2.0，它一般包含下列工具： 
+	1. Memcheck   
+	最常用的工具，用来检测程序中出现的内存问题，所有对内存的读写都会被检测到，一切对malloc()/free()/new/delete的调用都会被捕获。所以，它能检测以下问题。  
+		- 对未初始化内存的使用； 
+		- 读/写释放后的内存块； 
+		- 读/写超出malloc分配的内存块； 
+		- 读/写不适当的栈中内存块； 
+		- 内存泄漏，指向一块内存的指针永远丢失； 
+		- 不正确的malloc/free或new/delete匹配； 
+		-  memcpy()相关函数中的dst和src指针重叠。
 
-另外一个检查内存泄露的工具是mtrace
-不需要下载，在ubuntu中已经自动安装了，需要做的是：
-1）在文件中加入下列语句
-...
-#include <mcheck.h>
-...
-main(){
-...
- set("MALLOC_TRACK","output",1);
- mtrack();
-....
-}
+		这些问题往往是C/C++程序员最头疼的问题，Memcheck在这里帮上了大忙。 
+		- 用法：
+		
+				valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  your program
+			然后会在当前目录看到一个logfile文件，然后就可以查看这个文件检查问题了。
+	2. Callgrind   
+	和gprof类似的分析工具，但它对程序的运行观察更是入微，能给我们提供更多的信息。和gprof不同，它不需要在编译源代码时附加特殊选项，但加上调试选项是推荐的。Callgrind收集程序运行时的一些数据，建立函数调用关系图，还可以有选择地进行cache模拟。在运行结束时，它会把分析数据写入一个文件。callgrind_annotate可以把这个文件的内容转化成可读的形式。 
+		- 用法：
+		
+				valgrind --tool=callgrind  your program
+			然后可以发现在当前目录中有一个callgrind.out.xxxx的文件，可以直接查看这个文件看调用关系，但是很复杂。  
+			可以用kcachegrind callgrind.out.xxxx来查看，这是个图形化程序。左边窗口是所有调用的函数及其调用次数，运行时间所占比例等，右边窗口上半部是左边窗口所选择函数的调用者信息，下半部是该函数调用的函数信息。
+	3. Cachegrind   
+	Cache分析器，它模拟CPU中的一级缓存I1，Dl和二级缓存，能够精确地指出程序中cache的丢失和命中。如果需要，它还能够为我们提供cache丢失次数，内存引用次数，以及每行代码，每个函数，每个模块，整个程序产生的指令数。这对优化程序有很大的帮助。 
+		- 用法：
+		
+				valgrind --tool=cachegrind  your program,
+		然后可以发现在当前目录中有一个cachegrind.out.xxxx的文件，可以直接查看这个文件.也可以用kcachegrind程序来查看。
+	4. Helgrind   
+	它主要用来检查多线程程序中出现的竞争问题。Helgrind寻找内存中被多个线程访问，而又没有一贯加锁的区域，这些区域往往是线程之间失去同步的地方，而且会导致难以发掘的错误。Helgrind实现了名为“Eraser”的竞争检测算法，并做了进一步改进，减少了报告错误的次数。不过，Helgrind仍然处于实验阶段。 
+		- 用法：
+		
+				valgrind --tool=helgrind --log-file=log your program,
+		然后查看log文件
+	5.  Massif  
+	堆栈分析器，它能测量程序在堆栈中使用了多少内存，告诉我们堆块，堆管理块和栈的大小。Massif能帮助我们减少内存的使用，在带有虚拟内存的现代系统中，它还能够加速我们程序的运行，减少程序停留在交换区中的几率。 
+		- 用法：
+
+				valgrind --tool=massif your program,
+		然后可以在当前目录中看到有一个massif.out.xxxx文件，可以查看该文件检查堆的使用情况。
+
+	此外，lackey和nulgrind也会提供。Lackey是小型工具，很少用到；Nulgrind只是为开发者展示如何创建一个工具。我们就不做介绍了。  
+- 调用方法：
+
+		valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  ./a.out
+	valgrind使用memcheck工具来检查，如果是守护进程，可以用killall memcheck来退出进程。实际上有一个默认选项--tool=memcheck
+- 检查代码覆盖：
+	
+		valgrind --tool=callgrind ./a.out
+		killall callgrind
+	检查当前目录下有一个callgrind.out.xxx文件，xxxx表示当前程序的pid。
+
+		callgrind_annotate --auto=yes callgrind.out.xxx>log
+	然后可以用vi来查看这个文件。
+- 安装  
+	valgrind需要下载和安装。下载来自www.valgrind.org,程序为valgrind-x.x.x.tar.bz2.  
+	下载后
+	
+		tar vxf valgrind-x.x.x.tar.bz2  
+		./configure --prefix=/usr/local
+		make install
+
+另外一个检查内存泄露的工具是mtrace,不需要下载，在ubuntu中已经自动安装了，需要做的是在文件中加入下列语句:
+
+		...
+		#include <mcheck.h>
+		...
+		main(){
+		...
+		 set("MALLOC_TRACK","output",1);
+		 mtrack();
+		....
+		}
 运行后在当前目录下，会产生一个output 文件，可以用mtrace output来查看。
 但是mtrace的记录都是机器级的，不如valgrind来的直接，是代码级的。
 
-Valgrind的最新版是3.2.0，它一般包含下列工具： 
-1.Memcheck 
-最常用的工具，用来检测程序中出现的内存问题，所有对内存的读写都会被检测到，一切对malloc()/free()/new/delete的调用都会被捕获。所以，它能检测以下问题： 
-1.对未初始化内存的使用； 
-2.读/写释放后的内存块； 
-3.读/写超出malloc分配的内存块； 
-4.读/写不适当的栈中内存块； 
-5.内存泄漏，指向一块内存的指针永远丢失； 
-6.不正确的malloc/free或new/delete匹配； 
-7,memcpy()相关函数中的dst和src指针重叠。 
-这些问题往往是C/C++程序员最头疼的问题，Memcheck在这里帮上了大忙。 
-用法：valgrind --leak-check=full --show-reacheable=yes --trace-children=yes --log-file=logfile  your program
-然后会在当前目录看到一个logfile文件，然后就可以查看这个文件检查问题了。
-2.Callgrind 
-和gprof类似的分析工具，但它对程序的运行观察更是入微，能给我们提供更多的信息。和gprof不同，它不需要在编译源代码时附加特殊选项，但加上调试选项是推荐的。Callgrind收集程序运行时的一些数据，建立函数调用关系图，还可以有选择地进行cache模拟。在运行结束时，它会把分析数据写入一个文件。callgrind_annotate可以把这个文件的内容转化成可读的形式。 
-用法：valgrind --tool=callgrind  your program,然后可以发现在当前目录中有一个callgrind.out.xxxx的文件，可以直接查看这个文件看调用关系，但是很复杂，可以用kcachegrind callgrind.out.xxxx来查看，这是个图形化程序。左边窗口是所有调用的函数及其调用次数，运行时间所占比例等，右边窗口上半部是左边窗口所选择函数的调用者信息，下半部是该函数调用的函数信息。
-3.Cachegrind 
-Cache分析器，它模拟CPU中的一级缓存I1，Dl和二级缓存，能够精确地指出程序中cache的丢失和命中。如果需要，它还能够为我们提供cache丢失次数，内存引用次数，以及每行代码，每个函数，每个模块，整个程序产生的指令数。这对优化程序有很大的帮助。 
-用法：valgrind --tool=cachegrind  your program,然后可以发现在当前目录中有一个cachegrind.out.xxxx的文件，可以直接查看这个文件.也可以用kcachegrind程序来查看。
-4.Helgrind 
-它主要用来检查多线程程序中出现的竞争问题。Helgrind寻找内存中被多个线程访问，而又没有一贯加锁的区域，这些区域往往是线程之间失去同步的地方，而且会导致难以发掘的错误。Helgrind实现了名为“Eraser”的竞争检测算法，并做了进一步改进，减少了报告错误的次数。不过，Helgrind仍然处于实验阶段。 
-用法：valgrind --tool=helgrind --log-file=log your program,然后查看ｌｏｇ文件
-5. Massif 
-堆栈分析器，它能测量程序在堆栈中使用了多少内存，告诉我们堆块，堆管理块和栈的大小。Massif能帮助我们减少内存的使用，在带有虚拟内存的现代系统中，它还能够加速我们程序的运行，减少程序停留在交换区中的几率。 
-用法：valgrind --tool=massif your program,然后可以在当前目录中看到有一个massif.out.xxxx文件，可以查看该文件检查堆的使用情况。
-此外，lackey和nulgrind也会提供。Lackey是小型工具，很少用到；Nulgrind只是为开发者展示如何创建一个工具。我们就不做介绍了。  
 
 ##单元测试中的代码覆盖率检查：
-1）在cppflags或cflags中加上 -fprofile-arcs -ftest-coverage
-2) 在ldflags中加上 -fprofile-arcs -ftest-coverage
-3) 编译文件，可以看到在当前目录中有后缀名为gcno文件
-4）运行程序，可以看到在当前目录中有后缀名为gcda文件，此时文件中已经包括了代码覆盖信息。但是还不能直观的显示出来。
-5）下载lcov工具，http://ltp.SourceInsight.net/coverage/lcov.php
- lcov-x.x.tar.gz,
- tar -zxvf lcov-x.x.tar.gz,mak install
-6) lcov -d .  -o coverage.info -b . -c -t your programe
-7) genhtml  coverage.info-o 想要输出的目录
-8) 可以看到在当前目录下有一个你刚才建立的输出目录，里面是html文件，用浏览器查看index.html文件。
+1. 在cppflags或cflags中加上 -fprofile-arcs -ftest-coverage
+2. 在ldflags中加上 -fprofile-arcs -ftest-coverage
+3. 编译文件，可以看到在当前目录中有后缀名为gcno文件
+4. 运行程序，可以看到在当前目录中有后缀名为gcda文件，此时文件中已经包括了代码覆盖信息。但是还不能直观的显示出来。
+5. 下载lcov工具，http://ltp.SourceInsight.net/coverage/lcov.php
+	lcov-x.x.tar.gz,
+	 tar -zxvf lcov-x.x.tar.gz,mak install
+6. lcov -d .  -o coverage.info -b . -c -t your programe
+7. genhtml  coverage.info-o 想要输出的目录
+8. 可以看到在当前目录下有一个你刚才建立的输出目录，里面是html文件，用浏览器查看index.html文件。
 
 ##doxygen:用于生成项目帮助文档
-1.下载工具：sudo apt-get install doxygen
+1. 下载工具：
+
+		sudo apt-get install doxygen
 2. 在项目所在目录 doxygen -g 会生成一个Doxygenfile 配置文件。
- 这里面的大多数内容可以不修改，主要要修改的地方
- PROJECT_NAME           = "项目名称"
- OUTPUT_DIRECTORY       =doxygen_file//设置输出目录
- OUTPUT_LANGUAGE        =Chinese //语言选择
- EXTRACT_PRIVATE        = YES//是否要检查private中的变量或函数
- GENERATE_RTF           = YES//是否产生rtf文件，默认是在rtf目录下的refman。rtf
- EXTRACT_LOCAL_CLASSES YES 是否解析源文件（cpp文件）中定义的类
- SOURCE_BROWSER NO 如果为YES，源代码文件会被包含在文档中
- INLINE_SOURCES NO 如果为YES，函数和类的实现代码被包含在文档中
+
+		 这里面的大多数内容可以不修改，主要要修改的地方
+		 PROJECT_NAME           = "项目名称"
+		 OUTPUT_DIRECTORY       =doxygen_file//设置输出目录
+		 OUTPUT_LANGUAGE        =Chinese //语言选择
+		 EXTRACT_PRIVATE        = YES//是否要检查private中的变量或函数
+		 GENERATE_RTF           = YES//是否产生rtf文件，默认是在rtf目录下的refman。rtf
+		 EXTRACT_LOCAL_CLASSES YES 是否解析源文件（cpp文件）中定义的类
+		 SOURCE_BROWSER NO 如果为YES，源代码文件会被包含在文档中
+		 INLINE_SOURCES NO 如果为YES，函数和类的实现代码被包含在文档中
 3. 注释代码
- @exception {exception description} 对一个异常对象进行注释。
- @warning {warning message } 一些需要注意的事情
- @todo { things to be done } 对将要做的事情进行注释
- @see {comment with reference to other items } 一段包含其他部分引用的注释，中间包含对其他代码项的名称，自动产生对其的引用链接。
- @relates 通常用做把非成员函数的注释文档包含在类的说明文档中。
- @since {text} 通常用来说明从什么版本、时间写此部分代码。
- @deprecated
- @pre { description of the precondition } 用来说明代码项的前提条件。
- @post { description of the postcondition } 用来说明代码项之后的使用条件。
- @code 在注释中开始说明一段代码，直到@endcode命令。
- @endcode 注释中代码段的结束。
- ///产生一条消息给control类，用于转发主站直接对电能表的批量抄读，1,2,3,4等级数据的返回
- /**
- ***********************************************************************
- *  @brief  清除电表事件等级参数列表
- *  @author  hhj
- *  @param[in] AmmeterEventGrade &grade 电表事件分级表
- *  @return  grade.data_id_set清除
- *  @note 无。
- *  @see  NULL
- ***********************************************************************
- */
- 以上都是有效的注释
+
+		 @exception {exception description} 对一个异常对象进行注释。
+		 @warning {warning message } 一些需要注意的事情
+		 @todo { things to be done } 对将要做的事情进行注释
+		 @see {comment with reference to other items } 一段包含其他部分引用的注释，中间包含对其他代码项的名称，自动产生对其的引用链接。
+		 @relates 通常用做把非成员函数的注释文档包含在类的说明文档中。
+		 @since {text} 通常用来说明从什么版本、时间写此部分代码。
+		 @deprecated
+		 @pre { description of the precondition } 用来说明代码项的前提条件。
+		 @post { description of the postcondition } 用来说明代码项之后的使用条件。
+		 @code 在注释中开始说明一段代码，直到@endcode命令。
+		 @endcode 注释中代码段的结束。
+		 ///产生一条消息给control类，用于转发主站直接对电能表的批量抄读，1,2,3,4等级数据的返回
+		 /**
+		 ***********************************************************************
+		 *  @brief  清除电表事件等级参数列表
+		 *  @author  hhj
+		 *  @param[in] AmmeterEventGrade &grade 电表事件分级表
+		 *  @return  grade.data_id_set清除
+		 *  @note 无。
+		 *  @see  NULL
+		 ***********************************************************************
+		 */
+	 以上都是有效的注释
 4. 运行 doxygen，会自动在doxygen_file目录下产生html和latex目录
 
 ##网络配置：
-基本工具：
-	ifconfig,用来启停网络设备，配置ip地址（临时的），子网掩码，等
-	ifconfig [interface] [options] [address]
-		没有任何参数，显示当前所有接口网络状态
-		interface 当前网络接口，可以用ls /sys/class/net 来显示当前的网络接口，其实是一个链接。一般以太设备命名为enxxx,无线设备命名为wlxxx.
-			cat /sys/class/net/enxxx/address 来显示mac地址。
-		netmask 用来配置子网掩码
-		metric 用来配置数据包转发次数。
-		-arp 允许或禁止arp
-		-allmuti 允许或禁止无区别模式
-		-promisc 关闭或启动混杂模式
-		media 网络媒介10base2,10baseT，100bseT
-		mem_start 驱动内存开始地址
-		mtu 每个包的最大长度
-		add <地址>配置ipv6地址
-		del <地址>删除ipv6地址 
-		-s 显示当前网络通讯发送接受字节信息
-		up 启动网络设备
-		down 关闭网络设备
-	举例：
-		ifconfig eth0 192.1688.1.103 netmask 255.255.255.0 up/down
-	其他：
-		改变接口名称：
-			一般以前的网络接口名都是ethx，如果觉得现在的命名不爽，可以用下面的方法来改变：
-			vi /etc/udev/rules.d/10-network.rules 这个文件中是配置网络接口底层信息的地方，可以配置mac地址和名称：
-			SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="88:ae:1d:d2:d0:4d",NAME="net0"
-			NAME最好不要配置成ethx，免得冲突。地址可以用上面的命令获得。
-			修改好后，如果想立即生效，可以先删除系统中该接口的驱动，然后重新插入。
-			查找该接口的驱动可以用lspci -v来显示
-			07:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8101/2/6E PCI Express Fast/Gigabit Ethernet controller (rev 02)
-			Subsystem: Lenovo RTL8101/2/6E PCI Express Fast/Gigabit Ethernet controller
-			Flags: bus master, fast devsel, latency 0, IRQ 26
-			I/O ports at 2000 [size=256]
-			Memory at 95110000 (64-bit, prefetchable) [size=4K]
-			Memory at 95100000 (64-bit, prefetchable) [size=64K]
-			Expansion ROM at 98100000 [disabled] [size=128K]
-			Capabilities: <access denied>
-			Kernel driver in use: r8169
-			Kernel modules: r8169
-　　从上面的最后一句话可以看出该接口使用的模块是r8169，该模块位于/lib/modules/当前内核/kernel/drivers/net/ethernet/realtek/r8169.ko.如果不知道位于何处，可以用locate 模块名 来搜索。然后，rmmod r8169 ,insmod /lib/modules/.../r8169.ko来重新加载模块，这时用ifconfig来查看，可以看到接口名已经改变了。
+### ifconfig
+- 用途：启停网络设备，配置ip地址（临时的），子网掩码，
+- 调用格式
+
+		ifconfig [interface] [options] [address]
+- 选项  
+	- 没有任何参数，显示当前所有接口网络状态
+	- interface 当前网络接口。  
+		可以用ls /sys/class/net 来显示当前的网络接口，其实是一个链接。一般以太设备命名为enxxx,无线设备命名为wlxxx.  
+		cat /sys/class/net/enxxx/address 来显示mac地址。
+	- netmask 用来配置子网掩码
+	- metric 用来配置数据包转发次数。
+	- -arp 允许或禁止arp
+	- -allmuti 允许或禁止无区别模式
+	- -promisc 关闭或启动混杂模式
+	-	media 网络媒介10base2,10baseT，100bseT
+	- mem_start 驱动内存开始地址
+	- mtu 每个包的最大长度
+	- add <地址>配置ipv6地址
+	- del <地址>删除ipv6地址 
+	- -s 显示当前网络通讯发送接受字节信息
+	- up 启动网络设备
+	- down 关闭网络设备
+	
+			ifconfig eth0 192.1688.1.103 netmask 255.255.255.0 up/down 
+
+
+###	改变接口名称
+一般以前的网络接口名都是ethx，如果觉得现在的命名不爽，可以用下面的方法来改变：
+
+		/etc/udev/rules.d/10-network.rules 
+这个文件中是配置网络接口底层信息的地方，可以配置mac地址和名称：
+
+	SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="88:ae:1d:d2:d0:4d",NAME="net0"
+	NAME最好不要配置成ethx，免得冲突。地址可以用上面的命令获得。
+修改好后，如果想立即生效，可以先删除系统中该接口的驱动，然后重新插入。  
+查找该接口的驱动可以用lspci -v来显示
+
+	07:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8101/2/6E PCI Express Fast/Gigabit Ethernet controller (rev 02)
+	Subsystem: Lenovo RTL8101/2/6E PCI Express Fast/Gigabit Ethernet controller
+	Flags: bus master, fast devsel, latency 0, IRQ 26
+	I/O ports at 2000 [size=256]
+	Memory at 95110000 (64-bit, prefetchable) [size=4K]
+	Memory at 95100000 (64-bit, prefetchable) [size=64K]
+	Expansion ROM at 98100000 [disabled] [size=128K]
+	Capabilities: <access denied>
+	Kernel driver in use: r8169
+	Kernel modules: r8169
+从上面的最后一句话可以看出该接口使用的模块是r8169，该模块位于/lib/modules/当前内核/kernel/drivers/net/ethernet/realtek/r8169.ko.如果不知道位于何处，可以用locate 模块名 来搜索。然后，rmmod r8169 ,insmod /lib/modules/.../r8169.ko来重新加载模块，这时用ifconfig来查看，可以看到接口名已经改变了。
 
 	cat proc/net/dev:显示当前网络通讯发送接受字节信息，同ifoconfig -s ,netstat -i 
 		
-	为一个网卡配置多个ip地址：
-		ifconfig eth0:1 xxx 为eth0添加一个配置（第一个是eth0:0）,ifconfig eth0:2 xxx为eth0添加第二个网卡配置 
-	
-	以上配置都是一次性的，如果关机了，配置就掉了，你可以在/etc/rc.local添加以上配置。对于ubuntu你也可以在/etc/network/interfaces中配置，下面再描述。
+###为一个网卡配置多个ip地址：
 
-route:配置路由：
-	route [add] target [gw] [netmask] [interface]
-	route [del] target [netmask] [interface]
-	路由就是与远方建立连接的通道表，通过目标地址和子网掩码来确定，举例通过dns确定目标地址为19.1.2.3，假如路由表中有这样配置：19.1.0.0,netmask:255.255.0.0
-	route add default gw 192.168.1.1
-配置dns
-	sudo vi /etc/resolv.conf 
+	ifconfig eth0:1 xxx 为eth0添加一个配置（第一个是eth0:0）,ifconfig eth0:2 xxx为eth0添加第二个网卡配置 
+以上配置都是一次性的，如果关机了，配置就掉了，你可以在/etc/rc.local添加以上配置。对于ubuntu你也可以在/etc/network/interfaces中配置，下面再描述。
+
+### route
+- 用途:配置路由：  
+	路由就是与远方建立连接的通道表，通过目标地址和子网掩码来确定。
+- 调用格式
+
+		route [add] target [gw] [netmask] [interface]
+		route [del] target [netmask] [interface]
+		route add default gw 192.168.1.1
+
+### 配置dns
+本地dns文件位于/etc/resolv,内容如下：
+
 	nameserver 8.8.8.8 --google dns
 
-自动配置网络：
-	刚才讲了通过ifconfig方式来配置网络，但是此方法是一次性的，为了能够开机就能自动配置，可以使用下面的方法：
-	linux下配置网络有两种方法，无界面方式和有界面方式。前者在ubuntu下通过/etc/network/interface或者rehat下通过/etc/sysconfig/network-scripts
+### 自动配置网络：
+刚才讲了通过ifconfig方式来配置网络，但是此方法是一次性的，为了能够开机就能自动配置，可以使用下面的方法：
+	linux下配置网络有两种方法，无界面方式和有界面方式。前者在通过/etc/network/interface,后者通过界面方式配置。
 
-	无界面方式：
-    	ubuntu:
-    	编辑/etc/network/interfaces文件，该文件用于配置网络接口，并被ifup，ifdown来使用。
-    	vi /etc/network/interfaces
-    		auto eth0
-    		iface eth0 inet manual|static|dhcp 
-    	如果是static，可以配置ip地址，netmask，gateway等
-    	举例：
-    		address 192.168.0.10
-    		netmask 255.255.255.0
-    		gateway 192.168.0.1
-    		dns-nameserver 192.168.0.1
-    		dns-nameserver 8.8.8.8
-    	然后调用ifup|ifdown interface 来启动和停止网络，或者/etc/init.d/network restart
-    	如果配置成manual，可能需要等一会才能ping通外面的网络，
-    	如果配置成dhcp，会调用dhcpcd守护进程配置网络，可能需要等一会才能ping通外部的网络。
-    	
-    	dhcpcd的配置文件是/etc/dhcpcd.conf
-    		# A sample configuration for dhcpcd.
-    		# See dhcpcd.conf(5) for details.
-    		
-    		# Allow users of this group to interact with dhcpcd via the control socket.
-    		#controlgroup wheel
-    		
-    		# Inform the DHCP server of our hostname for DDNS.
-    			hostname
-    		
-    		# Use the hardware address of the interface for the Client ID.
-    		#clientid
-    		# or
-    		# Use the same DUID + IAID as set in DHCPv6 for DHCPv4 ClientID as per RFC4361.
-    		# Some non-RFC compliant DHCP servers do not reply with this set.
-    		# In this case, comment out duid and enable clientid above.
-    			duid
-    		
-    		# Persist interface configuration when dhcpcd exits.
-    			persistent
-    		
-    		# Rapid commit support.
-    		# Safe to enable by default because it requires the equivalent option set
-    		# on the server to actually work.
-    			option rapid_commit
-    		
-    		# A list of options to request from the DHCP server.
-    			option domain_name_servers, domain_name, domain_search, host_name
-    			option classless_static_routes
-    		# Most distributions have NTP support.
-    			option ntp_servers
-    		# Respect the network MTU. This is applied to DHCP routes.
-    			option interface_mtu
-    		
-    		# A ServerID is required by RFC2131.
-    			require dhcp_server_identifier
-    		
-    		# Generate Stable Private IPv6 Addresses instead of hardware based ones
-    			slaac private
+- 无界面方式：  
+	配置文件为/etc/network/interfaces文件，该文件用于配置网络接口，并被ifup，ifdown来使用。文件内容如下：
+
+		auto eth0
+    	iface eth0 inet manual|static|dhcp 
+	如果是static，可以配置ip地址，netmask，gateway。例如 
+
+    	address 192.168.0.10
+    	netmask 255.255.255.0
+    	gateway 192.168.0.1
+    	dns-nameserver 192.168.0.1
+    	dns-nameserver 8.8.8.8
+   	然后调用ifup|ifdown interface 来启动和停止网络，或者/etc/init.d/network restart。  
+   	如果配置成manual，可能需要等一会才能ping通外面的网络，
+   	如果配置成dhcp，会调用dhcpcd守护进程配置网络，可能需要等一会才能ping通外部的网络。  
+	dhcpcd守护进程通过/etc/dhcpcd.conf文件来配置，文件内容如下：
+
+    	# A sample configuration for dhcpcd.
+    	# See dhcpcd.conf(5) for details.
+    	# Allow users of this group to interact with dhcpcd via the control socket.
+    	#controlgroup wheel
+    	# Inform the DHCP server of our hostname for DDNS.
+    		hostname
+    	# Use the hardware address of the interface for the Client ID.
+    	#clientid
+    	# or
+    	# Use the same DUID + IAID as set in DHCPv6 for DHCPv4 ClientID as per RFC4361.
+    	# Some non-RFC compliant DHCP servers do not reply with this set.
+    	# In this case, comment out duid and enable clientid above.
+    		duid
+    	# Persist interface configuration when dhcpcd exits.
+    		persistent
+    	# Rapid commit support.
+    	# Safe to enable by default because it requires the equivalent option set
+    	# on the server to actually work.
+    		option rapid_commit
+    	# A list of options to request from the DHCP server.
+    		option domain_name_servers, domain_name, domain_search, host_name
+    		option classless_static_routes
+    	# Most distributions have NTP support.
+    		option ntp_servers
+    	# Respect the network MTU. This is applied to DHCP routes.
+    		option interface_mtu
+    	# A ServerID is required by RFC2131.
+    		require dhcp_server_identifier
+    	# Generate Stable Private IPv6 Addresses instead of hardware based ones
+    		slaac private
     		可能要改动的地方是clinetid
-    		也可以直接运行dhcpcd net0 以获得dns，或者dhclient来获得dns。
-    		dns的配置文件是/etc/resolv.conf,该文件一般不直接修改，而是通过ifup，dhcpcd，network-manager等程序来修改。		
+    	也可以直接运行dhcpcd net0 以获得dns，或者dhclient来获得dns。
 
-	有界面方式：
-    	通过/etc/NetworkManager/NetworkManager.conf配置文件来实现
-    	需要允许其中的managed
-    		[ifupdown]
-    		managed=true
-    	然后通过桌面右上角的网络配置添加网络配置，然后执行/etc/init.d/network-manager start 
-    	如果上面managed配置成false，右上角的网络会显示未托管。
+- 有界面方式：  
+使用界面方式的配置文件为/etc/NetworkManager/NetworkManager.conf  
+需要将其中的managed属性改为true
+
+		[ifupdown]
+    	managed=true
+然后通过桌面右上角的网络配置添加网络配置，然后执行
+
+		etc/init.d/network-manager start。 
+ 如果上面managed配置成false，右上角的网络会显示未托管。
     
-　　有界面和无界面方式二者只能选一，如果改动了interfaces文件，有界面方式会关闭自己，显示未托管，除非特地指定managed为true。如果managed设置为true，则interfaces文件无效。
+有界面和无界面方式二者只能选一，如果改动了interfaces文件，有界面方式会关闭自己，显示未托管，除非特地指定managed为true。如果managed设置为true，则interfaces文件无效。
 
-通过systemctl来操纵network :
-	/etc/init.d/network-manager替代，network-manager用/usr/sbin/NetworkManager来处理。
-　　相关文件：
-		/etc/conf.d/network@<interface>
-			address ...
-			netmask ...
-			gateway ...
-		/lib/systemd/system/network@.service
-			[Unit]
-			Description=Network connectivity (%i)
-			Wants=network.target
-			Before=network.target
-			BindsTo=sys-subsystem-net-devices-%i.device
-			After=sys-subsystem-net-devices-%i.device
-			
-			[Service]
-			Type=oneshot
-			RemainAfterExit=yes
-			EnvironmentFile=/etc/conf.d/network@%i
-			
-			ExecStart=/usr/bin/ip link set dev %i up
-			ExecStart=/usr/bin/ip addr add ${address}/${netmask} broadcast ${broadcast} dev %i
-			ExecStart=/usr/bin/ip route add default via ${gateway}
-			
-			ExecStop=/usr/bin/ip addr flush dev %i
-			ExecStop=/usr/bin/ip link set dev %i down
-			
-			[Install]
-			WantedBy=multi-user.target
-	ln -s /lib/systemd/system/network@.servie /etc/systemd/system 
-	systemctl enable network@enp7s0 
-	systemctl start network@enp7s0
+### 自动插入模块：
+/etc/moudles中写入想要插入的模块，该文件被指向为 /etc/modules-load.d/modules.conf 。
 
-		
-
-自动插入模块：
-	vi /etc/moudles中写入想要插入的模块举例r8169，该文件被指向为 /etc/modules-load.d/modules.conf .
-
-adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
-	在ubuntu中的配置工具是采用ponconf。在redhat中采用adsl
+### adsl 拨号上网：
+基本工具是pppoe
+	在ubuntu中的配置工具是采用ponconf。
 	ubuntu：
 	sudo pppoeconf 用来配置pppoe ，会弹出文本界面自动扫描当前网卡，提示输入你的adsl用户名和密码，询问是否开机自动启动连接。设置最后提示是否现在使用，同意后就能使用网络了。
 	手动建立adsl连接命令是sudo pon dsl-provider，断开连接命令是sudo poff dsl-provider。
@@ -2769,39 +2770,48 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 	hotnamectl set-hostname=xxx
 	注意同时要修改/etc/hosts文件，将其中的主机名修改，否则配置网络时会报“无法解析主机”的错误。
 
-##rinetd:一个端口映射工具
-	需要配置/etc/rinetd.conf
-	文件内容为：
-	绑定地址 绑定端口 发送地址 发送端口
-	举例：
+## rinetd:
+- 用途：一个端口映射工具
+- 配置
+	/etc/rinetd.conf
+	文件内容为：  
+	绑定地址 绑定端口 发送地址 发送端口  
 	0.0.0.0 1234 192.168.1.23 1234 
 
-#pdftk 将多个pdf文件连接成一个文件
-	pdftk file1 file2 ... cat output all.pdf 
+## pdftk 
+- 用途：将多个pdf文件连接成一个文件
 
-##sysctl:用来控制一些系统参数
-	-a 显示所有系统参数
+		pdftk file1 file2 ... cat output all.pdf 
 
-##convert 将图像文件转换成pdf文件
+##sysctl:
+- 用途：用来控制一些系统参数
+- 选项   
+	- -a 显示所有系统参数
+
+##convert 
+- 用途：将图像文件转换成pdf文件
 
 ##ros 机器人操作系统
+
 	https://wenku.baidu.com/view/1d15d1fd284ac850ac02422a.html
 
 ##连接库
-	编译程序时，往往涉及到库的路径问题，可以采用：
-	1.修改LD_LIBRARY_PATH变量方式，修改环境变量的方法参见export说明。
-	2.修改  /etc/ld.so.conf.d/下面文件，将需要的路径添加进来。
+编译程序时，往往涉及到库的路径问题，可以采用：
+
+1. 修改LD_LIBRARY_PATH变量方式，修改环境变量的方法参见export说明。
+2. 修改  /etc/ld.so.conf.d/下面文件，将需要的路径添加进来。
 
 ##bash脚本执行
-	1。bash xx 启动一个bash执行脚本。执行xx不会影响当前环境
-	2. chmod u+x xx 给脚本加上执行属性，然后 ./xx 。此方法也是启动一个bash去执行。
-	3. source xx 。在当前bash中执行脚本。执行xx会影响当前环境。
-	4. .空格xx 。也是在当前bash中执行脚本。
+1. bash xx 启动一个bash执行脚本。执行xx不会影响当前环境
+2. chmod u+x xx 给脚本加上执行属性，然后 ./xx 。此方法也是启动一个bash去执行。
+3. source xx 。在当前bash中执行脚本。执行xx会影响当前环境。
+4. .空格xx 。也是在当前bash中执行脚本。
 
-##Makefile编写：
-	Makefile用来管理包括多个文件的项目的编译，因为一般来说用手工编写，因此适用于比较小规模的项目，如果项目文件较多建议使用自动化程度较高的cmake或automake等工具。
-	Makefile类似与bash脚本文件，最基本的包括定义，依赖关系两个部分，此外makefile中也有控制语句，函数等，我们只要使用常用的部分基本就可以了，没有必要弄得太复杂。
-	定义就是定义一些需要用到的变量，常用的变量包括编译器，工程路径，源代码，目标文件，以及一些预定义的变量。变量的定义与bash中的定义方法是一致的，举例：CC=gcc，就是指定编译器为gcc，make工具有默认定义的规则和变量，可以用make -p 来查看。假设，目前的项目所有文件都在同一目录下，有两个文件main.cpp,lib.cpp
+## Makefile编写：
+Makefile用来管理包括多个文件的项目的编译，因为一般来说用手工编写，因此适用于比较小规模的项目，如果项目文件较多建议使用自动化程度较高的cmake或automake等工具。  
+	Makefile类似与bash脚本文件，最基本的包括定义，依赖关系两个部分，此外makefile中也有控制语句，函数等，我们只要使用常用的部分基本就可以了，没有必要弄得太复杂。  
+	定义就是定义一些需要用到的变量，常用的变量包括编译器，工程路径，源代码，目标文件，以及一些预定义的变量。变量的定义与bash中的定义方法是一致的，举例：CC=gcc，就是指定编译器为gcc，make工具有默认定义的规则和变量，可以用make -p 来查看。假设，目前的项目所有文件都在同一目录下，有两个文件main.cpp,lib.cpp  
+
 	第一个Makefile
 	proj=.
 	target=test
@@ -2822,15 +2832,139 @@ adsl 拨号上网：基本工具是pppoe,前提是网卡工作正常。
 	clean:
 		@rm $(objs) $(target)
 	
-	如果项目由多个目录组成，可以考虑在根目录建一个管理的Makefile，将通用的部分包括进来，在各个子目录中进行实际的编译，举例有如下目录
+如果项目由多个目录组成，可以考虑在根目录建一个管理的Makefile，将通用的部分包括进来，在各个子目录中进行实际的编译，如下目录
+
 	--root
 		--app
 		--lib
 		--tools
 		
-	app目录放置应用程序，lib放置一些库，tools放置一些工具程序
-	在根目录可以这样写：
-	Makefile:
+app目录放置应用程序，lib放置一些库，tools放置一些工具程序  
+在根目录下的makefile可以这样写：
+
 	proj_root_dir=$(PWD)
 	export proj_root_dir
-	subdir=app lib tools 或者：subdir=$(shell ls -d                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+	subdir=app lib tools 或者：subdir=$(shell ls -d */)
+	for i in $(sbudir);do
+		make -C $i||exit 1;
+	done
+	
+	Makefile.rule:
+	%.o:%.cpp
+		$(CC) -c -g $< -o $@
+
+	app/Makefile
+	
+	include $(proj_root_dir)/Makefile.rule
+	target=test
+	srcs=$(wildcard *.cpp)
+	objs=$(srcs:%.cpp=%.o)
+	objs+=$(proj_root_dir)/tools/*.o
+	$(target):$(objs)
+		$(CC) -L$(proj_root_dir)/lib -labc $(objs) -o $@	
+	...
+	
+##编写so库：
+	gcc -fPIC -c -g -Wall a.c
+	gcc -shared -o a.so a.o
+	使用的时候：
+	修改LD_LIBRARY_PATH环境变量，指向so所在目录
+	或者在 /etc/ld.so.conf.d/中添加你想要的路径
+	静态库：ar rcs a.a a.o
+		
+##iconv:用于转换文字编码
+	iconv -f infilecode -t tofilecode inputfile -o outputfile
+	iconv -l :list all support code
+	icov -f CN-GB -t utf-8 a.txt -o a.txt.utf8
+	
+##file 显示文件编码信息
+	-i 按照mime形式显示
+
+##pdftk：合并切割pdf
+
+##pandoc:
+	将markdown格式的文本转换成其他格式的文本.
+
+##svn
+	版本库
+	svnserve 服务端
+	调用格式：
+		svnserve [options] reposdir
+	选项：
+		-d	daemon 
+		-r	root dir 
+	svn	客户端
+	调用格式
+		svn <command> [args]
+	command:
+		add			:add file into repos 
+		commit(ci)	:提交
+		checkout(co):检出。
+		list(ls) 	:列出文件，只有一级目录,
+		info		:显示版本库信息
+		diff		：显示修改
+	
+		
+	服务端：
+		如果没有svn工具，首先要下载subversion
+		创建一个新仓库：
+			举例在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2
+			1.	建立仓库根目录：cd ~ && mkdir svn 
+			2.	创建两个仓库：svnadmin create svn/test1 && svnadmin create  svn/test2。
+			3.	启动svn服务器：svnserve -d -i /home/hanhj/svn 
+			这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
+		挂载原仓库：
+			svnserve -d -r 原仓库的位置
+
+	客户端：
+		如果没有svn工具，首先要下载subversion
+		检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
+		修改后，可以用
+			svn add:添加文件
+			svn ci -m ""：提交修改
+			svn diff :比较修改等操作
+
+添加网络打印机：
+	添加smb，windows共享打印机：
+		sudo lpadmin -p name_of_printer -E -v url -m everywhere
+
+	此时会在系统设置的打印机中出现一个myprinter，然后双击其属性，配置远程打印机及驱动。
+
+计算器：
+	gnome-calculater
+
+libreoffice:
+	办公软件
+	localc	=excel
+	lowriter=word
+	lodraw
+	loweb
+	lomath
+	loimpress	=powerpoint
+
+grub
+	根据需要编辑下列文件: 
+	/etc/default/grub 
+	/etc/grub.d/
+	run update-grub
+
+添加字体：
+	一般linux的字体文件位于 /usr/share/fonts/目录下。
+	将字体文件拷贝到该目录（或新建目录），然后执行
+	mkfontscale,mkfontdir,lc-cache.
+	fc-list :lang=zh可以查看安装的中文字体。
+
+
+字号：
+9小五
+10.5五号
+12小四
+14四号
+15小三
+16三号
+18小二
+22二号
+24小一
+26一号
+
+
