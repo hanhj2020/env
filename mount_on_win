@@ -25,10 +25,12 @@ dst_dir[2]="/home/hanhj/document"
 n=2
 user=hanhj
 passwd=hhj123456
+uid=1000
+gid=1000 
 #执行挂载或卸载
 if [ "$ret" = 'mount' ] ;then
 	for i in `seq $n`;do 
-		sudo mount -t cifs //${src_ip}/${src_dir[$i]} ${dst_dir[$i]} -o user=${user},pass=${passwd},uid=1000,gid=1000,noserverino,vers=1.0
+		sudo mount -t cifs //${src_ip}/${src_dir[$i]} ${dst_dir[$i]} -o user=${user},pass=${passwd},uid=${uid},gid=${gid},noserverino,vers=1.0
 	done
 elif [ "$ret" == 'umount' ];then
 	for i in `seq $n`;do 
@@ -37,7 +39,7 @@ elif [ "$ret" == 'umount' ];then
 elif [ "$ret" == 'remount' ];then
 	for i in `seq $n`;do 
 		sudo umount ${dst_dir[$i]}
-		sudo mount -t cifs //${src_ip}/${src_dir[$i]} ${dst_dir[$i]} -o user=${user},pass=${passwd},uid=1000,gid=1000,noserverino,vers=1.0
+		sudo mount -t cifs //${src_ip}/${src_dir[$i]} ${dst_dir[$i]} -o user=${user},pass=${passwd},uid=${uid},gid=${gid},noserverino,vers=1.0
 	done
 fi
 
