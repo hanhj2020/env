@@ -11,19 +11,30 @@ git 下载：sudo apt-get install git
 		[组名]
 			成员名=value
 			。。。
-		常用的组和成员为：
-		user组：
-			成员：name，email
-		alias组：用于设置简化的命令，方便操作
-			成员：可以自定义比如：
-				co=checkout
-				ci=commit -a -m
-				br=branch
-				st=status
-				...
+		常用的组为：
+		user：
+			name，email
+		alias：用于设置简化的命令，方便操作
+			brief=command
+		例如:
+		[user]
+			name=hanhj 
+			email=zx-jy.com 
+		[alias]
+			co=checkout
+			ci=commit -a -m
+			br=branch
+			st=status
+			...
 	操作：
-		--add name value 增加一个变量，可以不带前面的--add
-		--get name 获得一个变量，可以不带前面的--get 
+		上述配置可以在文本中直接编辑,但是推荐用git config命令来操作
+		--add name value 增加一个变量
+
+			git config --global --add user.name=hanhj 
+			git config --global --add user.email=hanhj@zx-jy.com
+		--get name 获得一个变量
+
+			git config --global --get user.name 
 		--unset name 删除一个变量
 		--remove-section name 删除一个组
 		--rename-section name newname 重命名一个组

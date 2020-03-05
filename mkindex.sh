@@ -6,8 +6,8 @@
 files=`ls --hide=index.html|grep html`
 if [ -z "$files" ];then exit 1;fi
 cat <<eof |tee index.md
-|files|
-
+|文件|
+|:--------|
 eof
 
 for i in $files;do
@@ -16,6 +16,6 @@ for i in $files;do
 ${str}  
 eof
 done
-pandoc index.md -o index.html 
+pandoc index.md -o index.html -c dox.css 
 rm -f index.md
 # vim:tw=72 

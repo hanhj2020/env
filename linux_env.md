@@ -2741,20 +2741,44 @@ gdbtui是一个基于gdb的文本界面环境。
 有界面和无界面方式二者只能选一，如果改动了interfaces文件，有界面方式会关闭自己，显示未托管，除非特地指定managed为true。如果managed设置为true，则interfaces文件无效。
 
 ### 自动插入模块：
-/etc/moudles中写入想要插入的模块，该文件被指向为 /etc/modules-load.d/modules.conf 。
+- 配置文件
+
+		/etc/moudles
+	在该文件中写入想要插入的模块，则会自动装载模块。该文件被指向为 /etc/modules-load.d/modules.conf 。
 
 ### adsl 拨号上网：
-基本工具是pppoe
-	在ubuntu中的配置工具是采用ponconf。
-	ubuntu：
-	sudo pppoeconf 用来配置pppoe ，会弹出文本界面自动扫描当前网卡，提示输入你的adsl用户名和密码，询问是否开机自动启动连接。设置最后提示是否现在使用，同意后就能使用网络了。
-	手动建立adsl连接命令是sudo pon dsl-provider，断开连接命令是sudo poff dsl-provider。
-	为了建立dns，可以下载dhcpcd:sudo apt install dhcpcd .
-	redhat：
-	配置命令是adsl-setup,启动命令是adsl -start，停止命令是adsl -stop，可以在启动命令中加入adsl用于自动建立连接。
-修改主机名：
-	hotnamectl set-hostname=xxx
-	注意同时要修改/etc/hosts文件，将其中的主机名修改，否则配置网络时会报“无法解析主机”的错误。
+- ubuntu：  
+	- 配置	
+
+			sudo pppoeconf 
+		用来配置pppoe。弹出文本界面自动扫描当前网卡，提示输入你的adsl用户名和密码，询问是否开机自动启动连接。设置最后提示是否现在使用，同意后就能使用网络了。
+	- 建立连接
+	
+			sudo pon dsl-provider，
+			sudo poff dsl-provider。断开连接
+	- 建立dns
+		可以下载dhcpcd:
+		
+			sudo apt install dhcpcd .
+- redhat：
+	- 配置
+		
+			adsl-setup
+	- 建立连接
+			
+			adsl -start
+			adsl -stop 停止。
+
+##  修改主机名
+- 配置文件 
+
+		/etc/hostname
+		/etc/hosts  
+- 相关命令		
+	
+		hotnamectl set-hostname=xxx
+
+注意同时要修改/etc/hosts文件，将其中的主机名修改，否则配置网络时会报“无法解析主机”的错误。
 
 ## rinetd:
 - 用途：一个端口映射工具

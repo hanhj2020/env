@@ -11,18 +11,34 @@ dialog --title "挂载或卸载远程机器的硬盘?"	\
 		--menu "$result" 20 50 7 \
 			"mount" "mount dell machine hard disk" \
 			"umount" "umount dell machine hard disk" \
+			"remount" "remount dell machine hard disk" \
 2>/tmp/tmp.$$
 ret=`cat /tmp/tmp.$$`
 rm -f /tmp/tmp.$$
 
 clear
+src_ip=192.168.15.62
+src_dir[1]="share_doc"
+dst_dir[1]="/home/hanhj/share_doc"
+src_dir[2]="document"
+dst_dir[2]="/home/hanhj/document"
+n=2
+user=hanhj
+passwd=hhj123456
 #执行挂载或卸载
 if [ "$ret" = 'mount' ] ;then
-	sudo mount -t cifs //192.168.0.103/document /home/hanhj/share_doc -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
-	sudo mount -t cifs //192.168.0.103/down /home/hanhj/win_download -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
+	for i in `seq $n`;do 
+		sudo mount -t cifs //${src_ip}/${src_dir[$i]} ${dst_dir[$i]} -o user=${user},pass=${passwd},uid=1000,gid=1000,noserverino,vers=1.0
+	done
 elif [ "$ret" == 'umount' ];then
-	sudo umount /home/hanhj/share_doc
-	sudo umount /home/hanhj/win_download
+	for i in `seq $n`;do 
+		sudo umount ${dst_dir[$i]}
+	done
+elif [ "$ret" == 'remount' ];then
+	for i in `seq $n`;do 
+		sudo umount ${dst_dir[$i]}
+		sudo mount -t cifs //${src_ip}/${src_dir[$i]} ${dst_dir[$i]} -o user=${user},pass=${passwd},uid=1000,gid=1000,noserverino,vers=1.0
+	done
 fi
 
 ret=`findmnt |grep "share_doc" `

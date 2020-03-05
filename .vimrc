@@ -183,6 +183,8 @@ func! CompileRunGcc()
 	elseif &filetype == 'py'
 		exec "!python %"
 		exec "!python %<"
+	else 
+		exec "!make"
 	endif
 endfunc
 "C,C++的调试
