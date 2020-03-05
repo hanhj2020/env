@@ -194,9 +194,7 @@ ctrl+prtsc 全屏截取到剪切板
    
 
 ##chmod
-- 用途:  
-改变文件权限属性
-
+- 用途: 改变文件权限属性
 - 调用格式:
 
 		chmod xxx file
@@ -260,8 +258,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	　　某个文件a.c,该文件的所有者和组是hanhj。chmod o-r-w-x a.c去掉other的所有权限，这样其他用户就不能使用这个文件。编译一个程序xx打开a.c文件,xx的所有者和组是hanhj。如果对这个程序不加s权限chmod u+s xx ,则当其他用户tom执行这个程序的时候，他的身份是tom，他不能打开a.c文件，因为它属于other组，没有读写a.c文件的权限。但是如果将xx程序加上suid权限，则tom执行这个xx程序的时候就变成hanhj，则它可以打开a.c文件。  
 
 ##umask
-- 用途：  
-用于设置权限掩码。
+- 用途：用于设置权限掩码。
 - 调用格式：
 
 		umask xxx
@@ -270,15 +267,13 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	如：`umask=0002`，则创建新文件夹的权限为777-0002=775，普通文件的权限是666-0002=664（执行权限不用umask来设置，因为此设置会影响系统安全）。
 
 ## findmnt 
-- 用途：  
-	列出当前已经挂载的设备
+- 用途：列出当前已经挂载的设备
 - options:  
 	- -t fs_type
 
 ## lsblk
 		
-- 用途：  
-	列出系统中的块设备信息。
+- 用途：列出系统中的块设备信息。
 - 调用格式:
 
 		lsblk [option] [device]
@@ -286,8 +281,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	- -o UUID 
 
 ## blkid
-- 用途：  
-	显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
+- 用途：显示系统中块设备的名字.常用来已知设备名，需要了解如uuid等信息。
 - 调用格式
 
 		blkid options device
@@ -296,8 +290,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	- -i info 
 
 ## dd
-- 用途：  
-	文件拷贝和转换命令。
+- 用途：文件拷贝和转换命令。
 - 调用格式 
 
 		dd if=xxx of=xxx bs=xx count=xx
@@ -375,8 +368,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 				
 
 ##网络共享
-- 用途：  
-	将网络上的文件在局域网内共享。
+- 用途：将网络上的文件在局域网内共享。
 - 用samba来共享:
 
 	samba是一种基于smb/cifs协议的提供网络文件共享服务.其客户端被windows,linux所支持。
@@ -508,9 +500,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 			举例 mount -t nfs 192.168.15.23 /mnt/tmp -o nolock ,intr,rsize=1024,wsize=1024 
 	
 ## tftp
-- 用途:  
-	通过TFTP协议传输文件
-
+- 用途:	通过TFTP协议传输文件
 - 服务器：    
 	1. 启动服务器：
 
@@ -529,8 +519,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 			
 ##ls
 			
-- 用途：  
-	显示目录内容
+- 用途：显示目录内容
 - 调用格式：
 
 		ls [options] [file]
@@ -604,8 +593,7 @@ ls -d */ 仅显示当前目录下的目录
 - 用途:显示路径的实际物理路径，将链接转换成实际的物理路径
 
 ##cp 
-- 用途： 
-	复制文件
+- 用途：复制文件
 - 调用格式:
 	
 		cp [选项] [参数]
@@ -629,17 +617,14 @@ ls -d */ 仅显示当前目录下的目录
 	- -f 表示不提示用户
 	
 ##scp 
-- 用途  
-	远程复制文件
+- 用途:	远程复制文件
 - 调用格式 
 
 		cp src_file dest_file
 		xample scp hanhj@192.168.15.23:/home/hanhj/.vimrc .
 
 ##mv 
-- 用途：  
-	移动文件
-
+- 用途：移动文件
 - 调用格式:
 
 		mv [选项] [参数]
@@ -652,8 +637,7 @@ ls -d */ 仅显示当前目录下的目录
 	
 
 ##pwd 
-- 用途  
-	打印当前工作目录
+- 用途:	打印当前工作目录
 - 调用格式：
 
 		pwd [options]
@@ -663,8 +647,7 @@ ls -d */ 仅显示当前目录下的目录
 	- -P 显示绝对路径 
 
 ##df   
-- 用途：  
-	显示当前磁盘使用情况
+- 用途：显示当前磁盘使用情况
 - 调用格式：
 	
 		df [options]
@@ -672,8 +655,7 @@ ls -d */ 仅显示当前目录下的目录
 	- -h 按照人可阅读显示
 
 ##du 
-- 用途  
-	显示目录占用磁盘情况
+- 用途:	显示目录占用磁盘情况
 - 调用格式：
 
 		du [options]
@@ -686,8 +668,7 @@ ls -d */ 仅显示当前目录下的目录
 	- -c 统计总量
 
 ##who  
-- 用途
-	显示当前用户
+- 用途:显示当前用户
 - 调用格式：
 
 		who [options]
@@ -696,8 +677,7 @@ ls -d */ 仅显示当前目录下的目录
 
 
 ##sudo 
-- 用途   
-	以超级用户身份运行
+- 用途:以超级用户身份运行
 - 调用格式
 
 		sudo [options]]  命令 
@@ -729,8 +709,7 @@ ls -d */ 仅显示当前目录下的目录
 		%admin ALL=(ALL) ALL
 	
 ##rm
-- 用途  
-	删除文件  
+- 用途:删除文件  
 - 调用格式:
 
 		rm [选项] [参数]
@@ -742,8 +721,7 @@ ls -d */ 仅显示当前目录下的目录
 	
 
 ##rmdir 
-- 用途  
-	删除空目录
+- 用途:删除空目录
 - 调用格式:
 
 		rmdir [选项] [参数]
@@ -1122,13 +1100,13 @@ ls -d */ 仅显示当前目录下的目录
 	
 
 ##ps：
-- 用途 显示当前进程
+- 用途:显示当前进程
 - 选项：
 	- -e	显示全部进程
 	- -all	显示详细内容
 
 ##set：
-- 用途 查看本地定义的变量
+- 用途:查看本地定义的变量
 
 
 ##unset 
@@ -1251,11 +1229,13 @@ vim的参见:h regular
 	`grep "return 0" dir -r --include=*.cpp --include=*.h`  
 	
 ##| 管道
-	将前一个程序的标准输出作为下一个程序的标准输入
-	linux中的许多程序将标准输入（比如控制台的键盘）作为输入。其输出为标准输出（比如控制台的屏幕）。管道即将二者连接起来。
-	举例：
-		 set | grep ...
-	　　 grep可以使用正则表达式。如果想获得逻辑与的结果，举例查看某个文件中包括“字串1”和“字串2”的内容的行： 
+- 用途:将前一个程序的标准输出作为下一个程序的标准输入  
+	linux中的许多程序将标准输入（比如控制台的键盘）作为输入。其输出为标准输出（比如控制台的屏幕）。管道将二者连接起来,前一个程序的输出作为后一个程序的输入.	例如:  
+	在环境变量中查找是否有包含abc的内容.
+	
+		set | grep abc:
+	查看某个文件中包括“字串1”和“字串2”的内容的行： 
+
 	　　`cat search.txt|grep "xxxx1"|grep "xxxx2"`
 
 		
@@ -1712,6 +1692,11 @@ uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而s
 	- -r 显示核心版本,
 	- -a 显示全部;
 
+另外显示版本号程序
+
+	cat /proc/version 
+	lsb_release 
+			 
 ##history 
 - 用途:　显示输入过的命令
 - 配置  
@@ -1962,23 +1947,24 @@ apt可以认为等同与apt-get
 	- -x :解压一个deb文件 
 	- -I :显示一个deb文件信息
 
-制作一个my-app软件安装包；
+**制作软件安装包**  
+1. 首先创建以这个软件为名的目录,例如myapp。   
+2. 将所需要安装的软件相关文件拷贝到这个目录中，这个目录是所安装系统的根目录。  
+3.  在这个目录下创建DEBIAN目录，在这个目录中创建control文件，作为dpkg创建deb文件的信息，内容如下： 
 
-> 首先创建以这个软件为名的目录  
-> 然后将所需要安装的软件相关文件拷贝到这个目录中，这个目录是所安装系统的根目录。  
-> 在这个目录下创建DEBIAN目录，在这个目录中创建control文件，作为dpkg创建deb文件的信息，内容如下： 
->
-> 		Package:my-app  
-> 		version: 1.4.0  
-> 		architecture:i386  
-> 		installed-size:4096  
-> 		maintainer:gatieme  
-> 		provides:bioinfoserv-arb  
-> 		description: this is my-app   
-> 		section:bioinfoserv-arbserv  
-> 		depends:  
-> 		suggests:  
-> 然后执行：dpkg -b my-app 
+	Package:myapp  
+	version: 1.4.0  
+	architecture:i386  
+	installed-size:4096  
+	maintainer:gatieme  
+	provides:bioinfoserv-arb  
+	description: this is my-app   
+	section:bioinfoserv-arbserv  
+	depends:  
+	suggests:  
+4. 执行：
+
+	dpkg -b myapp 
 
 ## dpkg-query  
 - 用途：软件包查询工具
@@ -2877,92 +2863,100 @@ app目录放置应用程序，lib放置一些库，tools放置一些工具程序
 	iconv -l :list all support code
 	icov -f CN-GB -t utf-8 a.txt -o a.txt.utf8
 	
-##file 显示文件编码信息
-	-i 按照mime形式显示
+##file 
+- 用途:显示文件编码信息
+- 选项
 
-##pdftk：合并切割pdf
+	- -i 按照mime形式显示
 
 ##pandoc:
-	将markdown格式的文本转换成其他格式的文本.
+- 用途:将markdown格式的文本转换成其他格式的文本.
+- 调用格式:
+
+		pandoc -f 源文档格式 -t 目标文档格式 -o 输出文件 输入文件 
 
 ##svn
-	版本库
-	svnserve 服务端
-	调用格式：
-		svnserve [options] reposdir
-	选项：
-		-d	daemon 
-		-r	root dir 
-	svn	客户端
-	调用格式
-		svn <command> [args]
-	command:
-		add			:add file into repos 
-		commit(ci)	:提交
-		checkout(co):检出。
-		list(ls) 	:列出文件，只有一级目录,
-		info		:显示版本库信息
-		diff		：显示修改
-	
+- 用途:版本库,类似git。工具为subversion。
+- 服务端  
+	- 调用格式：
+
+			svnserve [options] reposdir
+		选项：  
+		- -d	daemon 
+		- -r	root dir 
+- 客户端  
+	- 调用格式
 		
-	服务端：
-		如果没有svn工具，首先要下载subversion
-		创建一个新仓库：
-			举例在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2
-			1.	建立仓库根目录：cd ~ && mkdir svn 
-			2.	创建两个仓库：svnadmin create svn/test1 && svnadmin create  svn/test2。
-			3.	启动svn服务器：svnserve -d -i /home/hanhj/svn 
-			这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
-		挂载原仓库：
-			svnserve -d -r 原仓库的位置
+			svn <command> [args]
+	- command:   
+		- add			:add file into repos 
+		- commit(ci)	:提交
+		- checkout(co):检出。  
+			检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
+		- list(ls) 	:列出文件，只有一级目录,
+		- info		:显示版本库信息
+		- diff		：显示修改
+	
+- 创建一个新仓库：  
+	在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2  
+	1.	建立仓库根目录：
+			
+			cd ~ && mkdir svn 
+	2.	创建两个仓库：
+	
+			svnadmin create svn/test1 && svnadmin create  svn/test2。
+	3.	启动svn服务器：
+	
+			svnserve -d -i /home/hanhj/svn 
+	这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
 
-	客户端：
-		如果没有svn工具，首先要下载subversion
-		检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
-		修改后，可以用
-			svn add:添加文件
-			svn ci -m ""：提交修改
-			svn diff :比较修改等操作
+- 挂载原仓库：
 
-添加网络打印机：
+		svnserve -d -r 原仓库的位置
+
+
+## lpdadmin
+- 用途:添加网络打印机  
 	添加smb，windows共享打印机：
+
 		sudo lpadmin -p name_of_printer -E -v url -m everywhere
+此时会在系统设置的打印机中出现一个myprinter，然后双击其属性，配置远程打印机及驱动。
 
-	此时会在系统设置的打印机中出现一个myprinter，然后双击其属性，配置远程打印机及驱动。
+##	gnome-calculater
+- 用途:计算器
 
-计算器：
-	gnome-calculater
+## libreoffice:
+- 用途:办公软件  
+	- localc	=excel
+	- lowriter=word
+	- lodraw
+	- loweb
+	- lomath
+	- loimpress	=powerpoint
 
-libreoffice:
-	办公软件
-	localc	=excel
-	lowriter=word
-	lodraw
-	loweb
-	lomath
-	loimpress	=powerpoint
+## grub  
+- 用途:多系统启动
+- 配置  
+	根据需要编辑下列文件:   
 
-grub
-	根据需要编辑下列文件: 
-	/etc/default/grub 
-	/etc/grub.d/
-	run update-grub
+		/etc/default/grub  
+		/etc/grub.d/  
+		run update-grub  
 
-添加字体：
-	一般linux的字体文件位于 /usr/share/fonts/目录下。
-	将字体文件拷贝到该目录（或新建目录），然后执行
-	mkfontscale,mkfontdir,lc-cache.
-	fc-list :lang=zh可以查看安装的中文字体。
+## 添加字体： 
+一般linux的字体文件位于 /usr/share/fonts/目录下。  
+将字体文件拷贝到该目录（或新建目录），然后执行  
 
-
-字号：
-9小五
-10.5五号
-12小四
-14四号
-15小三
-16三号
-18小二
-22二号
-24小一
+	mkfontscale,mkfontdir,lc-cache.  
+	fc-list :lang=zh可以查看安装的中文字体。  
+字号：  
+9小五  
+10.5五号  
+12小四  
+14四号  
+15小三  
+16三号  
+18小二  
+22二号  
+24小一  
 26一号
