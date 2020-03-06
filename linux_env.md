@@ -1985,102 +1985,6 @@ apt可以认为等同与apt-get
 ## snap  
 - 用途：另外一个软件包命令行
 
-##wget 
-- 用途：从远程网站下载文件
-- 调用格式：
-
-		wget [options] url 
-- 选项  
-	- -r 递归 
-	- -c 断点续传
-	- -p 下载图片
-	- -e 执行命令，如果远方网站有robots.txt里面有disallow的字眼，表示不能自动下载，这时可以用-e robots=off 来关掉此限制。
-
-##nc 
-- 用途：网络调试工具
-- 调用格式
-
-		nc [options] 
-		server:服务端
-			nc -l [ip] port ;ip不写默认是本地任选ip地址
-		client:客户端
-			nc ip port 
-- 选项：			
-	- -s ：设定socket中发送地址source ip，不能与-l同时使用
-	- -S ：enable rfc 2385 tcp md5 signature option
-	- -z ：scan listening daemons
-	- -u ：udp
-	- -p ：source port 
-	- -l ：listening
-	- -O ：specifies output size
-	- -I ：specifiles input size
-	- -4 ：use ipv4
-	- -6 ：use ipv6
-
-下面的命令可以将命令到服务端，并将执行结果返回到客户端
-
-- 服务端：
-
-		 rm -f /tmp/f   
-		 mkfifo /tmp/f  
-		 cat f|sh -i 2>&1|nc -l port >f  
-- 客户端:  
-
-		 nc ip port   
-这时，客户端提示符为$，可以输入举例ls，cd等命令。ctrl-d退出。  
-
-##tcpdump 
-- 用途：网络抓包工具
-- 调用格式：
-
-		tcpdump [-i interface] [protocol] [port] 
-		tcpdump tcp port 7998 ;抓取本机默认网卡的上tcp协议中所有端口号为7998的数据包。
-- 选项 
-	- -i 网卡
-	- protocol 协议：ip,tcp,udp,icmp,arp,rarp，eth等
-	- net 网络名，举例 tcpdump net xxx
-	- port 与协议有关，
-	- src 源
-	- dst 目的地，举例tcp src port 7998，ip src 192.168.1.2
-	- host 主机名，举例tcpdump host 192.168.1.2
-	- 逻辑 and，or,!,>,<,==,!   
-		例如不想抓某个ip的包：tcpdump tcp port 7998 and host ! 218.106.89.76。  
-		可以用协议[字节]来获取相应协议的字节，从而达到对内容进行过滤的目的。举例：tcpdump ip[2:2]获取ip包的长度
-	- -w 将原始包写入一个文件以供分析
-	- -W 写入的文件c格式输出
-	- -r 读入一个文件进行分析
-	- -l 一边抓包，一边显示 tcpdump -l |tee dat; tcpdump -l >dat & tail -f dat 
-	- -# 显示包号
-	- -p 取消杂散模式
-	- -t tt ttt tttt ttttt 显示时间格式
-	- -v vv vvv 分析包
-	- -U 一旦有包来了，立即更新写入的文件
-	- -x，-xx，-X，-XX 分析文件
-	- -Z 以某个用户身份使用。
-
-举例：  
-在本机抓取tcp协议的端口号为7998（src and dst），排除218.106.89.76地址，实时写入文件dat。
-
-	tcpdump tcp port 7998 and host not 218.106.89.76 -w dat -U 
-分析文件：
-
-	tcpdump -r dat -X 
-
-tcp格式	
-	
-        0                            15                              31
-       -----------------------------------------------------------------
-       |          source port          |       destination port        |
-       -----------------------------------------------------------------
-       |                        sequence number                        |
-       -----------------------------------------------------------------
-       |                     acknowledgment number                     |
-       -----------------------------------------------------------------
-       |  HL   | rsvd  |C|E|U|A|P|R|S|F|        window size            |
-       -----------------------------------------------------------------
-       |         TCP checksum          |       urgent pointer          |
-       -----------------------------------------------------------------
-
 
 ##apache:
 - 用途：web服务器  
@@ -2599,7 +2503,7 @@ gdbtui是一个基于gdb的文本界面环境。
 		 ***********************************************************************
 		 */
 	 以上都是有效的注释
-4. 运行 doxygen，会自动在doxygen_file目录下产生html和latex目录
+4. 运行 doxygen，会自动在doxygen\_file目录下产生html和latex目录
 
 ##网络配置：
 ### ifconfig
@@ -2618,7 +2522,7 @@ gdbtui是一个基于gdb的文本界面环境。
 	- -allmuti 允许或禁止无区别模式
 	- -promisc 关闭或启动混杂模式
 	-	media 网络媒介10base2,10baseT，100bseT
-	- mem_start 驱动内存开始地址
+	- mem\_start 驱动内存开始地址
 	- mtu 每个包的最大长度
 	- add <地址>配置ipv6地址
 	- del <地址>删除ipv6地址 
@@ -2780,6 +2684,102 @@ gdbtui是一个基于gdb的文本界面环境。
 
 注意同时要修改/etc/hosts文件，将其中的主机名修改，否则配置网络时会报“无法解析主机”的错误。
 
+##wget 
+- 用途：从远程网站下载文件
+- 调用格式：
+
+		wget [options] url 
+- 选项  
+	- -r 递归 
+	- -c 断点续传
+	- -p 下载图片
+	- -e 执行命令，如果远方网站有robots.txt里面有disallow的字眼，表示不能自动下载，这时可以用-e robots=off 来关掉此限制。
+
+##nc 
+- 用途：网络调试工具
+- 调用格式
+
+		nc [options] 
+		server:服务端
+			nc -l [ip] port ;ip不写默认是本地任选ip地址
+		client:客户端
+			nc ip port 
+- 选项：			
+	- -s ：设定socket中发送地址source ip，不能与-l同时使用
+	- -S ：enable rfc 2385 tcp md5 signature option
+	- -z ：scan listening daemons
+	- -u ：udp
+	- -p ：source port 
+	- -l ：listening
+	- -O ：specifies output size
+	- -I ：specifiles input size
+	- -4 ：use ipv4
+	- -6 ：use ipv6
+
+下面的命令可以将命令到服务端，并将执行结果返回到客户端
+
+- 服务端：
+
+		 rm -f /tmp/f   
+		 mkfifo /tmp/f  
+		 cat f|sh -i 2>&1|nc -l port >f  
+- 客户端:  
+
+		 nc ip port   
+这时，客户端提示符为$，可以输入举例ls，cd等命令。ctrl-d退出。  
+
+##tcpdump 
+- 用途：网络抓包工具
+- 调用格式：
+
+		tcpdump [-i interface] [protocol] [port] 
+		tcpdump tcp port 7998 ;抓取本机默认网卡的上tcp协议中所有端口号为7998的数据包。
+- 选项 
+	- -i 网卡
+	- protocol 协议：ip,tcp,udp,icmp,arp,rarp，eth等
+	- net 网络名，举例 tcpdump net xxx
+	- port 与协议有关，
+	- src 源
+	- dst 目的地，举例tcp src port 7998，ip src 192.168.1.2
+	- host 主机名，举例tcpdump host 192.168.1.2
+	- 逻辑 and，or,!,>,<,==,!   
+		例如不想抓某个ip的包：tcpdump tcp port 7998 and host ! 218.106.89.76。  
+		可以用协议[字节]来获取相应协议的字节，从而达到对内容进行过滤的目的。举例：tcpdump ip[2:2]获取ip包的长度
+	- -w 将原始包写入一个文件以供分析
+	- -W 写入的文件c格式输出
+	- -r 读入一个文件进行分析
+	- -l 一边抓包，一边显示 tcpdump -l |tee dat; tcpdump -l >dat & tail -f dat 
+	- -# 显示包号
+	- -p 取消杂散模式
+	- -t tt ttt tttt ttttt 显示时间格式
+	- -v vv vvv 分析包
+	- -U 一旦有包来了，立即更新写入的文件
+	- -x，-xx，-X，-XX 分析文件
+	- -Z 以某个用户身份使用。
+
+举例：  
+在本机抓取tcp协议的端口号为7998（src and dst），排除218.106.89.76地址，实时写入文件dat。
+
+	tcpdump tcp port 7998 and host not 218.106.89.76 -w dat -U 
+分析文件：
+
+	tcpdump -r dat -X 
+
+tcp格式	
+	
+        0                            15                              31
+       -----------------------------------------------------------------
+       |          source port          |       destination port        |
+       -----------------------------------------------------------------
+       |                        sequence number                        |
+       -----------------------------------------------------------------
+       |                     acknowledgment number                     |
+       -----------------------------------------------------------------
+       |  HL   | rsvd  |C|E|U|A|P|R|S|F|        window size            |
+       -----------------------------------------------------------------
+       |         TCP checksum          |       urgent pointer          |
+       -----------------------------------------------------------------
+
 ## rinetd:
 - 用途：一个端口映射工具
 - 配置
@@ -2787,6 +2787,77 @@ gdbtui是一个基于gdb的文本界面环境。
 	文件内容为：  
 	绑定地址 绑定端口 发送地址 发送端口  
 	0.0.0.0 1234 192.168.1.23 1234 
+
+## netstat 
+- 用途:查看网络情况
+- 调用格式:
+	
+		netstat [options]
+- options
+
+	- -a 所有 
+	- -n 显示端口号 
+	- -t tcp 
+	- -u udp 
+	- -p 查询占用的程序 
+	- -l 正在监听的程序 
+
+## nmap
+- 用途:网络探测和安全审核工具
+- 调用格式:
+
+		nmap   [options] target
+- scan type  
+	- -A scand all 
+	- -O os dection
+	- -T[0-6] set timeing template(higer is faster)
+
+## iptables
+- 用途:设置ip包过滤 
+- 调用格式:
+
+		iptable [-t table] [command] [options] [rule]
+- table 
+	- there are five type of table  
+		filter  
+		nat  
+		mangle  
+		raw  
+		security
+- command   
+	- -A append 
+	- -C check 
+	- -D delete
+- options  
+	- -4 ipv4 
+	- -6 ipv6 
+	- [!] -p protocol :tcp,udp,icmp .. all
+	- [!] -d destination 
+
+example:
+
+	iptable -A INPUT -p tcp --d 1234 -j DROP  禁止端口1234 入
+	iptable -A OUTPUT -p tcp --d 1234 -j DROP 禁止端口1234 出
+
+## lsof 
+- 用途:list open file 
+- 调用格式:
+	
+		lsof [options]
+- options
+	- -itypeselect the listing of files any of whose Internet address matches the address specified in i.
+		[46][protocol][@hostname|hostaddress][:service|port]	
+		-i4 ipv4  
+		-i6 ipv6  
+		protocol tcp,udp 
+- 配置文件 
+
+	/etc/service 配置的端口服务
+
+example:
+
+	lsof -i:1234 
+list file on 1234 port 
 
 ## pdftk 
 - 用途：将多个pdf文件连接成一个文件
@@ -2808,7 +2879,7 @@ gdbtui是一个基于gdb的文本界面环境。
 ##连接库
 编译程序时，往往涉及到库的路径问题，可以采用：
 
-1. 修改LD_LIBRARY_PATH变量方式，修改环境变量的方法参见export说明。
+1. 修改LD\_LIBRARY\_PATH变量方式，修改环境变量的方法参见export说明。
 2. 修改  /etc/ld.so.conf.d/下面文件，将需要的路径添加进来。
 
 ##bash脚本执行

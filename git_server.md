@@ -302,39 +302,27 @@ make的时候有可能会找不到zlib头文件，可以执行：
 	enable-index-owner=1
 	enable-log-filecount=1
 	enable-log-linecount=1
+	snapshots=zip
+	section-from-path=1
 	#title
 	root-title=hanhj.com git repositories
 	#desc
 	root-desc=Git repositories hosted at hanhj.com
 	source-filter=/usr/local/lib/cgit/filters/syntax-highlighting.sh
- scan-path 表示自动搜索git仓库所在目录  
-	
- 原来可以起作用的配置  
- 
+	#scan-path 表示自动搜索git仓库所在目录  
+	scan-path=/home/git/repositories
+	#如果手动添加仓库可以用include包括一个仓库列表进来
+	include=/home/git/repositories/cgitrepos
 
-	apache2的配置文件  
-	Alias /cgit /usr/share/cgit   
-	<Directory /usr/share/cgit>   
-		AllowOverride None  
-		Options +ExecCGI  
-		Order allow,deny  
-		DirectoryIndex /cgit/cgit.cgi  
-		Allow from all  
-		AddHandler cgi-script .cgi   
-	 </Directory>  
-	 cgit的配置文件  
-	 在/etc目录下添加cgitrc文件。文件内容如下：  
-	 css=/cgit/cgit.css   
-	 logo=/cgit/cgit.png   
-	 robots=noindex,nofollow   
-	 scan-path=/home/git   
-	 #repo.url=test.git   
-	 #repo.path=/home/git/test.git   
-	 #repo.desc=ggg   
-	 #repo.owner=hanhj  
-	如果要手工配置仓库则添加被注释掉的repo配置
-   
- 
+cgitrepos文件内容如下:
+
+	section=app 
+	repo.url=dtu-c
+	repo.path=/home/git/repositories/apps/dtu-c.git
+	repo.desc=distribution terminal 
+	repo.owner=hanhj
+
+	
 
  重新启动apache：
 
