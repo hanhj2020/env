@@ -20,7 +20,12 @@ body>*:last-child {
   margin-bottom: 0 !important;
 }
 H1 {
+	font-family:仿宋_GB2312
     text-align: center;
+}
+H2 {
+	font-family:仿宋_GB2312
+	font-weight: bold;
 }
 A.qindex {}
 A.qindexRef {}

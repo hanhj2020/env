@@ -296,8 +296,6 @@ make的时候有可能会找不到zlib头文件，可以执行：
 	#css logo.
 	css=/cgit.css
 	logo=/cgit.png
-	#project
-	scan-path=/home/git/repositories
 	enable-index-links=1
 	enable-index-owner=1
 	enable-log-filecount=1
