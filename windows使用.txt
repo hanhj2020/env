@@ -67,5 +67,16 @@ windows使用技巧
 	vboxmanage internalcommands createrawvmdk -filename xx.vmdk -rawdisk \\.\physicaldriveX
 	这里X是插入U盘后，所看到的磁盘号。0,1,2,3...
 	将此文件作为磁盘设备加载。然后按照磁盘，光驱顺序启动。
+
+8 关掉一个程序
+	taskkill xx 
+		/f force
+		/fi filter
+		/im	image name 
+		/t tree all 
+		
+		taskkill /F /im notepad.exe /im mspaint.exe 
+	net stop service
+
 	
 	

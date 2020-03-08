@@ -1,0 +1,44 @@
+do_start(){
+	ret=1;
+	pid=`pgrep svnserve`
+	if [ ! -z $pid ];then
+		echo "svnserve is exist"
+		return $ret;
+	fi
+	svnserve -d -r /home/git/svn 
+	pid=`pgrep svnserve`
+	echo $pid>/tmp/svn.pid 
+	if [ ! -z "$pid" ];then
+		ret=0;
+	else
+		ret=1;
+	fi
+	return $ret
+}
+do_stop(){
+	if [ ! -f /tmp/svn.pid ];then
+		return 2;
+	fi
+	pid=`cat /tmp/svn.pid`;
+	if [ ! -z "$pid" ];then
+		kill $pid
+		rm -f /tmp/svn.pid
+	fi
+	return $?
+}
+case "$1" in
+	start)
+		do_start
+		exit $?
+		;;
+	stop)
+		do_stop
+		exit $?
+		;;
+	restart)
+		do_stop 
+		do_start
+		exit $?
+		;;
+esac
+

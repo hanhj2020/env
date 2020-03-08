@@ -1343,33 +1343,6 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	
 ## 6.系统管理
 
-### lpdadmin
-- 用途:添加网络打印机  
-	添加smb，windows共享打印机：
-
-		sudo lpadmin -p name_of_printer -E -v url -m everywhere
-此时会在系统设置的打印机中出现一个myprinter，然后双击其属性，配置远程打印机及驱动。
-
-### 添加字体： 
-一般linux的字体文件位于 /usr/share/fonts/目录下。  
-将字体文件拷贝到该目录（或新建目录），然后执行  
-
-	mkfontscale,mkfontdir,lc-cache.  
-	fc-list :lang=zh可以查看安装的中文字体。  
-
-|数字字号|字号|
-|:----|:----|
-|9 |小五|  
-|10|五号|  
-|12|小四|  
-|14|四号|  
-|15|小三|  
-|16|三号|  
-|18|小二|  
-|22|二号|  
-|24|小一|  
-|26|一号|
-
 ### grub  
 - 用途:多系统启动
 - 配置  
@@ -1378,6 +1351,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 		/etc/default/grub  
 		/etc/grub.d/  
 		run update-grub  
+
 ### uname
 - 用途:显示系统版本
 - 选项   
@@ -1456,7 +1430,32 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	用户的crontab放置在/var/spool/cron/crontabs/user文件下  
 	系统的cron放置在/etc/cron/crontab,/etc/cron.d/ 下
 
+### lpdadmin
+- 用途:添加网络打印机  
+	添加smb，windows共享打印机：
 
+		sudo lpadmin -p name_of_printer -E -v url -m everywhere
+此时会在系统设置的打印机中出现一个myprinter，然后双击其属性，配置远程打印机及驱动。
+
+### 添加字体： 
+一般linux的字体文件位于 /usr/share/fonts/目录下。  
+将字体文件拷贝到该目录（或新建目录），然后执行  
+
+	mkfontscale,mkfontdir,lc-cache.  
+	fc-list :lang=zh可以查看安装的中文字体。  
+
+|数字字号|字号|
+|:----|:----|
+|9 |小五|  
+|10|五号|  
+|12|小四|  
+|14|四号|  
+|15|小三|  
+|16|三号|  
+|18|小二|  
+|22|二号|  
+|24|小一|  
+|26|一号|
 
 ### 开机服务程序 
 - 系统的启动模式： 
@@ -1549,6 +1548,37 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 - 用途：用来控制一些系统参数
 - 选项   
 	- -a 显示所有系统参数
+
+### kill 
+- 用途：杀死进程
+- 调用格式：
+
+		kill [options] <pid>
+- options
+
+	- -signal 发送的信号。默认是发送SIGKILL，-9。
+	- -s signal 发送的信号。用字符形式。
+	- -L/l 列出可以发送的信号。
+- pid 
+	发送给的进程pid号，-1代表所有进程。
+
+例如：
+
+	kill -9 123
+
+### 获取进程号
+
+- pidof command
+
+		pidof sshd
+- ps
+	
+		ps -e |grep sshd|awk '{print $1}'
+- pgrep
+
+		pgrep command 
+		see also
+			pkill command 
 
 ## 7.内部命令
 ### history 

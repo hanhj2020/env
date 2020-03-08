@@ -719,10 +719,6 @@ ctrl-d	结束输入
 			:expression1 and expression2 is true 
 		expression1 -o expression2 
 			:expression1 or expression2 is true 
-		-n string 
-			:the length of string is not zero
-		-z string 
-			:the length of string is zero 
 		string1 = string 2 
 			:the strings are equal
 		string1 != string2 
@@ -739,10 +735,24 @@ ctrl-d	结束输入
 			:number1 > number2
 		number1 -lt number2
 			:number1 < number2
-		-d file 判断file是否是目录
-		-e file 判断file是否存在
-		-r file 判断file是否可读
-		-w file 判断file是否可写
+		-n string :length of string is nozero
+		-z string :length of string is zero 
+		-a	file:文件是否存在  
+		-b	file:是否是块设备  
+		-c  file:是否是字符设备
+		-d	file:是否是目录  
+		-e	file:文件是否存在  
+		-f	file:文件是否存在,且是都是一般文件  
+		-g	file:文件是否存在,且具有groupid  
+		-h	file:文件是否存在,且是个连接  
+		-o	file:文件是否存在,且被有效拥有.  
+		-p	file:文件是否存在,且是个fifo  
+		-s	file:文件大小为0  
+		-S	file:文件是否存在,且是个socket  
+		-r	file:是否可读  
+		-t  fd	:文件描述符是否在一个终端上被打开
+		-w	file:是否可写  
+		-x	file:是否可执行  
 		等等
 		注意1：条件判断符两边也要有空格分开。比如：
 		[ $a = a ]
