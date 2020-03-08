@@ -2561,6 +2561,26 @@ apt可以认为等同与apt-get
 	 - apache2.conf   
 		可以用来配置除了以上分开的配置文件未配置的内容；
 
+### a2enmod/a2dismod
+- 用途：使能apache的模块
+- 调用格式：
+
+		a2enmod mod_name
+
+例如：
+	
+	a2enmod dav-svn
+
+### a2enconf/a2disconf
+- 用途：使能apache的配置文件
+- 调用格式：
+
+		a2enconf mod_name
+
+例如：
+	
+	a2enconf dav-svn
+
 ### wiki  
 - 用途：wiki is a php program with database,so it use apache,php and mysql(or other database)
 - 安装  
