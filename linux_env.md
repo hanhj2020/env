@@ -1043,44 +1043,62 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	使用touch命令可以创建新文件. touch newfile
 
 ## 4.用户
-### 用户设置
 
 用户信息保存在/etc/passwd中   
 用户组信息保存在/etc/group中  
 
-- 用户   
-	- useradd增加用户  
-		- -m 会在home目录下添加用户的目录  
-		- -g gid 设置用户组号  
-		- -u uid 设置用户号  
+### useradd
+- 用途：增加用户  
+	- -m 会在home目录下添加用户的目录  
+	- -g gid 设置用户组号  
+	- -u uid 设置用户号  
 		默认的会添加与用户名相同的用户组。  
 	
-	- adduser 增加用户	
-	- deluser 删除用户  
-		- --remove-home删除home目录下的用户目录  
-	- usermod 修改用户信息，包括密码，  
-		但是最好不要用此命令修改密码，因为会导致影子文件中的密码是明文。/etc/shadow  
-	- passwd 用来修改用户密码  
-		- -l 锁定用户，即禁止用户
-		- -u 解锁用户  
-		通过usermod -L/U可以同样达到此目的
-- 组用户  
-	直接查看/etc/group文件，可以看到组成员情况。  
-	- groupadd 添加用户组  
-		- 调用格式：
-				
-				groupadd [options] group
-		- options 
-			- -g gid 设置用户组号
-	- groupmod 修改用户组
-	- groupdel 删除用户组
-	- gpasswd 组用户操作
-		- 调用格式  
+### adduser 
+- 用途：增加用户	
+	要求输入密码，建立己目录
 
-				gpasswd [options] user group
-		- options  
-			- -a 添加用户到组中
-			- -d 从组中删除用户
+### deluser 
+- 用途：删除用户  
+- 选项  
+	- --remove-home删除home目录下的用户目录  
+
+### usermod 
+- 用途：修改用户信息，包括密码，  
+	但是最好不要用此命令修改密码，因为会导致影子文件中的密码是明文。/etc/shadow  
+- 选项：  
+	- -L ：lock user 
+	- -U ：unlock user 
+
+### passwd 
+- 用途：修改用户密码  
+- 选项  
+	- -l 锁定用户，即禁止用户
+	- -u 解锁用户  
+
+### groupadd 
+- 用途：添加用户组  
+- 调用格式：
+		
+		groupadd [options] group
+- options 
+	- -g gid 设置用户组号
+
+###	 groupmod 
+- 用途：修改用户组
+
+### groupdel   
+- 用途：删除用户组
+
+### gpasswd   
+- 用途：组用户操作
+- 调用格式  
+
+		gpasswd [options] user group
+- options  
+	- -a 添加用户到组中
+	- -d 从组中删除用户
+
 ### who  
 - 用途:显示当前用户
 - 调用格式：
@@ -1120,8 +1138,9 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 			举例上面的命令表示 接受来自各种主机的hantmp用户，其目标用户为所有，可以执行各种命令。
 		
 		# Members of the admin group may gain root privileges
-		%admin ALL=(ALL) ALL
-### 磁盘管理
+		%admin ALL=(ALL) ALL 
+		
+## 5.磁盘管理
 ### findmnt 
 - 用途：列出当前已经挂载的设备
 - options:  
@@ -1243,7 +1262,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	- -B 按照指定大小统计
 	- -c 统计总量
 
-## 5.压缩
+## 6.压缩
 ### tar
 - 用途：压缩文件	
 - 调用格式:
@@ -1341,7 +1360,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	.rar			rar a zipfile files		unrar x zipfile [-d]
 	.zip			zip zipfile files		unzip zipfile [-d] 
 	
-## 6.系统管理
+## 7.系统管理
 
 ### grub  
 - 用途:多系统启动
@@ -1580,7 +1599,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 		see also
 			pkill command 
 
-## 7.内部命令
+## 8.内部命令
 ### history 
 - 用途:　显示输入过的命令
 - 配置  
@@ -1670,7 +1689,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 	在bash中启动一个程序时，bash一般会启动一个新的bash，然后再新的bash中执行该程序。在新的bash中会继承父bash的环境变量，但是不会继承临时变量。子bash中可以设置环境变量，但是退出时，此环境变量丢失，不会影响父bash。  
 	如果用source来执行程序，则bash会在当前bash中执行程序，所以在程序中如果设置环境变量，则当前环境中的环境变量将发生改变。
 
-## 8.网络
+## 9.网络
 ### ifconfig
 - 用途：启停网络设备，配置ip地址（临时的），子网掩码，
 - 调用格式
@@ -2154,7 +2173,7 @@ example:
 
 			tftp ip -p -l file
 
-## 9.编程相关
+## 10.编程相关
 
 ###连接库
 编译程序时，往往涉及到库的路径问题，可以采用：
@@ -2335,9 +2354,7 @@ app目录放置应用程序，lib放置一些库，tools放置一些工具程序
 				*)		statement;;
 			esac		
 
-
-
-## 10.软件包 
+## 11.软件包 
 ### apt-key 
 - 用途:获取公鈅
 - 调用格式：
@@ -2659,42 +2676,90 @@ apt可以认为等同与apt-get
 
 ### svn
 - 用途:版本库,类似git。工具为subversion。
-- 服务端  
-	- 调用格式：
+svn服务可以通过三种方式来提供。  
+1: 通过svnserve，svn协议提供。   
+2：通过apache，http协议来提供。
 
-			svnserve [options] reposdir
-		选项：  
-		- -d	daemon 
-		- -r	root dir 
-- 客户端  
-	- 调用格式
-		
-			svn <command> [args]
-	- command:   
-		- add			:add file into repos 
-		- commit(ci)	:提交
-		- checkout(co):检出。  
-			检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
-		- list(ls) 	:列出文件，只有一级目录,
-		- info		:显示版本库信息
-		- diff		：显示修改
+1. svn协议  
+	- 服务端  
+		- 调用格式：
 	
-- 创建一个新仓库：  
-	在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2  
-	1.	建立仓库根目录：
+				svnserve [options] reposdir
+			选项：  
+			- -d	daemon 
+			- -r	root dir 
+	- 客户端  
+		- 调用格式
 			
-			cd ~ && mkdir svn 
-	2.	创建两个仓库：
-	
-			svnadmin create svn/test1 && svnadmin create  svn/test2。
-	3.	启动svn服务器：
-	
-			svnserve -d -i /home/hanhj/svn 
-	这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
+				svn <command> url_of_repo 
+		- command:   
+			- add			:add file into repos 
+			- commit(ci)	:提交
+			- checkout(co):检出。  
+				检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
+			- list(ls) 	:列出文件，只有一级目录,
+			- info		:显示版本库信息
+			- diff		：显示修改
+		
+	- 创建一个新仓库：  
+		在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2  
+		1.	建立仓库根目录：
+				
+				cd ~ && mkdir svn 
+		2.	创建两个仓库：
+		
+				svnadmin create svn/test1 && svnadmin create  svn/test2。
+		3.	启动svn服务器：
+		
+				svnserve -d -r /home/hanhj/svn 
+		这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
 
-- 挂载原仓库：
+- http协议  
+除了通过svn协议来进行服务，也可以通过http协议服务。二者并不冲突。
+	1. 配置apache服务器   
+		安装dav-svn模块。
 
-		svnserve -d -r 原仓库的位置
+			apt install libapache2-mod-svn
+
+		配置mod-svn模块  
+		/etc/apache2/mods-available/dav-svn.conf 
+
+			<Location /svn> #网络上显示的地址http://utl/svn 
+			DAV svn			#开启解释
+			SVNPath /home/git/svn/doc #设置svn仓库地址,doc是最终仓库的文件夹名。
+			SVNParentPath /home/git/svn/ #如果这样设置，在每个仓库前加上这个地址。
+
+		比如实际仓库位于/homt/git/svn/repo1,则访问http://url/repo1实际上访问/home/git/svn/repo1.  
+			SVNPath和SVNParentPath只能选一个。
+
+	2. 配置访问控制  
+		svn的访问控制可以通过apache本身的服务来提供。apache对外可以提供用户/密码检查服务。该用户名并不与系统用户名相关。apache将用户名和密码保存到一个文件中，然后可以在配置文件中对需要有访问控制的地方，使用这个密码文件。  
+		1. 创建密码文件
+			
+				htpasswd -cm file user 
+				htpasswd -cm /etc/apache/user hanhj 
+				-c 表示创建一个新文件，
+				-m 表示使用md5编码。
+		2. 使用密码文件  
+			有两种方法。
+			1. 集中的  
+			将需要实施访问控制的目录加入如下内容：  
+			xx.conf
+ 
+					<Directory /home/hanhj/env>
+						...
+						AuthType Basic
+						AuthName "Authority"
+						AuthUserFile /etc/apache/user 
+						Require valid-user
+						...
+					</Directory>
+ 
+			2.  分散的  
+				对于需要控制的目录下放置.htaccess 文件，将上述内容放入其中。  
+				此时，需要将<Directory xx>中的AllowOverride None改成AllowOverridide All.这样才会允许Apache去查看目录本身的.htaccess文件。
+
+
 
 ###	gnome-calculater
 - 用途:计算器
