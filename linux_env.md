@@ -2444,7 +2444,7 @@ apt可以认为等同与apt-get
 	update-manager 检查更新软件程序  
 
 ### dpkg
-- 用途：软件包安装工具	
+- 用途：软件包安装工具,是dpkg-deb，dpkg-query的前端工具
 - 调用格式：
 
 		dpkg <action> [pkg]	:pkg 要求精确匹配
@@ -2452,8 +2452,25 @@ apt可以认为等同与apt-get
 	- -i :安装软件
 	- -r :卸载软件
 	- -s :state显示软件安装包信息
-	- -l :显示软件安装状态
+	- -l :显示软件安装状态  
+		显示安装状态有：  
+		expect state  
+		u	unknown  
+		i	install  
+		r	remove   
+		p	purge  
+		h	hold  
+		now state  
+		n	not install  
+		i	installed  
+		c	config  
+		U	uncompress  
+		F	config failure  
+		H	half install  
+		W	triger wait  
+		T	triger terminal  
 	- -L --listfiles：显示软件包内文件
+	- -P purge
 	
 ### dpkg-deb  
 - 用途：软件包生成工具
@@ -2686,6 +2703,10 @@ apt可以认为等同与apt-get
 	char(size)  
 	varchar(size)  
 	date(yyyymmdd);
+- 赋权
+
+		grant 权限 privileges on 数据库 to 'user'@'host' identified by 'password' with grant option;
+		grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option 
 
 - 修改root用户密码
 
