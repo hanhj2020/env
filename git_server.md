@@ -156,10 +156,10 @@ deluser 删除用户和组
 
 	sudo vi /home/git/.ssh/authorized_keys
 	将其他用户的公钥放到这个文件中，保存。
-	cd /home/git/repositories/ 
 初始化仓库
 
 
+	cd /home/git/repositories/ 
 	sudo git init test.git 
 将目录改为git用户拥有
 

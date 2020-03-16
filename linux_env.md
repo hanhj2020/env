@@ -2599,8 +2599,7 @@ apt可以认为等同与apt-get
 	4. config apache sites-enable for wiki:
 
 		vi /etc/apache2/sites-enable/httpd.conf
-	5. config my sql  
-		create a database for wiki
+	5. config my sql,create a database for wikii(not necessary?)
 
 			mysql -u root -p
 			mysql>create database my_wiki;
@@ -2608,14 +2607,14 @@ apt可以认为等同与apt-get
 			mysql>exit
 			Bye
 		this is  not computer user account passwd ,but the database user passwd
-	6.	add a computer user for wiki
+	6.	add a computer user for wiki.(not necessary)
 
 			 sudo adduser wiki
 			 passwd wiki (not necessary)
 	7. config wiki in browse
-		in browse :localhost/wiki  
-		 config your wiki
-		 and put LocalSettins.php in your wiki dictory
+		in browse :localhost/wiki    
+		 config your wiki(will create my_wiki database,use root as mysql user.)  
+		 put LocalSettins.php in your wiki dictory
 
 ### mysql:
  		 
@@ -2687,6 +2686,19 @@ apt可以认为等同与apt-get
 	char(size)  
 	varchar(size)  
 	date(yyyymmdd);
+
+- 修改root用户密码
+
+		add "skip-grant-tables" into /etc/mysql/mysql.conf.d/mysqld.cnt
+		login mysql without user and password 
+		in mysql:
+		use mysql;
+		update user set user.authentication_string=password("123456") where user="root";
+		flush privileges;
+		and then,remove "skip-grant-tables" from mysqld.cnt
+		sudo service mysql restart	
+
+		
 
 ### pandoc:
 - 用途:将markdown格式的文本转换成其他格式的文本.
