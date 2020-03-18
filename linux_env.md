@@ -1991,10 +1991,15 @@ tcp格式
 - 调用格式:
 
 		nmap   [options] target
+		nmap -A -T4 localhost 
 - scan type  
 	- -A scand all 
 	- -O os dection
 	- -T[0-6] set timeing template(higer is faster)
+- target  	
+	目标地址:  
+	192.168.0.0/24--192.168.0.0-192.168.255.255
+
 
 ### iptables
 - 用途:设置ip包过滤 
