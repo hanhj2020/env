@@ -1,4 +1,5 @@
 # Linux应用环境学习 
+[toc]
 
 ## 1.Ubuntu通用
 ### Linux系统的组成：
