@@ -1153,7 +1153,16 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 		
 		# Members of the admin group may gain root privileges
 		%admin ALL=(ALL) ALL 
-		
+
+### 修改root用户密码（ubuntu）  
+如果忘掉root用户密码，可以用以下方法修改。
+
+1. 进入grub时，选择recovery模式，然后键入“e”进入编辑状态。  
+2. 在以Linux开始的一行，将"ro recovery nomodeset" 改成"quiet splash rw init=/bin/bash"。然后ctrl-x启动。
+3. 进入系统后，此时是以root用户身份。输入passwd root则可以修改root用户密码。此时已经修改成功。
+
+有时，由于某种原因导致启动不成功，此时有可能会出现乱码的提示如：“×××root××××××CTRL-D×××”，意思是输入root用户密码进入，或ctrl-d重启。
+
 <h2 id="c5"> 5.磁盘管理</h2>
 ### findmnt 
 - 用途：列出当前已经挂载的设备
