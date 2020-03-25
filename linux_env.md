@@ -2084,19 +2084,33 @@ example:
 			配置文件位于:/etc/samba/smb.conf   
 			主要是配置共享的文件夹,举例:
 
-				[share_doc]		网络上共享名
-				comment = xxx	注释 
-				path=xxx		共享的本地文件
-				guest ok = yes/no 是否允许任何人访问,
-				如果不允许,则客户端访问时需要提供用户名和密码.(这一点测试的时候反复弹出用户名密码对话框,不知何故)
-				read only = yes/no	是否可写
-				其他一些选项好像不是必要的
+				[share_doc]					网络上共享名
+				comment = xxx				注释 
+				path=xxx					共享的本地文件
+				guest ok = yes/no			是否允许匿名访问,如果不允许,则客户端访问时需要提供用户名和密码。
+				read only = yes/no			是否可写
 				public=yes/no 
-				writeable=yes/no 
-				browseable=yes/no 
-				create mask=
-				directory mask = 
-			需要注意的是,由于是共享,所以如果要可写,需要原文件夹对other用户具有写权限,否则即使这里配置了可写,也不能写入.
+				writeable=yes/no			是否可写
+				browseable=yes/no			是否在网上邻居中显示
+				create mask= 0700			文件权限
+				directory mask = 0700		目录权限
+				valid users = hanhj,@group	允许用户.当guest ok不被允许时
+				write list=hanhj,			允许写用户
+				read list= ,				允许读用户
+
+			Linux的Server端如果需要配置samba用户,可以用smbpassed或pdbedit命令。samba用户与Linux系统用户不同，需要用以上两个命令将系统用户添加到samba用户中。samba用户首先必须是系统用户。	
+
+				smbpasswd -a user	:添加samba用户 
+				smbpassed -x user	:delete 
+				smbpassed -d user	:disable 
+				smbpassed -e user	:enable 
+
+				pdbedit -L			:list 
+				pdbedit -v	user	:show details 
+				pdbedit -u	user	:user 
+				pdbedit -a	user	:create user 
+				pdbedit -x	user	:delete user
+
 		3. 启动服务端:
 
 				sudo /etc/init.d/smbd start	或
@@ -2117,10 +2131,15 @@ example:
 				smb://192.168.0.103/  
 		- 在linux中挂载该文件系统
 
-			可以用mount命令,如:  
-			mount -t smbfs/cifs //server_ip/share_name mount_point -o user=xxx,pass=xxx,[uid=xxx,gid=xxx,file_mode=xxx,dir_mod=xxx,noserverino,vers=1.0]  
-			带[]中的内容是可选项,vers选项主要是因为有些老的windows系统不支持smb2.0以上版本.  
-			如:mount -t cifs //192.168.0.102/share_doc share_doc -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
+			可以用mount命令,如: mount -t smbfs/cifs //server_ip/share_name mount_point -o user=xxx,pass=xxx,[uid=xxx,gid=xxx,file_mode=xxx,dir_mod=xxx,noserverino,vers=1.0]   
+			带[]中的内容是可选项,vers选项主要是因为有些老的windows系统不支持smb2.0以上版本.   
+			mount -t cifs //192.168.0.102/share_doc share_doc -o user=hanhj,pass=hanhjhanhj,uid=1000,gid=1000,noserverino,vers=1.0
+
+		- 在Linux中用smbclient命令 
+
+				smbclient -L //IP	list	:list share 
+				smbclient //IP -U			:longin by user 
+
 
 - 用nfs来共享
 
