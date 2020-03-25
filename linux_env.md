@@ -2436,7 +2436,10 @@ app目录放置应用程序，lib放置一些库，tools放置一些工具程序
 	- search regex	:用regex来查找软件
 	- show pkg		:显示软件包信息
 	- edit-sources	:编辑软件源文件source.list 
-	- list pkg		:显示软件包的安装状态。类似dpkg-query --list 
+	- list pkg		:显示软件包的安装状态。类似dpkg-query --list  
+		- list --upgradable		:显示可以升级的软件
+		- list --installed		:show installed
+		- list --all-versions	:all version,同-a 
 	- source pkg		:安装软件源程序包
 	- build-dep pkg 	:为编译软件安装依赖包
 	- autoclean		:清除下载的软件包
@@ -2559,6 +2562,22 @@ apt可以认为等同与apt-get
 
 ### snap  
 - 用途：另外一个软件包命令行
+
+### pip
+- 用途：a tool of install python package 
+- 调用格式：
+
+		pip command [options] [package]
+- command
+	- install 
+	- uninstall
+	- list 
+	- show 
+	- wheel 
+	- search 
+- options
+	- -v		:verbose
+	- -q		:quiet
 
 <h2 id="c12"> 12.应用程序 </h2>
 ### okular
