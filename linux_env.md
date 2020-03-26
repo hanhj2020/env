@@ -688,10 +688,10 @@ ls -d */ 仅显示当前目录下的目录
 	
 		lsof [options]
 - options
-	- -itypeselect the listing of files any of whose Internet address matches the address specified in i.
-		[46][protocol][@hostname|hostaddress][:service|port]	
-		-i4 ipv4  
-		-i6 ipv6  
+	- -itypeselect :the listing of files any of whose Internet address matches the address specified in i.  
+		[46][protocol][@hostname|hostaddress][:service|port]  
+		-i4 ipv4   
+		-i6 ipv6   
 		protocol tcp,udp 
 - 配置文件 
 
