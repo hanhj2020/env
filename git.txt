@@ -176,3 +176,23 @@ git 下载：sudo apt-get install git
 	git checkout -b 本地分支 origin/远程分支：生成一个本地分支与远程分支同步；	
 
 
+出现证书错误的情况结局
+有时由于证书原因导致不能与github网站通信,会出现如下提示
+server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
+表示本系统不能信任远方服务器
+解决办法:
+1.禁止对证书的协商
+	a.	windows: 		set GIT_SSL_NO_VERIFY=1
+	b.	linux				export GIT_SSL_NO_VERIFY =1
+	c.	git					git config --global http.sslverify false
+
+2.将对方证书放入系统中
+	curl-config  --ca		#查看证书存放的位置,一般为 /etc/ssl/certs/ca-certificates.crt 
+							#如果curl-config没有安装 sudo apt install libcurl4-openssl-dev
+								
+	openssl s_client -connect $hostname:$port 2>/dev/null  | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >> $trust_cert_file_location"
+	for example:
+		openssl s_client -connect www.github.com:443 >aaa
+		然后将aaa文件内容放入到/etc/ssl/certs/ca-certificates.crt 中
+	
+	
