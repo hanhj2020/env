@@ -1634,6 +1634,17 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 		see also
 			pkill command 
 
+### curl-config
+- 用途	get infomation of curl or libcurl
+- 调用格式:
+	
+		cur-config [option]
+- options
+	- --ca ca证书按照位置
+	- --cc	compiler
+
+install :apt install libcurl4-opssl-dev
+
 <h2 id="c8"> 8.内部命令</h2>
 ### history 
 - 用途:　显示输入过的命令
@@ -2035,6 +2046,8 @@ tcp格式
 	目标地址:  
 	192.168.0.0/24--192.168.0.0-192.168.255.255
 
+/etc/services 系统服务端口
+443	https
 
 ### iptables
 - 用途:设置ip包过滤 
