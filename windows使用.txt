@@ -78,6 +78,7 @@ windows使用技巧
 		taskkill /F /im notepad.exe /im mspaint.exe 
 	net stop service
 
+9 网络应用
 清除连接的用户名密码 control keymgr.dll
 
 本地组策略编辑器	gpedit.msc
