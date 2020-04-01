@@ -1,4 +1,4 @@
-git 下载：sudo apt-get install git
+eit 下载：sudo apt-get install git
 配置：
 	git config [范围] [操作]
 	范围：--global/system/local
@@ -175,6 +175,17 @@ git 下载：sudo apt-get install git
 	git pull ：抓取远程库内容，并与本地库合并；相当于git fetch + rebase 
 	git checkout -b 本地分支 origin/远程分支：生成一个本地分支与远程分支同步；	
 
+	远程回退版本
+		本地回退:
+			git checkout xx
+			git reset --hard xx 
+		远程回退:
+			比如远程A-B-C
+			想回到A
+			git reset --hard verA	强制回到A
+			git push  -f			推送A,丢掉了BC
+
+			
 
 出现证书错误的情况结局
 有时由于证书原因导致不能与github网站通信,会出现如下提示
