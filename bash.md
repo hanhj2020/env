@@ -4,19 +4,25 @@
 
 ## 1. 变量
 
-	var=xx      
 赋值字符串
 
+	var=xx      
 
-	let var=xxx 
+
 赋值数字，十进制直接表示，八进制0xx，十六进制0xxx
-
-
+	
+	let var=xxx 
 	let c=$((a*b)) or let c=$a*$b
 相比而言，后者更为简洁。
 
-	$var
 引用变量：
+
+	$var
+
+变量数组:  
+定义:	aaa[1]="abc",aaa[2]="ccc"  
+引用	${aaa[1]}	用大括号
+
 
 $0 表示程序名  
 $1 表示第一个参数  
