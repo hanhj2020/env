@@ -121,6 +121,7 @@
 			inoremap <c-k>	<up>
 			inoremap <c-l>	<right>
 			对于c-h在原来的terminal终端中定义为删除键。如果c-h不能使用，需要搜索加载的vim文件中是否有定义该键的地方，把他取消掉。
+			在我的机器上就是.vim/autoload/acp.vim
 
 		d{motion}	删除motion移动到的字符。
 			motion是移动单词，比如w:next word,b:back word,l,h,j,k等。
