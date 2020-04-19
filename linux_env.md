@@ -681,7 +681,11 @@ uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而s
 	touch -m file:	改变文件修改时间和改动时间  
 	touch file	:	改变文件上述三个时间  
 
-ls -d */ 仅显示当前目录下的目录
+仅显示目录
+ls -d */	显示当前目录下的目录  
+ls xxx -F |grep \\/	;加入-F选项,在目录后面添加了-个\\/  
+ls xxx -l |grep ^d		;详细模式下,目录前面有d 
+
 
 ### lsof 
 - 用途:list open file 
@@ -2852,7 +2856,7 @@ apt可以认为等同与apt-get
 
 ### svn
 - 用途:版本库,类似git。工具为subversion。
-svn服务可以通过三种方式来提供。  
+svn服务可以通过二种方式来提供。  
 1: 通过svnserve，svn协议提供。   
 2：通过apache，http协议来提供。
 
@@ -2872,10 +2876,13 @@ svn服务可以通过三种方式来提供。
 			- add			:add file into repos 
 			- commit(ci)	:提交
 			- checkout(co):检出。  
-				检出：svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
 			- list(ls) 	:列出文件，只有一级目录,
 			- info		:显示版本库信息
 			- diff		：显示修改
+			例如:
+			svn checkout svn://localhost/test1; ip和test1之间不要带svn，因为服务器是以svn为根目录，这里只要给出仓库名就可。
+			svn ls svn://localhost/test1
+		在windows下,也可以使用TortoiseSVN工具来访问,在地址栏中输入svn://localhost/test1 				 
 		
 	- 创建一个新仓库：  
 		在/home/hanhj/下建一个仓库，根为/home/hanhj/svn ,在这个目录下有多个仓库，如test1,test2  
@@ -2891,7 +2898,7 @@ svn服务可以通过三种方式来提供。
 		这时服务器如果一切正常就可以启动了，可以从客户端检出和上传。
 
 - http协议  
-除了通过svn协议来进行服务，也可以通过http协议服务。二者并不冲突。
+除了通过svn协议来进行服务，也可以通过http协议服务。二者可共存。
 	1. 配置apache服务器   
 		安装dav-svn模块。
 
@@ -2934,7 +2941,11 @@ svn服务可以通过三种方式来提供。
 			2.  分散的  
 				对于需要控制的目录下放置.htaccess 文件，将上述内容放入其中。  
 				此时，需要将<Directory xx>中的AllowOverride None改成AllowOverridide All.这样才会允许Apache去查看目录本身的.htaccess文件。
-
+	3. 访问仓库
+		1. 可以用浏览器访问
+			在浏览器中输入地址http://url/repos 
+		2. 在window下用TortoiseSVN工具访问
+			在地址栏中输入http://url/repos 
 
 
 ###	gnome-calculater
