@@ -614,6 +614,12 @@ uniq中的-u与sort中的-u不同，uniq中的重复行必须是连续的，而s
 	iconv -l :list all support code
 	icov -f CN-GB -t utf-8 a.txt -o a.txt.utf8
 	
+### dos2unix:将dos格式的文本转换成unix格式文本
+- 调用格式:	dos2unix inputfile options
+- options:
+	- -n input_file output_file :new file mode,reverse input file and output to a new file 
+	- -o output_file :overwrite mode,will overwrite input file(default)
+
 ### file 
 - 用途:显示文件编码信息
 - 选项
@@ -823,7 +829,7 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 - 调用格式 
 
 		cp src_file dest_file
-		xample scp hanhj@192.168.15.23:/home/hanhj/.vimrc .
+		example scp hanhj@192.168.15.23:/home/hanhj/.vimrc .
 
 ### mv 
 - 用途：移动文件
@@ -1421,6 +1427,19 @@ linux中所有文件（包括目录，设备）都具有权限属性。我们执
 
 	cat /proc/version 
 	lsb_release 
+
+## 查看系统时间
+
+- 系统启动时间	
+	- uptime
+	- cat /proc/uptime 
+- 系统安装时间  
+	tune2fs /的对应磁盘 
+	
+		tune2fs /dev/sda10 |grep create
+	passwd -S 用户
+
+		passwd -S hanhj
 
 ### chkconfig 
 - 用途：配置系统的服务程序
