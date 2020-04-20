@@ -96,7 +96,7 @@ eit 下载：sudo apt-get install git
 	git checkout x
 		x可以是记录号/分支号/文件：切换到某个记录号/分支/文件。
 		-b 创建一个分支，并切换到该分支，相当于git br newbr && git co newbr 
-		git checkout ref_log 记录号，会切换到一个未命名分支。
+		git checkout ref_log 记录号，会切换到一个未命名分支,这时,可以用git br branch_name 保存这个版本,并切换到该分支.
 		git checkout branch_name 分支，切换到一个已命名分支。
 		git checkout [--] file ,丢弃当前版本文件的修改，导出文件。
 	git branch 分支：
@@ -122,6 +122,11 @@ eit 下载：sudo apt-get install git
 		显示在git库中的文件
 	git log --graph 
 		图形显示log记录
+	patch:
+		git format-patch HEAD@{xx},为从当前版本到xx版本打patch,如果有几次提交,就有几个patch文件.
+		git apply xxpatch	,为当前版本打上patch.打patch的顺序不能乱了,否则打不上.比如:
+			a->b->c,c是最新版本
+			从a到c有两个patch,分别为第一个a到b,第二个b到c.如果当前版本是a,必须从a开始打第一个patch,而不能从a打第二个patch.
 
 远程仓库操作：
 	git remote add 远程库名 远程库地址：建立与远程git库的连接
