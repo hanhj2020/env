@@ -190,6 +190,11 @@ eit 下载：sudo apt-get install git
 			git reset --hard verA	强制回到A
 			git push  -f			推送A,丢掉了BC
 
+	将本地仓库变成远程仓库
+		有时需要将本地的git仓库放到服务器上作为远程仓库,一般是在仓库迁移时用到.
+		此时将本地仓库的.git目录拷贝到服务器端,并改名.
+		此时需要将config中的core.bare由false改成true,否则本地的修改不能推送上去.
+
 			
 
 出现证书错误的情况结局
