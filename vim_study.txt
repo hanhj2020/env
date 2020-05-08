@@ -1364,6 +1364,8 @@
 	se updatetime=xxxx 设置无字符敲入后等待时间后备份 默认4000ms 
 	se updatecount=xxxx 设置连续敲入n个字符后备份 默认200
 
+	vi -r xx.swp 从swp文件中恢复文件
+
 ======================================================================
 附录1：关于motion 
 	motion是移动命令，比如hljk。但是vim中的motion比这丰富的多。
