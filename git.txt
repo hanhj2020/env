@@ -189,6 +189,17 @@ eit 下载：sudo apt-get install git
 			想回到A
 			git reset --hard verA	强制回到A
 			git push  -f			推送A,丢掉了BC
+	远程分支
+		推送远程分支:
+			git co xx分支
+			git push origin xx分支
+		删除远程分支:
+			git push origin --delete xx分支
+	远程tag
+		推送tag到远程:
+			git push origin xxtag
+
+
 
 	将本地仓库变成远程仓库
 		有时需要将本地的git仓库放到服务器上作为远程仓库,一般是在仓库迁移时用到.
