@@ -94,5 +94,8 @@
 	lookup(d4,a2:a5,b2:b5)  
 	如果是引用外部数据  
 	lookup(待查数据,'文件路径\[文件名]表名'!范围,返回范围)
+10. 当有多个office版本时,避免每次重新配置
+	Word:reg add HKCU\Software\Microsoft\Office\12.0\Word\Options /v NoReReg /t REG_DWORD /d 1 
+	Excel:打开“我的电脑”——“C盘”——“Program Files\Common Files\Microsoft Shared\OFFICE12\Office Setup Controller”——找到一个“SETUP.EXE”的文件，对此文件重命名,隨意命名就可以了
 
 
