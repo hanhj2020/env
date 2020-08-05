@@ -198,6 +198,8 @@ git 下载：sudo apt-get install git
 	远程tag
 		推送tag到远程:
 			git push origin xxtag
+		删除远程tag:
+			git push origin :xxtag
 	将本地仓库变成远程仓库
 		有时需要将本地的git仓库放到服务器上作为远程仓库,一般是在仓库迁移时用到.
 		此时将本地仓库的.git目录拷贝到服务器端,并改名.
